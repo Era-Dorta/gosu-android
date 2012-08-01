@@ -19,6 +19,8 @@ module Gosu
     end
   end
   
+  ruboto_generate(android.opengl.GLSurfaceView => "TouchSurfaceView")
+  
   class Window
     attr_accessor :caption
     attr_accessor :mouse_x
@@ -33,22 +35,49 @@ module Gosu
     # at 60 FPS, which is ideal on standard 60 Hz TFT screens.
     def initialize(width, height, fullscreen, update_interval=16.666666)  
       @fullscreen = fullscreen
-      @surface_view = JavaImports::GLSurfaceView.new($gosu)
-      @surface_view.renderer = JavaImports::RubotoGLSurfaceViewRenderer.new    
+      @showing = false
+      @display = $gosu.getWindowManager.getDefaultDisplay
+      @width = width
+      @height= height
+      #@width = @display.getWidth
+      #@height = @display.getHeight
+      #setLayout(int width, int height)
+      #@width = $gosu.get_window.rect.width
+      #@height = $gosu.get_window.rect.height 
+      #@width = @display.getMeasureWidth
+      #@height = @display.getMeasureHeight      
+      @surface_view = TouchSurfaceView.new($gosu)
+      @surface_view.initialize_ruboto_callbacks do
+        def on_touch_event(event)
+          if event.getAction == JavaImports::MotionEvent::ACTION_DOWN
+            puts "tocado"
+            request_render
+          end      
+          return true 
+        end
+      end      
+      #@width = @surface_view.rect.width
+      #@height = @surface_view.rect.height 
+      @surface_view.renderer = RubotoGLSurfaceViewRenderer.new    
     end
     
     # Enters a modal loop where the Window is visible on screen and receives calls to draw, update etc.
     def show
+      @showing = true
       if @fullscreen
         #Use full java path for Window, since there is a Gosu::Window
         $gosu.request_window_feature(JavaImports::Window::FEATURE_NO_TITLE)
         $gosu.get_window.set_flags(JavaImports::WindowManager::LayoutParams::FLAG_FULLSCREEN,
             JavaImports::WindowManager::LayoutParams::FLAG_FULLSCREEN)
+        $gosu.content_view = @surface_view 
+        @window = $gosu.getWindow            
       else      
         $gosu.setTitle @caption
-      end  
         $gosu.content_view = @surface_view 
-        puts "el surface mide #{@surface_view.getWidth}, #{@surface_view.getMeasuredWidth}"            
+        @window = $gosu.getWindow  
+        @window.setLayout(width, height)        
+      end                                
+      puts "el surface mide #{@surface_view.getWidth}, #{@surface_view.getMeasuredWidth}"            
       #@activity = $gosu
     end
     
