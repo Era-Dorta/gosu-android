@@ -1,3 +1,4 @@
+require 'requires'
 require 'graphicsBase'
 require 'color'
 
@@ -5,7 +6,8 @@ module Gosu
   class Graphics
     attr_reader :width, :height
     attr_reader :fullscreen
-    def initialize(physicalWidth, physicalHeight, fullscreen)
+    def initialize(physicalWidth, physicalHeight, fullscreen, window)
+      @window = window     
       @virtWidth = physicalHeight
       @virtHeight = physicalWidth
       
@@ -24,7 +26,14 @@ module Gosu
 
     #Prepares the graphics object for drawing. Nothing must be drawn
     #without calling begin.
-    def begin(clearWithColor = Color::BLACK); end
+    def begin(clearWithColor = Color::BLACK)
+      #TODO clearWithColor doesnt work here, fix it
+      @gl.glClearColor(clearWithColor.red() / 255.0, clearWithColor.green() / 255.0,
+        clearWithColor.blue() / 255.0, clearWithColor.alpha() / 255.0)
+      @gl.glClear(JavaImports::GL10::GL_COLOR_BUFFER_BIT)
+      
+      return true
+    end
     #Every call to begin must have a matching call to end.
     def end; end
     #Flushes the Z queue to the screen and starts a new one.
@@ -86,5 +95,31 @@ module Gosu
     #this graphics object.
     def createImage( src, srcX,  srcY,  srcWidth,  srcHeight,
          borderFlags); end    
+    
+    def onDrawFrame(gl)
+      gl.glClear(JavaImports::GL10::GL_COLOR_BUFFER_BIT | JavaImports::GL10::GL_DEPTH_BUFFER_BIT)
+      @window.do_tick
+    end
+  
+    def onSurfaceChanged(gl, width, height)
+      @gl = gl
+      gl.glViewport(0, 0, width, height)
+    end
+  
+    def onSurfaceCreated(gl, config)
+      #gl.glClearColor(1,1,1,1)
+      @gl = gl
+      gl.glMatrixMode(JavaImports::GL10::GL_PROJECTION)
+      gl.glLoadIdentity
+      gl.glViewport(0, 0, @window.width, @window.height)
+
+      gl.glOrthof(0, @window.width, @window.height, 0, -1, 1)
+
+      
+      gl.glMatrixMode(JavaImports::GL10::GL_MODELVIEW)
+      gl.glLoadIdentity
+      
+      gl.glEnable(JavaImports::GL10::GL_BLEND)         
+    end         
   end
 end
