@@ -34,19 +34,19 @@ module Gosu
     end
     
     def red
-      @rep >> RED_OFFSET
+      (@rep >> RED_OFFSET)&0x000000FF
     end
 
     def green
-      @rep >> GREEN_OFFSET
+      (@rep >> GREEN_OFFSET)&0x000000FF
     end
 
     def blue
-      @rep >> BLUE_OFFSET
+      (@rep >> BLUE_OFFSET)&0x000000FF
     end
 
     def alpha
-      @rep >> ALPHA_OFFSET
+      (@rep >> ALPHA_OFFSET)&0x000000FF
     end
 
     def setRed(value)

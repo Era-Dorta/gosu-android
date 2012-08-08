@@ -27,9 +27,8 @@ module Gosu
     #Prepares the graphics object for drawing. Nothing must be drawn
     #without calling begin.
     def begin(clearWithColor = Color::BLACK)
-      #TODO clearWithColor doesnt work here, fix it
-      @gl.glClearColor(clearWithColor.red() / 255.0, clearWithColor.green() / 255.0,
-        clearWithColor.blue() / 255.0, clearWithColor.alpha() / 255.0)
+      @gl.glClearColor(clearWithColor.red / 255.0, clearWithColor.green / 255.0,
+        clearWithColor.blue / 255.0, clearWithColor.alpha / 255.0)
       @gl.glClear(JavaImports::GL10::GL_COLOR_BUFFER_BIT)
       
       return true
