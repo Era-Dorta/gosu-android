@@ -19,7 +19,7 @@ module Gosu
       
       #TODO include queues @queues
       #TODO include vector of @textures 
-      #TODO Set quues to size 1    
+      #TODO Set queues to size 1    
     end
     
     def setResolution(virtualWidth, virtualHeight); end
@@ -27,11 +27,14 @@ module Gosu
     #Prepares the graphics object for drawing. Nothing must be drawn
     #without calling begin.
     def begin(clearWithColor = Color::BLACK)
+      if @gl == nil
+        raise "Surface must be created before calling begin"
+      end
       @gl.glClearColor(clearWithColor.red / 255.0, clearWithColor.green / 255.0,
         clearWithColor.blue / 255.0, clearWithColor.alpha / 255.0)
       @gl.glClear(JavaImports::GL10::GL_COLOR_BUFFER_BIT)
       
-      return true
+      true
     end
     #Every call to begin must have a matching call to end.
     def end; end
@@ -96,29 +99,29 @@ module Gosu
          borderFlags); end    
     
     def onDrawFrame(gl)
-      gl.glClear(JavaImports::GL10::GL_COLOR_BUFFER_BIT | JavaImports::GL10::GL_DEPTH_BUFFER_BIT)
-      @window.do_tick
+      #gl.glClear(JavaImports::GL10::GL_COLOR_BUFFER_BIT | JavaImports::GL10::GL_DEPTH_BUFFER_BIT)
+      @window.do_show
     end
   
     def onSurfaceChanged(gl, width, height)
       @gl = gl
-      gl.glViewport(0, 0, width, height)
+      @gl.glViewport(0, 0, width, height)
     end
   
     def onSurfaceCreated(gl, config)
       #gl.glClearColor(1,1,1,1)
       @gl = gl
-      gl.glMatrixMode(JavaImports::GL10::GL_PROJECTION)
-      gl.glLoadIdentity
-      gl.glViewport(0, 0, @window.width, @window.height)
+      @gl.glMatrixMode(JavaImports::GL10::GL_PROJECTION)
+      @gl.glLoadIdentity
+      @gl.glViewport(0, 0, @window.width, @window.height)
 
-      gl.glOrthof(0, @window.width, @window.height, 0, -1, 1)
+      @gl.glOrthof(0, @window.width, @window.height, 0, -1, 1)
 
       
-      gl.glMatrixMode(JavaImports::GL10::GL_MODELVIEW)
-      gl.glLoadIdentity
+      @gl.glMatrixMode(JavaImports::GL10::GL_MODELVIEW)
+      @gl.glLoadIdentity
       
-      gl.glEnable(JavaImports::GL10::GL_BLEND)         
+      @gl.glEnable(JavaImports::GL10::GL_BLEND)         
     end         
   end
 end

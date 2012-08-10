@@ -81,6 +81,16 @@ module Gosu
       @screen_height = @surface_view.get_height
     end
     
+    def do_show
+      start_time = Time.now
+      do_tick
+      #Do gosu dark side
+      end_time = Time.now
+      if (start_time <= end_time and (end_time - start_time) < @update_interval)
+          sleep(@update_interval - (end_time - start_time)) 
+      end      
+    end
+    
     # Tells the window to end the current show loop as soon as possible.
     def close 
       @showing = false
@@ -184,13 +194,7 @@ module Gosu
     # @deprecated Use Window#mouse_x= and Window#mouse_y= instead.
     def set_mouse_position(x, y); end
     
-    def do_tick
-      start_time = Time.now
-      #Do gosu dark side
-      end_time = Time.now
-      if (start_time <= end_time and (end_time - start_time) < @update_interval)
-          sleep(@update_interval - (end_time - start_time)) 
-      end     
+    def do_tick    
       @graphics.begin(Color::BLACK)      
     end
     
