@@ -1,18 +1,19 @@
 require 'requires'
 require 'graphicsBase'
 require 'color'
+require 'drawOp'
 
 module Gosu
   class Graphics
     attr_reader :width, :height
     attr_reader :fullscreen
-    def initialize(physicalWidth, physicalHeight, fullscreen, window)
+    def initialize(physical_width, physical_height, fullscreen, window)
       @window = window     
-      @virtWidth = physicalHeight
-      @virtHeight = physicalWidth
+      @virt_width = physical_height
+      @virt_height = physical_width
       
-      @physWidth = physicalWidth
-      @physHeight = physicalHeight
+      @phys_width = physical_width
+      @phys_height = physical_height
       
       @fullscreen = fullscreen
       #Gl stuff moved to render
@@ -26,12 +27,12 @@ module Gosu
 
     #Prepares the graphics object for drawing. Nothing must be drawn
     #without calling begin.
-    def begin(clearWithColor = Color::BLACK)
+    def begin(clear_with_color = Color::BLACK)
       if @gl == nil
         raise "Surface must be created before calling begin"
       end
-      @gl.glClearColor(clearWithColor.red / 255.0, clearWithColor.green / 255.0,
-        clearWithColor.blue / 255.0, clearWithColor.alpha / 255.0)
+      @gl.glClearColor(clear_with_color.red / 255.0, clear_with_color.green / 255.0,
+        clear_with_color.blue / 255.0, clear_with_color.alpha / 255.0)
       @gl.glClear(JavaImports::GL10::GL_COLOR_BUFFER_BIT)
       
       true
@@ -78,20 +79,27 @@ module Gosu
     #Note: OpenGL lines are not reliable at all and may have a missing pixel at the start
     #or end po. Please only use this for debugging purposes. Otherwise, use a quad or
     #image to simulate lines, or contribute a better drawLine to Gosu.
-    def drawLine( x1,  y1,  c1,
-         x2,  y2,  c2,
-         z,  mode = AlphaMode::AM_DEFAULT); end
+    def draw_line( x1,  y1,  c1, x2,  y2,  c2, z,  mode) 
+      op = DrawOp.new(@gl)
+      op.renderState.mode = mode
+      op.verticesOrBlockIndex = 2
+      op.vertices[0] = DrawOp::Vertex.new(x1, y1, c1)
+      op.vertices[1] = DrawOp::Vertex.new(x2, y2, c2)
+      op.z = z  
+      #TODO Delete @op and work with queues
+      @op = op
+    end
 
-    def drawTriangle( x1,  y1,  c1,
+    def draw_triangle( x1,  y1,  c1,
          x2,  y2,  c2,
          x3,  y3,  c3,
-         z,  mode = AlphaMode::AM_DEFAULT); end
+         z,  mode); end
 
-    def drawQuad( x1,  y1,  c1,
+    def draw_quad( x1,  y1,  c1,
          x2,  y2,  c2,
          x3,  y3,  c3,
          x4,  y4,  c4,
-         z,  mode = AlphaMode::AM_DEFAULT); end
+         z,  mode); end
 
     #Turns a portion of a bitmap o something that can be drawn on
     #this graphics object.
@@ -101,6 +109,8 @@ module Gosu
     def onDrawFrame(gl)
       #gl.glClear(JavaImports::GL10::GL_COLOR_BUFFER_BIT | JavaImports::GL10::GL_DEPTH_BUFFER_BIT)
       @window.do_show
+      #Perform should not be done here, use queues
+      @op.perform(1)
     end
   
     def onSurfaceChanged(gl, width, height)

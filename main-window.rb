@@ -1,6 +1,7 @@
 require 'requires'
 
 require 'graphics'
+require 'graphicsBase'
 module Gosu
   
   ruboto_generate(android.opengl.GLSurfaceView => "TouchSurfaceView")
@@ -130,14 +131,16 @@ module Gosu
     # Note: OpenGL lines are not reliable at all and may have a missing pixel at the start
     # or end point. Please only use this for debugging purposes. Otherwise, use a quad or
     # image to simulate lines, or contribute a better draw_line to Gosu.
-    def draw_line(x1, y1, c1, x2, y2, c2, z=0, mode=:default); end
+    def draw_line(x1, y1, c1, x2, y2, c2, z=0, mode=AlphaMode::AM_DEFAULT)
+      @graphics.draw_line(x1, y1, c1, x2, y2, c2, z, mode)
+    end
     
-    def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=:default); end
+    def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=AlphaMode::AM_DEFAULT); end
     
     # Draws a rectangle (two triangles) with given corners and corresponding
     # colors.
     # The points can be in clockwise order, or in a Z shape.
-    def draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=:default); end
+    def draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=AlphaMode::AM_DEFAULT); end
     
     # Flushes all drawing operations to OpenGL so that Z-ordering can start anew. This
     # is useful when drawing several parts of code on top of each other that use conflicting
@@ -195,7 +198,8 @@ module Gosu
     def set_mouse_position(x, y); end
     
     def do_tick    
-      @graphics.begin(Color::BLACK)      
+      @graphics.begin(Color::BLACK)  
+      self.draw    
     end
     
     def focus_changed has_focus, width, height
