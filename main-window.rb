@@ -199,7 +199,8 @@ module Gosu
     
     def do_tick    
       @graphics.begin(Color::BLACK)  
-      self.draw    
+      self.draw 
+      @graphics.end   
     end
     
     def focus_changed has_focus, width, height

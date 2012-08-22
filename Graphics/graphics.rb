@@ -2,6 +2,7 @@ require 'requires'
 require 'graphicsBase'
 require 'color'
 require 'drawOp'
+require 'drawOpQueue'
 
 module Gosu
   class Graphics
@@ -18,7 +19,7 @@ module Gosu
       @fullscreen = fullscreen
       #Gl stuff moved to render
       
-      #TODO include queues @queues
+      @queues = DrawOpQueue.new
       #TODO include vector of @textures 
       #TODO Set queues to size 1    
     end
@@ -38,10 +39,15 @@ module Gosu
       true
     end
     #Every call to begin must have a matching call to end.
-    def end; end
+    def end 
+      flush
+      @gl.glFlush
+    end
     #Flushes the Z queue to the screen and starts a new one.
     #Useful for games that are *very* composite in nature (splitscreen).
-    def flush; end
+    def flush
+      @queues.performDrawOpsAndCode
+    end
     
     #Finishes all pending Gosu drawing operations and executes
     #the following OpenGL code in a clean environment.
@@ -86,8 +92,7 @@ module Gosu
       op.vertices[0] = DrawOp::Vertex.new(x1, y1, c1)
       op.vertices[1] = DrawOp::Vertex.new(x2, y2, c2)
       op.z = z  
-      #TODO Delete @op and work with queues
-      @op = op
+      @queues.schedule_draw_op op
     end
 
     def draw_triangle( x1,  y1,  c1,
@@ -109,8 +114,6 @@ module Gosu
     def onDrawFrame(gl)
       #gl.glClear(JavaImports::GL10::GL_COLOR_BUFFER_BIT | JavaImports::GL10::GL_DEPTH_BUFFER_BIT)
       @window.do_show
-      #Perform should not be done here, use queues
-      @op.perform(1)
     end
   
     def onSurfaceChanged(gl, width, height)

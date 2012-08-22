@@ -44,5 +44,9 @@ module Gosu
       when 4
       end
     end
+    
+    def <=> other
+      self.z <=> other.z
+    end  
   end
 end
