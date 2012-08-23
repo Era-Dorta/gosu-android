@@ -42,18 +42,19 @@ module Gosu
       vertex_buffer = vbb.asFloatBuffer
       vertex_buffer.put(index.to_java(:float))
       vertex_buffer.position(0)
+
+      @gl.glColorPointer(4, JavaImports::GL10::GL_FLOAT, 0, color_buffer) 
+      @gl.glVertexPointer(3, JavaImports::GL10::GL_FLOAT, 0, vertex_buffer)
       
       case self[:verticesOrBlockIndex]
       when 2
-        @gl.glColorPointer(4, JavaImports::GL10::GL_FLOAT, 0, color_buffer) 
-        @gl.glVertexPointer(3, JavaImports::GL10::GL_FLOAT, 0, vertex_buffer)
-        @gl.glDrawArrays(JavaImports::GL10::GL_LINE_STRIP, 0, 2) 
-        @gl.glDisableClientState(JavaImports::GL10::GL_VERTEX_ARRAY) 
-        @gl.glDisableClientState(JavaImports::GL10::GL_COLOR_ARRAY)       
+        @gl.glDrawArrays(JavaImports::GL10::GL_LINE_STRIP, 0, 2)   
       when 3
-        
+        @gl.glDrawArrays(JavaImports::GL10::GL_TRIANGLE_STRIP, 0, 3)
       when 4
       end
+      @gl.glDisableClientState(JavaImports::GL10::GL_VERTEX_ARRAY) 
+      @gl.glDisableClientState(JavaImports::GL10::GL_COLOR_ARRAY) 
     end
     
     def <=> other

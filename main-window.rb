@@ -135,7 +135,9 @@ module Gosu
       @graphics.draw_line(x1, y1, c1, x2, y2, c2, z, mode)
     end
     
-    def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=AlphaMode::AM_DEFAULT); end
+    def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=AlphaMode::AM_DEFAULT)
+      @graphics.draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z, mode)
+    end
     
     # Draws a rectangle (two triangles) with given corners and corresponding
     # colors.
