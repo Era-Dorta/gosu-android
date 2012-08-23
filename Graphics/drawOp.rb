@@ -16,29 +16,40 @@ module Gosu
         raise "Wrong verticesOrBlockIndex"
       end
       @gl.glEnableClientState(JavaImports::GL10::GL_VERTEX_ARRAY) 
-      #TODO change color
-      @gl.glColor4f(0.0, 1.0, 0.0, 0.5)      
-      #TODO Read vector nice
-      vector = []
-      vector.push self[:vertices][0].x
-      vector.push self[:vertices][0].y
-      vector.push self[:z]
-      vector.push self[:vertices][1].x
-      vector.push self[:vertices][1].y 
-      vector.push self[:z]  
+      @gl.glEnableClientState(JavaImports::GL10::GL_COLOR_ARRAY)
+      
+      color = []
+      index = []
+      self[:vertices].each do |vertex|
+        color.push vertex.c.red
+        color.push vertex.c.green
+        color.push vertex.c.blue
+        color.push vertex.c.alpha
+        
+        index.push vertex.x
+        index.push vertex.y
+        index.push self[:z]
+      end
+
+      cbb = JavaImports::ByteBuffer.allocateDirect(color.length*4)
+      cbb.order(JavaImports::ByteOrder.nativeOrder)
+      color_buffer = cbb.asFloatBuffer
+      color_buffer.put(color.to_java(:float))
+      color_buffer.position(0)                
     
-      vbb = JavaImports::ByteBuffer.allocateDirect(vector.length*4)
+      vbb = JavaImports::ByteBuffer.allocateDirect(index.length*4)
       vbb.order(JavaImports::ByteOrder.nativeOrder)
       vertex_buffer = vbb.asFloatBuffer
-      #TODO Put all vertex, not just first on
-      vertex_buffer.put(vector.to_java(:float))
+      vertex_buffer.put(index.to_java(:float))
       vertex_buffer.position(0)
       
       case self[:verticesOrBlockIndex]
       when 2
+        @gl.glColorPointer(4, JavaImports::GL10::GL_FLOAT, 0, color_buffer) 
         @gl.glVertexPointer(3, JavaImports::GL10::GL_FLOAT, 0, vertex_buffer)
         @gl.glDrawArrays(JavaImports::GL10::GL_LINE_STRIP, 0, 2) 
-        @gl.glDisableClientState(JavaImports::GL10::GL_VERTEX_ARRAY)        
+        @gl.glDisableClientState(JavaImports::GL10::GL_VERTEX_ARRAY) 
+        @gl.glDisableClientState(JavaImports::GL10::GL_COLOR_ARRAY)       
       when 3
         
       when 4
