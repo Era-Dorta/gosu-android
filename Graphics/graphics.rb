@@ -101,16 +101,22 @@ module Gosu
       op.verticesOrBlockIndex = 3
       op.vertices[0] = DrawOp::Vertex.new(x1, y1, c1)
       op.vertices[1] = DrawOp::Vertex.new(x2, y2, c2)
-      op.vertices[1] = DrawOp::Vertex.new(x3, y3, c3)
+      op.vertices[2] = DrawOp::Vertex.new(x3, y3, c3)
       op.z = z  
       @queues.schedule_draw_op op        
     end
 
-    def draw_quad( x1,  y1,  c1,
-         x2,  y2,  c2,
-         x3,  y3,  c3,
-         x4,  y4,  c4,
-         z,  mode); end
+    def draw_quad( x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode)
+      op = DrawOp.new(@gl)
+      op.renderState.mode = mode
+      op.verticesOrBlockIndex = 4
+      op.vertices[0] = DrawOp::Vertex.new(x1, y1, c1)
+      op.vertices[1] = DrawOp::Vertex.new(x2, y2, c2)
+      op.vertices[2] = DrawOp::Vertex.new(x3, y3, c3)
+      op.vertices[3] = DrawOp::Vertex.new(x4, y4, c4)
+      op.z = z  
+      @queues.schedule_draw_op op       
+    end
 
     #Turns a portion of a bitmap o something that can be drawn on
     #this graphics object.

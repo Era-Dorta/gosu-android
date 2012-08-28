@@ -52,6 +52,8 @@ module Gosu
       when 3
         @gl.glDrawArrays(JavaImports::GL10::GL_TRIANGLE_STRIP, 0, 3)
       when 4
+        #This draws a quad using two triangles
+        @gl.glDrawArrays(JavaImports::GL10::GL_TRIANGLE_STRIP, 0, 4)
       end
       @gl.glDisableClientState(JavaImports::GL10::GL_VERTEX_ARRAY) 
       @gl.glDisableClientState(JavaImports::GL10::GL_COLOR_ARRAY) 

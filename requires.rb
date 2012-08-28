@@ -14,4 +14,5 @@ module JavaImports
   java_import "android.view.MotionEvent"
   java_import "android.view.Window"
   java_import "android.view.WindowManager"
+  java_import "android.view.KeyEvent"
 end  

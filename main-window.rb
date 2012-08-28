@@ -2,6 +2,7 @@ require 'requires'
 
 require 'graphics'
 require 'graphicsBase'
+require 'input'
 module Gosu
   
   ruboto_generate(android.opengl.GLSurfaceView => "TouchSurfaceView")
@@ -57,6 +58,7 @@ module Gosu
       @surface_view.set_events   
       @graphics = Graphics.new(@width, @height, @fullscreen, self) 
       @surface_view.renderer =  @graphics 
+      @input = Input.new(@display, self)
     end
     
     # Enters a modal loop where the Window is visible on screen and receives calls to draw, update etc.
@@ -142,7 +144,9 @@ module Gosu
     # Draws a rectangle (two triangles) with given corners and corresponding
     # colors.
     # The points can be in clockwise order, or in a Z shape.
-    def draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=AlphaMode::AM_DEFAULT); end
+    def draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=AlphaMode::AM_DEFAULT)
+      @graphics.draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode)
+    end
     
     # Flushes all drawing operations to OpenGL so that Z-ordering can start anew. This
     # is useful when drawing several parts of code on top of each other that use conflicting
