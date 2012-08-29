@@ -11,18 +11,27 @@ module Gosu
   GosuSurfaceView = TouchSurfaceView
   class GosuSurfaceView
     
-    def window= window
+    def atributes(window, input)
       @window = window
+      @input = input
     end
     
     def set_events
       self.initialize_ruboto_callbacks do
         def on_touch_event(event)
-          if event.getAction == JavaImports::MotionEvent::ACTION_DOWN
             puts "tocado"
-            request_render
-          end      
+            @input.feed_touch_event(event)     
           return true 
+        end
+        
+        def on_key_down(keyCode, event)
+          puts "tecla down"
+          @input.feed_key_event(keyCode, event)
+        end
+        
+        def on_key_up(keyCode, event)
+          puts "tecla up"
+          @input.feed_key_event(keyCode, event)
         end
         
         def on_window_focus_changed(has_focus) 
@@ -53,12 +62,13 @@ module Gosu
       @width = width
       @height= height
       @update_interval = update_interval/1000.0     
-      @surface_view = GosuSurfaceView.new(@activity)  
-      @surface_view.window = self       
+      @surface_view = GosuSurfaceView.new(@activity) 
+      @input = Input.new(@display, self)
+      @surface_view.atributes(self, @input)       
       @surface_view.set_events   
       @graphics = Graphics.new(@width, @height, @fullscreen, self) 
       @surface_view.renderer =  @graphics 
-      @input = Input.new(@display, self)
+      @surface_view.set_render_mode(JavaImports::GLSurfaceView::RENDERMODE_WHEN_DIRTY)
     end
     
     # Enters a modal loop where the Window is visible on screen and receives calls to draw, update etc.
@@ -206,7 +216,8 @@ module Gosu
     def do_tick    
       @graphics.begin(Color::BLACK)  
       self.draw 
-      @graphics.end   
+      @graphics.end 
+      @surface_view.request_render  
     end
     
     def focus_changed has_focus, width, height

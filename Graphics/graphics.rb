@@ -34,7 +34,7 @@ module Gosu
       end
       @gl.glClearColor(clear_with_color.red / 255.0, clear_with_color.green / 255.0,
         clear_with_color.blue / 255.0, clear_with_color.alpha / 255.0)
-      @gl.glClear(JavaImports::GL10::GL_COLOR_BUFFER_BIT)
+      @gl.glClear(JavaImports::GL10::GL_COLOR_BUFFER_BIT | JavaImports::GL10::GL_DEPTH_BUFFER_BIT)
       
       true
     end
@@ -47,6 +47,7 @@ module Gosu
     #Useful for games that are *very* composite in nature (splitscreen).
     def flush
       @queues.performDrawOpsAndCode
+      @queues.clear_queue
     end
     
     #Finishes all pending Gosu drawing operations and executes
@@ -134,8 +135,11 @@ module Gosu
     end
   
     def onSurfaceCreated(gl, config)
-      #gl.glClearColor(1,1,1,1)
       @gl = gl
+      #Options to improve performance
+      @gl.glDisable(JavaImports::GL10::GL_DITHER)
+      @gl.glHint(JavaImports::GL10::GL_PERSPECTIVE_CORRECTION_HINT, JavaImports::GL10::GL_FASTEST)  
+          
       @gl.glMatrixMode(JavaImports::GL10::GL_PROJECTION)
       @gl.glLoadIdentity
       @gl.glViewport(0, 0, @window.width, @window.height)
