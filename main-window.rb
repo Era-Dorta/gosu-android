@@ -97,7 +97,7 @@ module Gosu
     def do_show
       start_time = Time.now
       do_tick
-      #Do gosu dark side
+      #TODO gosu dark side
       end_time = Time.now
       if (start_time <= end_time and (end_time - start_time) < @update_interval)
           sleep(@update_interval - (end_time - start_time)) 
@@ -138,6 +138,13 @@ module Gosu
     
     # Returns true if a button is currently pressed. Updated every tick.
     def button_down?(id); end
+
+    # Called when the user started a touch on the screen
+    def touch_began(touch); end
+    # Called when the user continue a touch on the screen
+    def touch_moved(touch); end    
+    # Called when the user finished a touch on the screen
+    def touch_ended(touch); end    
     
     # Draws a line from one point to another (last pixel exclusive).
     # Note: OpenGL lines are not reliable at all and may have a missing pixel at the start
@@ -213,7 +220,15 @@ module Gosu
     # @deprecated Use Window#mouse_x= and Window#mouse_y= instead.
     def set_mouse_position(x, y); end
     
+    def caption= value    
+      @caption = value  
+      if @showing and not @fullscreen 
+        @activity.setTitle @caption
+      end
+    end
+    
     def do_tick    
+      @input.update
       @graphics.begin(Color::BLACK)  
       self.draw 
       @graphics.end 
@@ -223,6 +238,12 @@ module Gosu
     def focus_changed has_focus, width, height
       @screen_width = width
       @screen_height = height
+    end
+    
+    def show_soft_keyboard
+      context = @activity.getApplicationContext
+      imm = context.getSystemService(Context::INPUT_METHOD_SERVICE)
+      imm.toggleSoftInput(JavaImports::InputMethodManager::SHOW_FORCED,0)
     end
   end
 end  

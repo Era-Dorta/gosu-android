@@ -40,9 +40,20 @@ module Gosu
     def initialize(display, window) 
       @display = display
       @window = window
+      @touch_event_list = []
+      @key_event_list = []
+      @id = 0
     end
     
-    def feed_touch_event(type, touches); end  
+    def feed_touch_event(event)
+      puts "Guardando un touch event"
+      @touch_event_list.push event
+    end
+    
+    def feed_key_event(keyCode, event)
+      puts "Guardando un key event"
+      @key_event_list.push [keyCode, event]
+    end  
   
     # Returns the character a button usually produces, or 0.
     def id_to_char(btn); end
@@ -81,18 +92,25 @@ module Gosu
     
     # Collects new information about which buttons are pressed, where the
     # mouse is and calls onButtonUp/onButtonDown, if assigned.
-    def update; end
+    def update
+      @touch_event_list.each do |touch_event|
+        touch = Touch.new(touch_event.getEventTime, touch_event.getX, touch_event.getY)
+        case touch_event.getAction
+        when JavaImports::MotionEvent::ACTION_DOWN          
+          @window.touch_began(touch)
+        when JavaImports::MotionEvent::ACTION_MOVE
+          @window.touch_moved(touch)
+        when JavaImports::MotionEvent::ACTION_UP
+          @window.touch_ended(touch)
+        end    
+      end  
+      @touch_event_list = []    
+    end
     
     # Assignable events that are called by update. You can bind these to your own functions.
     # If you use the Window class, it will assign forward these to its own methods.
     def button_down; end
     def button_up; end
-    
-    # Assignable events that are called by update. You can bind these to your own functions.
-    # If you use the Window class, it will assign forward these to its own methods.
-    def touch_began; end
-    def touch_moved; end
-    def touch_ended; end
     
     # Returns the currently active TextInput instance, or 0.
     def text_input; end 
