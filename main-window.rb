@@ -150,18 +150,18 @@ module Gosu
     # Note: OpenGL lines are not reliable at all and may have a missing pixel at the start
     # or end point. Please only use this for debugging purposes. Otherwise, use a quad or
     # image to simulate lines, or contribute a better draw_line to Gosu.
-    def draw_line(x1, y1, c1, x2, y2, c2, z=0, mode=AlphaMode::AM_DEFAULT)
+    def draw_line(x1, y1, c1, x2, y2, c2, z=0, mode=AM_DEFAULT)
       @graphics.draw_line(x1, y1, c1, x2, y2, c2, z, mode)
     end
     
-    def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=AlphaMode::AM_DEFAULT)
+    def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=AM_DEFAULT)
       @graphics.draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z, mode)
     end
     
     # Draws a rectangle (two triangles) with given corners and corresponding
     # colors.
     # The points can be in clockwise order, or in a Z shape.
-    def draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=AlphaMode::AM_DEFAULT)
+    def draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=AM_DEFAULT)
       @graphics.draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode)
     end
     

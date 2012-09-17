@@ -1,5 +1,4 @@
 module Gosu
-    module AlphaMode
       #amDefault -> The color's channels will be interpolated. The alpha channel
       #specifies the opacity of the new color, 255 is full opacity.
       
@@ -9,6 +8,5 @@ module Gosu
       
       #amMultiply -> The color's channels will be multiplied with each other.
       AM_DEFAULT, AM_ADD, AM_MULTIPLY = *(0..2) 
-      AM_ADDITIVE = AM_ADD   
-    end  
+      AM_ADDITIVE = AM_ADD    
 end    
