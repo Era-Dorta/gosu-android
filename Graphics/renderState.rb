@@ -11,7 +11,7 @@ module Gosu
       when 0
         self[:tex_name] = NO_TEXTURE
         self[:transform] = 0
-        self[:clip_rect] = clipRect.new
+        self[:clip_rect] = ClipRect.new
         self[:clip_rect].width = NO_CLIPPING
         self[:mode] = AM_DEFAULT
       else
@@ -73,10 +73,10 @@ module Gosu
     end
     
     def RenderStateManager.finalize(id)
-        no_clipping = clipRect.new
+        no_clipping = ClipRect.new
         no_clipping.width = NO_CLIPPING
-        clip_rect = no_clipping
-        tex_name = NO_TEXTURE
+        self[:clip_rect] = no_clipping
+        self[:tex_name] = NO_TEXTURE
         #Return to previous MV matrix
         gl.glMatrixMode(JavaImports::GL_MODELVIEW)
         gl.glPopMatrix
