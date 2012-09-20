@@ -9,4 +9,19 @@ module Gosu
   #amMultiply -> The color's channels will be multiplied with each other.
   AM_DEFAULT, AM_ADD, AM_MULTIPLY = *(0..2) 
   AM_ADDITIVE = AM_ADD    
+  
+  FF_BOLD         = 1
+  FF_ITALIC       = 2
+  FF_UNDERLINE    = 4
+  FF_COMBINATIONS = 8
+  
+  TA_LEFT, TA_RIGHT, TA_CENTER, TA_JUSTIFY = *(0..3)
+  
+  #Flags that affect the tileability of an image 
+  BF_SMOOTH = 0
+  BF_TILEABLE_LEFT = 1
+  BF_TILEABLE_TOP = 2
+  BF_TILEABLE_RIGHT = 4
+  BF_TILEABLE_BOTTOM = 8
+  BF_TILEABLE = BF_TILEABLE_LEFT | BF_TILEABLE_TOP | BF_TILEABLE_RIGHT | BF_TILEABLE_BOTTOM
 end    

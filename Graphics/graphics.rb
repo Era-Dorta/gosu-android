@@ -8,6 +8,7 @@ module Gosu
   class Graphics
     attr_reader :width, :height
     attr_reader :fullscreen
+    attr_reader :gl
     def initialize(physical_width, physical_height, fullscreen, window)
       @window = window     
       @virt_width = physical_height
@@ -45,8 +46,8 @@ module Gosu
     end
     #Flushes the Z queue to the screen and starts a new one.
     #Useful for games that are *very* composite in nature (splitscreen).
-    def flush
-      @queues.performDrawOpsAndCode
+    def flush 
+      @queues.perform_draw_ops_and_code
       @queues.clear_queue
     end
     
@@ -88,8 +89,8 @@ module Gosu
     #image to simulate lines, or contribute a better drawLine to Gosu.
     def draw_line( x1,  y1,  c1, x2,  y2,  c2, z,  mode) 
       op = DrawOp.new(@gl)
-      op.renderState.mode = mode
-      op.verticesOrBlockIndex = 2
+      op.render_state.mode = mode
+      op.vertices_or_block_index = 2
       op.vertices[0] = DrawOp::Vertex.new(x1, y1, c1)
       op.vertices[1] = DrawOp::Vertex.new(x2, y2, c2)
       op.z = z  
@@ -98,8 +99,8 @@ module Gosu
 
     def draw_triangle( x1,  y1,  c1, x2,  y2,  c2, x3,  y3,  c3, z,  mode)
       op = DrawOp.new(@gl)
-      op.renderState.mode = mode
-      op.verticesOrBlockIndex = 3
+      op.render_state.mode = mode
+      op.vertices_or_block_index = 3
       op.vertices[0] = DrawOp::Vertex.new(x1, y1, c1)
       op.vertices[1] = DrawOp::Vertex.new(x2, y2, c2)
       op.vertices[2] = DrawOp::Vertex.new(x3, y3, c3)
@@ -109,8 +110,8 @@ module Gosu
 
     def draw_quad( x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode)
       op = DrawOp.new(@gl)
-      op.renderState.mode = mode
-      op.verticesOrBlockIndex = 4
+      op.render_state.mode = mode
+      op.vertices_or_block_index = 4
       op.vertices[0] = DrawOp::Vertex.new(x1, y1, c1)
       op.vertices[1] = DrawOp::Vertex.new(x2, y2, c2)
       op.vertices[2] = DrawOp::Vertex.new(x3, y3, c3)

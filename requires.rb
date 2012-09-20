@@ -2,11 +2,16 @@ require 'ruboto/activity'
 require 'ruboto/generate'
 
 module JavaImports
+  #Opengl classes
   java_import "android.opengl.GLSurfaceView"
   
   java_import "javax.microedition.khronos.egl.EGL10"
   java_import "javax.microedition.khronos.egl.EGLConfig"
   java_import "javax.microedition.khronos.opengles.GL10"
+  
+  #Bitmap classes
+  java_import "android.graphics.BitmapFactory"
+  java_import "android.graphics.Bitmap"
   
   java_import "java.nio.ByteBuffer"
   java_import "java.nio.ByteOrder"

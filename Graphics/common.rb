@@ -12,4 +12,13 @@ module Gosu
           self[:width] == other.width && self[:height] == other.height)
     end
   end 
+  
+  def reorder_coordinates_if_necessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4)
+    if (isPToTheLeftOfAB(x1, y1, x2, y2, x3, y3) ==
+      isPToTheLeftOfAB(x2, y2, x3, y3, x4, y4))
+      true
+    else
+      false
+    end    
+  end
 end

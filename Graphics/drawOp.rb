@@ -1,19 +1,19 @@
 require 'renderState'
 
 module Gosu
-  class DrawOp < Struct.new(:z, :verticesOrBlockIndex, :top, :left, :bottom, :right, :renderState, :vertices)  
+  class DrawOp < Struct.new(:z, :vertices_or_block_index, :top, :left, :bottom, :right, :render_state, :vertices)  
     
     class Vertex < Struct.new(:x, :y, :c); end  
     
     def initialize(gl)
       @gl = gl  
       self[:vertices] = Array.new
-      self[:renderState] = RenderState.new
+      self[:render_state] = RenderState.new
     end
     
     def perform(nextOp)
-      if self[:verticesOrBlockIndex] < 2 or self[:verticesOrBlockIndex] > 4
-        raise "Wrong verticesOrBlockIndex"
+      if self[:vertices_or_block_index] < 2 or self[:vertices_or_block_index] > 4
+        raise "Wrong vertices_or_block_index"
       end
       @gl.glEnableClientState(JavaImports::GL10::GL_VERTEX_ARRAY) 
       @gl.glEnableClientState(JavaImports::GL10::GL_COLOR_ARRAY)
@@ -46,7 +46,7 @@ module Gosu
       @gl.glColorPointer(4, JavaImports::GL10::GL_FLOAT, 0, color_buffer) 
       @gl.glVertexPointer(3, JavaImports::GL10::GL_FLOAT, 0, vertex_buffer)
       
-      case self[:verticesOrBlockIndex]
+      case self[:vertices_or_block_index]
       when 2
         @gl.glDrawArrays(JavaImports::GL10::GL_LINE_STRIP, 0, 2)   
       when 3

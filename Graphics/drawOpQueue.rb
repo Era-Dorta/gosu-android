@@ -9,11 +9,11 @@ module Gosu
       @ops.push op
     end
     
-    def performDrawOpsAndCode
+    def perform_draw_ops_and_code
       #Sort by z
       @ops.sort!
       @ops.each do |op|        
-          op.perform(0) if op.verticesOrBlockIndex >= 0
+          op.perform(0) if op.vertices_or_block_index >= 0
       end
     end
     

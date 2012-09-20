@@ -10,6 +10,7 @@ module Gosu
     GREEN_OFFSET = 8
     BLUE_OFFSET = 16
     ALPHA_OFFSET = 24 
+    GL_FORMAT = 0x1908
     def initialize(*args)
       case args.length
       #When no argument is given, do nothing
@@ -31,6 +32,11 @@ module Gosu
       else
         raise ArgumentError
       end      
+    end
+    
+    #Return internal representation of the color
+    def gl
+      @rep
     end
     
     def red
