@@ -12,12 +12,12 @@ module Gosu
       @allocator = BlockAllocator.new(@size, @size)
       @num = 0
       @gl = gl
-      @name = [1]
-      @gl.glGenTextures(1, @name.to_java(:int), 0)
+      @name = [0].to_java(:int)
+      @gl.glGenTextures(1, @name, 0)
       if @name[0] == -1
         raise "Couldn't create OpenGL texture"
       end 
-      @gl.glBindTexture(JavaImports::GL10::GL_TEXTURE_2D, @textures[0])
+      @gl.glBindTexture(JavaImports::GL10::GL_TEXTURE_2D, @name[0])
       #TODO Not sure wheter this should be here or not
       @gl.glTexImage2D(JavaImports::GL_TEXTURE_2D, 0, 4, @allocator.width, @allocator.height, 0,
                  JavaImports::GL_RGBA, JavaImports::GL_UNSIGNED_BYTE, 0)
@@ -31,11 +31,11 @@ module Gosu
     end
     
     def Texture.finalize(id)
-      @gl.glDeleteTextures(1, @name.to_java(:int))
+      @gl.glDeleteTextures(1, @name)
     end
     
     def tex_name
-      @name
+      @name[0]
     end
     
     def size
