@@ -22,8 +22,7 @@ module Gosu
       #Gl stuff moved to render
       
       @queues = DrawOpQueue.new
-      #TODO include vector of @textures 
-      #TODO Set queues to size 1    
+      @textures = []    
     end
     
     def setResolution(virtualWidth, virtualHeight); end
@@ -123,8 +122,65 @@ module Gosu
 
     #Turns a portion of a bitmap o something that can be drawn on
     #this graphics object.
-    def createImage( src, srcX,  srcY,  srcWidth,  srcHeight,
-         borderFlags); end    
+    def createImage(src, src_x,  src_y,  src_width,  src_height, border_flags)
+      max_size = MAX_TEXTURE_SIZE
+  
+      #Special case: If the texture is supposed to have hard borders,
+      #is quadratic, has a size that is at least 64 pixels but less than 256
+      #pixels and a power of two, create a single texture just for this image.
+      if ((border_flags & BF_TILEABLE) == BF_TILEABLE and src_width == src_height and
+          (src_width & (src_width - 1)) == 0 and src_width >= 64)
+          
+          texture = Texture.new(src_width)
+          
+          #Use the source bitmap directly if the source area completely covers
+          #it.
+          if (src_x == 0 and src_width == src.width and src_y == 0 and src_height == src.height)
+              data = texture.try_alloc(self, @queues, texture, src, 0)        
+          else
+              trimmed_src = Bitmap.new
+              trimmed_src.resize(src_width, src_height)
+              trimmed_src.insert(src, 0, 0, src_x, src_y, src_width, src_height)
+              data = texture.try_alloc(self, @queues, texture, trimmed_src, 0)
+          end
+          
+          if not data.get
+              raise "Internal texture block allocation error"
+          end    
+          return data
+      end
+      
+      #Too large to fit on a single texture. 
+      #TODO LargeImageData not implemented yet
+      if (src_width > max_size - 2 || src_height > max_size - 2)
+          bmp = Bitmap.new(src_width, src_height)
+          bmp.insert(src, 0, 0, src_x, src_y, src_width, src_height)
+          lidi = LargeImageData.new(self, bmp, max_size - 2, max_size - 2, border_flags)
+          return lidi
+      end
+      
+      bmp = Bitmap.new
+      apply_border_flags(bmp, src, src_x, src_y, src_width, src_height, border_flags)
+      
+      #Try to put the bitmap into one of the already allocated textures.
+      @textures.each do |tex|
+        data = tex.try_alloc(self, @queues, tex, bmp, 1)
+        if data.get
+            return data
+        end
+      end
+      
+      #All textures are full: Create a new one.    
+      texture = Texture.new(max_size)
+      @textures.push texture
+      
+  
+      data = texture.try_alloc(self, @queues, texture, bmp, 1)
+      if not data.get
+        raise "Internal texture block allocation error"
+      end
+      data      
+    end    
     
     def onDrawFrame(gl)
       #gl.glClear(JavaImports::GL10::GL_COLOR_BUFFER_BIT | JavaImports::GL10::GL_DEPTH_BUFFER_BIT)

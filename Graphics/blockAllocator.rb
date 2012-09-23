@@ -75,25 +75,23 @@ module Gosu
       end
 
       #Brute force: Look for a free place on this texture.
-      x = b.left
-      y = b.top
-      while(y <= (height - a_height)) do 
-        while(x <= (width - a_width)) do
+      while(b.top <= (height - a_height)) do 
+        while(b.left <= (width - a_width)) do
           if @pimpl.is_block_free(b)
             #Found a nice place!
   
             #Try to make up for the large for()-stepping.
-            while (y > 0 and @pimpl.is_block_free(Block.new(x, y - 1, a_width, a_height))) do
-                y -= 1
+            while (b.top > 0 and @pimpl.is_block_free(Block.new(b.left, b.top - 1, a_width, a_height))) do
+                b.top -= 1
             end    
-            while (x > 0 and @pimpl.is_block_free(Block.new(x - 1, y, a_width, a_height))) do
-                x -= 1
+            while (b.left > 0 and @pimpl.is_block_free(Block.new(b.left - 1, b.top, a_width, a_height))) do
+                b.left -= 1
             end
             @pimpl.mark_block_used(b, a_width, a_height)
             return [true, b]          
           end
-          y += 16
-          x += 8
+          b.top += 16
+          b.left += 8
         end      
       end
     

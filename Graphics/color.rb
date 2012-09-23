@@ -4,7 +4,7 @@ module Gosu
   
   class HSV < Struct.new(:h, :s, :v)
   end
-  
+  #TODO Maybe better for performace to make Color a subclass of Android Color
   class Color
     RED_OFFSET = 0
     GREEN_OFFSET = 8

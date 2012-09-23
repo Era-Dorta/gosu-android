@@ -51,10 +51,10 @@ module Gosu
       result = TexChunk.new(graphics, queues, ptr, block.left + padding, block.top + padding,
                                 block.width - 2 * padding, block.height - 2 * padding, padding)
       
-      @gl.glBindTexture(JavaImports::GL10::GL_TEXTURE_2D, @name.to_java(:int))
-      @gl.glTexSubImage2D(JavaImports::GL10::GL_TEXTURE_2D, 0, block.left, block.top, 
-        block.width, block.height, Color::GL_FORMAT, JavaImports::GL10::GL_UNSIGNED_BYTE, bmp.data)
-  
+      @gl.glBindTexture(JavaImports::GL10::GL_TEXTURE_2D, @name[0])
+      #@gl.glTexSubImage2D(JavaImports::GL10::GL_TEXTURE_2D, 0, block.left, block.top, 
+        #block.width, block.height, Color::GL_FORMAT, JavaImports::GL10::GL_UNSIGNED_BYTE, bmp.data)
+      JavaImports::GLUtils.texImage2D(JavaImports::GL10::GL_TEXTURE_2D, 0, bitmap.to_open_gl, 0)
       num += 1
       result
     end
