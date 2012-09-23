@@ -3,6 +3,7 @@ require 'graphicsBase'
 require 'color'
 require 'drawOp'
 require 'drawOpQueue'
+require 'image'
 
 module Gosu
   class Graphics

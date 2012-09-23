@@ -1,7 +1,6 @@
 require 'bitmap'
 require 'color'
 require 'graphicsBase'
-require 'graphics'
 
 module Gosu
   
@@ -72,7 +71,7 @@ module Gosu
     end
          
     public        
-    def draw(x, y, z, factorX = 1, factorY = 1, c = Color::WHITE, mode = amDefault) 
+    def draw(x, y, z, factorX = 1, factorY = 1, c = Color::WHITE, mode = AM_DEFAULT) 
       
     end
             

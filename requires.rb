@@ -12,6 +12,9 @@ module JavaImports
   #Bitmap classes
   java_import "android.graphics.BitmapFactory"
   java_import "android.graphics.Bitmap"
+  #Objects for textures
+  java_import "android.opengl.GLUtils"
+  java_import "java.io.InputStream"  
   
   java_import "java.nio.ByteBuffer"
   java_import "java.nio.ByteOrder"

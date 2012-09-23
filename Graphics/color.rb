@@ -89,8 +89,8 @@ module Gosu
       #TODO include math code
       #h = normalizeAngle(h)
         
-      sector = (h / 60).round
-      factorial = h / 60 - sector
+      sector = (h.to_f / 60).round
+      factorial = h.to_f / 60 - sector
         
       p = v * (1 - s)
       q = v * (1 - s * factorial)
