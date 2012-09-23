@@ -10,6 +10,8 @@ module Gosu
     attr_reader :width, :height
     attr_reader :fullscreen
     attr_reader :gl
+    
+    MAX_TEXTURE_SIZE = 1024
     def initialize(physical_width, physical_height, fullscreen, window)
       @window = window     
       @virt_width = physical_height
@@ -21,11 +23,11 @@ module Gosu
       @fullscreen = fullscreen
       #Gl stuff moved to render
       
-      @queues = DrawOpQueue.new
+      @queues = DrawOpQueue.new(@gl)
       @textures = []    
     end
     
-    def setResolution(virtualWidth, virtualHeight); end
+    def set_resolution(virtualWidth, virtualHeight); end
 
     #Prepares the graphics object for drawing. Nothing must be drawn
     #without calling begin.
@@ -65,23 +67,23 @@ module Gosu
     def scheduleGL(functor, z); end
     
     #Enables clipping to a specified rectangle.
-    def beginClipping(x,  y,  width,  height); end
+    def begin_clipping(x,  y,  width,  height); end
     #Disables clipping.
-    def endClipping; end
+    def end_clipping; end
     
     #Starts recording a macro. Cannot be nested.
-    def beginRecording; end
+    def begin_recording; end
     #Finishes building the macro and returns it as a drawable object.
     #The width and height affect nothing about the recording process,
     #the resulting macro will simply return these values when you ask
     #it.
     #Most usually, the return value is passed to Image::Image().
-    def endRecording(width,  height); end
+    def end_recording(width,  height); end
     
     #Pushes one transformation onto the transformation stack.
-    def pushTransform(transform); end
+    def push_transform(transform); end
     #Pops one transformation from the transformation stack.
-    def popTransform; end
+    def pop_transform; end
 
     #Draws a line from one po to another (last pixel exclusive).
     #Note: OpenGL lines are not reliable at all and may have a missing pixel at the start
@@ -122,7 +124,7 @@ module Gosu
 
     #Turns a portion of a bitmap o something that can be drawn on
     #this graphics object.
-    def createImage(src, src_x,  src_y,  src_width,  src_height, border_flags)
+    def create_image(src, src_x,  src_y,  src_width,  src_height, border_flags)
       max_size = MAX_TEXTURE_SIZE
   
       #Special case: If the texture is supposed to have hard borders,
@@ -160,6 +162,7 @@ module Gosu
       end
       
       bmp = Bitmap.new
+      #TODO Define apply_border_flags on bitmap utils file
       apply_border_flags(bmp, src, src_x, src_y, src_width, src_height, border_flags)
       
       #Try to put the bitmap into one of the already allocated textures.
@@ -194,6 +197,7 @@ module Gosu
   
     def onSurfaceCreated(gl, config)
       @gl = gl
+      @queues.gl = @gl
       #Options to improve performance
       @gl.glDisable(JavaImports::GL10::GL_DITHER)
       @gl.glHint(JavaImports::GL10::GL_PERSPECTIVE_CORRECTION_HINT, JavaImports::GL10::GL_FASTEST)  

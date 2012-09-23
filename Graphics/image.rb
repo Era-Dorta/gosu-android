@@ -46,27 +46,27 @@ module Gosu
       @data = data
     end
     
-    def initialize_3_bitmap(graphics, source, tileable = false)
-      initialize_7_bitmap(graphics, source, 0, 0, source.width, source.height, tileable)
+    def initialize_3_bitmap(window, source, tileable = false)
+      initialize_7_bitmap(window, source, 0, 0, source.width, source.height, tileable)
     end
     
-    def initialize_3_file_name(graphics, file_name, tileable = false)
+    def initialize_3_file_name(window, file_name, tileable = false)
       bmp = load_image_file(file_name)
-      initialize_3_bitmap(graphics, bmp, tileable)
+      initialize_3_bitmap(window, bmp, tileable)
     end
 
-    def initialize_7_file_name(graphics, file_name, src_x, src_y, src_width, src_height,
+    def initialize_7_file_name(window, file_name, src_x, src_y, src_width, src_height,
               tileable = false)
       bmp = load_image_file(file_name)
-      initialize_7_bitmap(graphics, bmp, src_x, src_y, src_width, src_height, tileable)      
+      initialize_7_bitmap(window, bmp, src_x, src_y, src_width, src_height, tileable)      
     end
     
-    def initialize_7_bitmap(graphics, source, src_x, src_y, src_width, src_height,
+    def initialize_7_bitmap(window, source, src_x, src_y, src_width, src_height,
               tileable = false)
       if tileable         
-        @data = graphics.create_image(source, src_x, src_y, src_width, src_height, BF_TILEABLE)     
+        @data = window.create_image(source, src_x, src_y, src_width, src_height, BF_TILEABLE)     
       else
-        @data = graphics.create_image(source, src_x, src_y, src_width, src_height, BF_SMOOTH)  
+        @data = window.create_image(source, src_x, src_y, src_width, src_height, BF_SMOOTH)  
       end   
     end
          

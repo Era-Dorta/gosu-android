@@ -1,5 +1,6 @@
 require 'blockAllocator'
 require 'texRequires'
+require 'requires'
 
 module Gosu
   class Texture

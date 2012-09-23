@@ -245,5 +245,9 @@ module Gosu
       imm = context.getSystemService(Context::INPUT_METHOD_SERVICE)
       imm.toggleSoftInput(JavaImports::InputMethodManager::SHOW_FORCED,0)
     end
+    
+    def create_image(source, src_x, src_y, src_width, src_height, tileable)
+      @graphics.create_image(source, src_x, src_y, src_width, src_height, tileable)
+    end
   end
 end  

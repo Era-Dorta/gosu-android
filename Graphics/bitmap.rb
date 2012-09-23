@@ -4,19 +4,19 @@ require 'color'
 module Gosu
   class Bitmap
     attr_reader :pixels
-    att_reader :w, :h
+    attr_reader :w, :h
     def initialize(*args)
       case args.length
       when 0
         @w = 0
         @h = 0
       when 1
-        bitmap = JavaImports::BitmapFactory.decodeFile(file_name)  
+        bitmap = JavaImports::BitmapFactory.decodeFile(args[0])  
         @w = bitmap.getWidth
         @h = bitmap.getHeight
-        @pixels = Array.new(@w*@h, 0)
-        bitmap.getPixels(@pixels, 0, @w, 0, 0, @w, @h)    
-        @pixels = to_color @pixels   
+        pixels = Array.new(@w*@h, 0).to_java(:int)
+        bitmap.getPixels(pixels, 0, @w, 0, 0, @w, @h)    
+        @pixels = to_color pixels   
         bitmap.recycle          
       when 2
         initialize_3(args[0], args[1])
@@ -27,6 +27,14 @@ module Gosu
       end     
     end
     
+    def width
+      @w
+    end
+    
+    def height
+      @h
+    end    
+    
     def swap other
       @pixels = other.pixels
       @w = other.w
@@ -36,17 +44,17 @@ module Gosu
     #Returns the color at the specified position. x and y must be on the
     #bitmap.
     def get_pixel(x, y)
-      @pixels[y * w + x]
+      @pixels[y * @w + x]
     end  
 
     #Sets the pixel at the specified position to a color. x and y must
     #be on the bitmap.
     def set_pixel(x, y, c)
-      @pixels[y * w + x] = c
+      @pixels[y * @w + x] = c
     end
           
     def resize(width, height, c = Color::NONE)
-      if (width == w and height == h)
+      if (width == @w and height == @h)
           return
       end
       temp = Bitmap.new(width, height, c)
@@ -104,18 +112,18 @@ module Gosu
         y = 0
       end
   
-      if x + src_width > w
-        if x >= w
+      if x + src_width > @w
+        if x >= @w
             return
         end
-        src_width = w - x
+        src_width = @w - x
       end
   
-      if y + src_height > h
-        if y >= h
+      if y + src_height > @h
+        if y >= @h
             return
         end
-        src_height = h - y
+        src_height = @h - y
       end
   
       (0..(src_height - 1)).each do |rel_y|
@@ -126,15 +134,16 @@ module Gosu
     end
     
     def to_color pixels
-      pixels.each_index do |i|
-        @pixels[i] = Color.new pixels[i]
+      @pixels = []
+      (0..(pixels.length - 1)).each do |i|
+        @pixels.push Color.new pixels[i]
       end  
     end
 
   end
   
   #TODO define load_image with reader argument
-  def load_image_file(file_name)
+  def self.load_image_file(file_name)
     Gosu::Bitmap.new(file_name)
   end
 end
