@@ -51,13 +51,13 @@ module Gosu
     end
     
     def initialize_3_file_name(window, file_name, tileable = false)
-      bmp = load_image_file(file_name)
+      bmp = Gosu::load_image_file(file_name)
       initialize_3_bitmap(window, bmp, tileable)
     end
 
     def initialize_7_file_name(window, file_name, src_x, src_y, src_width, src_height,
               tileable = false)
-      bmp = load_image_file(file_name)
+      bmp = Gosu::load_image_file(file_name)
       initialize_7_bitmap(window, bmp, src_x, src_y, src_width, src_height, tileable)      
     end
     

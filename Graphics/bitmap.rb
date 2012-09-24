@@ -16,7 +16,7 @@ module Gosu
         @h = bitmap.getHeight
         pixels = Array.new(@w*@h, 0).to_java(:int)
         bitmap.getPixels(pixels, 0, @w, 0, 0, @w, @h)    
-        @pixels = to_color pixels   
+        to_color pixels   
         bitmap.recycle          
       when 2
         initialize_3(args[0], args[1])
@@ -63,7 +63,7 @@ module Gosu
     end
     
     def insert *args
-      case arg.length
+      case args.length
       when 3
         insert(args[0], args[1], args[2], 0, 0, args[0].width, args[0].height)
       when 7
@@ -135,7 +135,9 @@ module Gosu
     
     def to_color pixels
       @pixels = []
-      (0..(pixels.length - 1)).each do |i|
+      length = pixels.length - 1
+      
+      length.times do |i|
         @pixels.push Color.new pixels[i]
       end  
     end

@@ -4,6 +4,8 @@ require 'color'
 require 'drawOp'
 require 'drawOpQueue'
 require 'image'
+require 'bitmapUtils'
+require 'texture'
 
 module Gosu
   class Graphics
@@ -122,18 +124,18 @@ module Gosu
       @queues.schedule_draw_op op       
     end
 
+     #TODO If @gl == nil Texture.new will fail, this has to be fixed
     #Turns a portion of a bitmap o something that can be drawn on
     #this graphics object.
     def create_image(src, src_x,  src_y,  src_width,  src_height, border_flags)
       max_size = MAX_TEXTURE_SIZE
-  
       #Special case: If the texture is supposed to have hard borders,
       #is quadratic, has a size that is at least 64 pixels but less than 256
       #pixels and a power of two, create a single texture just for this image.
       if ((border_flags & BF_TILEABLE) == BF_TILEABLE and src_width == src_height and
           (src_width & (src_width - 1)) == 0 and src_width >= 64)
           
-          texture = Texture.new(src_width)
+          texture = Texture.new(src_width, @gl)
           
           #Use the source bitmap directly if the source area completely covers
           #it.
@@ -162,8 +164,7 @@ module Gosu
       end
       
       bmp = Bitmap.new
-      #TODO Define apply_border_flags on bitmap utils file
-      apply_border_flags(bmp, src, src_x, src_y, src_width, src_height, border_flags)
+      Gosu::apply_border_flags(bmp, src, src_x, src_y, src_width, src_height, border_flags)
       
       #Try to put the bitmap into one of the already allocated textures.
       @textures.each do |tex|
@@ -174,7 +175,7 @@ module Gosu
       end
       
       #All textures are full: Create a new one.    
-      texture = Texture.new(max_size)
+      texture = Texture.new(max_size, @gl)
       @textures.push texture
       
   
