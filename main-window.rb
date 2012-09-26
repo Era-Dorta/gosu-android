@@ -3,7 +3,25 @@ require 'requires'
 require 'graphics'
 require 'graphicsBase'
 require 'input'
+
+require 'singleton'
+
 module Gosu
+  
+  class AndroidInitializer
+    include Singleton
+    attr_reader :graphics, :surface_view
+    def initialize
+      @surface_view = GosuSurfaceView.new($activity)   
+      @graphics = Graphics.new(self) 
+      @surface_view.renderer =  @graphics 
+      $activity.content_view = @surface_view    
+    end
+    
+    def on_ready
+      $activity.on_ready
+    end
+  end
   
   ruboto_generate(android.opengl.GLSurfaceView => "TouchSurfaceView")
   #If TouchSurfaceView was redefined here it would hide the one
@@ -55,6 +73,7 @@ module Gosu
     # to the update member function. The default means the game will run
     # at 60 FPS, which is ideal on standard 60 Hz TFT screens.
     def initialize(width, height, fullscreen, update_interval=16.666666)  
+      android_initializer = AndroidInitializer.instance
       @fullscreen = fullscreen
       @showing = false
       @activity = $activity
@@ -62,12 +81,15 @@ module Gosu
       @width = width
       @height= height
       @update_interval = update_interval/1000.0     
-      @surface_view = GosuSurfaceView.new(@activity) 
+      #@surface_view = GosuSurfaceView.new(@activity) 
+      @surface_view = android_initializer.surface_view
       @input = Input.new(@display, self)
       @surface_view.atributes(self, @input)       
       @surface_view.set_events   
-      @graphics = Graphics.new(@width, @height, @fullscreen, self) 
-      @surface_view.renderer =  @graphics 
+      #@graphics = Graphics.new(@width, @height, @fullscreen, self) 
+      @graphics = android_initializer.graphics
+      @graphics.initialize_window(@width, @height, @fullscreen, self) 
+      #@surface_view.renderer =  @graphics 
       @surface_view.set_render_mode(JavaImports::GLSurfaceView::RENDERMODE_WHEN_DIRTY)
     end
     
@@ -79,12 +101,12 @@ module Gosu
         @activity.request_window_feature(JavaImports::Window::FEATURE_NO_TITLE)
         @activity.get_window.set_flags(JavaImports::WindowManager::LayoutParams::FLAG_FULLSCREEN,
             JavaImports::WindowManager::LayoutParams::FLAG_FULLSCREEN)
-        @activity.content_view = @surface_view 
+        #@activity.content_view = @surface_view 
         @window = @activity.getWindow
         #Replace position and size with gosu metrics            
       else      
         @activity.setTitle @caption
-        @activity.content_view = @surface_view 
+        #@activity.content_view = @surface_view 
         @window = @activity.getWindow  
         @window.setLayout(@width, @height)        
       end               

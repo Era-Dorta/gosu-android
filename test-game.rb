@@ -4,6 +4,7 @@ class GameWindow < Gosu::Window
   def initialize
     super 640, 480, false
     self.caption = "Gosu Tutorial Game"
+    @background_image = Gosu::Image.new(self, "/mnt/sdcard/jruby/res/drawable/button2.png", true)
     @offset = 0
   end
   
@@ -24,7 +25,15 @@ end
 
 $activity.start_ruboto_activity "$gosu" do
   def on_create(bundle)
-    window = GameWindow.new
-    window.show
+    Gosu::AndroidInitializer.instance
+    rescue Exception => e
+      puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!"     
   end  
+  
+  def on_ready
+    window = GameWindow.new
+    window.show    
+    rescue Exception => e
+      puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!"     
+  end
 end

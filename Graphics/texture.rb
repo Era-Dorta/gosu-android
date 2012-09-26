@@ -20,8 +20,8 @@ module Gosu
       end 
       @gl.glBindTexture(JavaImports::GL10::GL_TEXTURE_2D, @name[0])
       #TODO Not sure wheter this should be here or not
-      @gl.glTexImage2D(JavaImports::GL_TEXTURE_2D, 0, 4, @allocator.width, @allocator.height, 0,
-                 JavaImports::GL_RGBA, JavaImports::GL_UNSIGNED_BYTE, 0)
+      @gl.glTexImage2D(JavaImports::GL10::GL_TEXTURE_2D, 0, 4, @allocator.width, @allocator.height, 0,
+                 JavaImports::GL10::GL_RGBA, JavaImports::GL10::GL_UNSIGNED_BYTE, 0)
                  
       @gl.glTexParameterf(JavaImports::GL10::GL_TEXTURE_2D, 
         JavaImports::GL10::GL_TEXTURE_MIN_FILTER, JavaImports::GL10::GL_LINEAR)    

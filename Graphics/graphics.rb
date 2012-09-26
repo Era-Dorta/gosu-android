@@ -14,7 +14,12 @@ module Gosu
     attr_reader :gl
     
     MAX_TEXTURE_SIZE = 1024
-    def initialize(physical_width, physical_height, fullscreen, window)
+    
+    def initialize(android_initializer)
+      @android_initializer = android_initializer
+    end
+    
+    def initialize_window(physical_width, physical_height, fullscreen, window)
       @window = window     
       @virt_width = physical_height
       @virt_height = physical_width
@@ -26,7 +31,7 @@ module Gosu
       #Gl stuff moved to render
       
       @queues = DrawOpQueue.new(@gl)
-      @textures = []    
+      @textures = []       
     end
     
     def set_resolution(virtualWidth, virtualHeight); end
@@ -189,6 +194,8 @@ module Gosu
     def onDrawFrame(gl)
       #gl.glClear(JavaImports::GL10::GL_COLOR_BUFFER_BIT | JavaImports::GL10::GL_DEPTH_BUFFER_BIT)
       @window.do_show
+      rescue Exception => e
+        puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!"       
     end
   
     def onSurfaceChanged(gl, width, height)
@@ -198,7 +205,8 @@ module Gosu
   
     def onSurfaceCreated(gl, config)
       @gl = gl
-      @queues.gl = @gl
+      #@queues.gl = @gl
+      @android_initializer.on_ready  
       #Options to improve performance
       @gl.glDisable(JavaImports::GL10::GL_DITHER)
       @gl.glHint(JavaImports::GL10::GL_PERSPECTIVE_CORRECTION_HINT, JavaImports::GL10::GL_FASTEST)  
@@ -213,7 +221,9 @@ module Gosu
       @gl.glMatrixMode(JavaImports::GL10::GL_MODELVIEW)
       @gl.glLoadIdentity
       
-      @gl.glEnable(JavaImports::GL10::GL_BLEND)         
+      @gl.glEnable(JavaImports::GL10::GL_BLEND)
+      rescue Exception => e
+        puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!"        
     end         
   end
 end
