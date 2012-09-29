@@ -71,8 +71,18 @@ module Gosu
     end
          
     public        
-    def draw(x, y, z, factorX = 1, factorY = 1, c = Color::WHITE, mode = AM_DEFAULT) 
-      
+    def width
+      @data.width
+    end
+    
+    def height
+      @data.height
+    end
+    
+    def draw(x, y, z, factor_x = 1, factor_y = 1, c = Color::WHITE, mode = AM_DEFAULT) 
+      x2 = x + width*factor_x
+      y2 = y + height*factor_y  
+      @data.draw(x, y, c, x2, y, c, x, y2, c, x2, y2, c, z, mode) 
     end
             
   end

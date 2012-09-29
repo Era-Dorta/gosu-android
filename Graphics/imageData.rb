@@ -16,7 +16,7 @@ module Gosu
     def draw( x1,  y1,  c1, x2,  y2,  c2, x3,  y3,  c3, x4,  y4,  c4, z, mode);
     end  
         
-    def glTexInfo; end
+    def gl_tex_info; end
     def to_bitmap; end      
   end
   

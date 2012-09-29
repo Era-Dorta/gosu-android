@@ -11,17 +11,18 @@ module Gosu
   class AndroidInitializer
     include Singleton
     attr_reader :graphics, :surface_view
-    def initialize
+    
+    def start
       @surface_view = GosuSurfaceView.new($activity)   
       @graphics = Graphics.new(self) 
       @surface_view.renderer =  @graphics 
-      $activity.content_view = @surface_view    
-    end
+      $activity.content_view = @surface_view 
+    end   
     
     def on_ready
       $activity.on_ready
     end
-  end
+  end  
   
   ruboto_generate(android.opengl.GLSurfaceView => "TouchSurfaceView")
   #If TouchSurfaceView was redefined here it would hide the one
