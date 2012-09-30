@@ -19,8 +19,11 @@ module Gosu
         raise "Couldn't create OpenGL texture"
       end 
       @gl.glBindTexture(JavaImports::GL10::GL_TEXTURE_2D, @name[0])
+      
+      @gl.glTexImage2D(JavaImports::GL10::GL_TEXTURE_2D, 0, JavaImports::GL10::GL_RGBA, @allocator.width, 
+        @allocator.height, 0, JavaImports::GL10::GL_RGBA, JavaImports::GL10::GL_UNSIGNED_BYTE, nil)       
 =begin        
-      #TODO Shoul create an empty texture to be filled later
+      #TODO Should create an empty texture to be filled later
       pixel = [0]
       pbb = JavaImports::ByteBuffer.allocateDirect(pixel.length*4)
       pbb.order(JavaImports::ByteOrder.nativeOrder)
@@ -64,9 +67,11 @@ module Gosu
       block = alloc_info[1]
       result = TexChunk.new(graphics, queues, ptr, block.left + padding, block.top + padding,
                                 block.width - 2 * padding, block.height - 2 * padding, padding)
-      #TODO Should use texSubImage
-      @gl.glBindTexture(JavaImports::GL10::GL_TEXTURE_2D, @name[0])
-      JavaImports::GLUtils.texImage2D(JavaImports::GL10::GL_TEXTURE_2D, 0, bmp.to_open_gl, 0) 
+  
+      @gl.glTexSubImage2D(JavaImports::GL10::GL_TEXTURE_2D, 0, block.left, block.top, block.width, block.height, 
+        Color::GL_FORMAT, JavaImports::GL10::GL_UNSIGNED_BYTE, aux_buffer)      
+      #@gl.glBindTexture(JavaImports::GL10::GL_TEXTURE_2D, @name[0])
+      #JavaImports::GLUtils.texImage2D(JavaImports::GL10::GL_TEXTURE_2D, 0, bmp.to_open_gl, 0) 
   
       @num += 1
       result

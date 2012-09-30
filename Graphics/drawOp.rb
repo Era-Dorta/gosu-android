@@ -98,8 +98,11 @@ module Gosu
         @gl.glDrawArrays(JavaImports::GL10::GL_TRIANGLE_STRIP, 0, 4)
       end
       @gl.glDisableClientState(JavaImports::GL10::GL_VERTEX_ARRAY) 
-      @gl.glDisableClientState(JavaImports::GL10::GL_COLOR_ARRAY) 
-      @gl.glDisableClientState(JavaImports::GL10::GL_TEXTURE_COORD_ARRAY)
+      if self[:render_state].tex_name == NO_TEXTURE
+        @gl.glDisableClientState(JavaImports::GL10::GL_COLOR_ARRAY) 
+      else
+        @gl.glDisableClientState(JavaImports::GL10::GL_TEXTURE_COORD_ARRAY)        
+      end  
     end
     
     def <=> other

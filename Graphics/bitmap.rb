@@ -85,14 +85,14 @@ module Gosu
     
     def data_java
       #TODO Make a real transformation from pixels to pixels_java
-      #pbb = JavaImports::ByteBuffer.allocateDirect(@pixels.length*4)
-      #pbb.order(JavaImports::ByteOrder.nativeOrder)
-      #pixel_buffer = pbb.asIntBuffer
+      pbb = JavaImports::ByteBuffer.allocateDirect(@pixels_java.length*4)
+      pbb.order(JavaImports::ByteOrder.nativeOrder)
+      pixel_buffer = pbb.asIntBuffer
       #pixels_int = @pixels.collect{|i| i.gl}
-      #pixel_buffer.put(pixels_int.to_java(:int))
-      #pixel_buffer.position(0)
-      #pixel_buffer
-      @pixels_java
+      pixel_buffer.put(@pixels_java)
+      pixel_buffer.position(0)
+      pixel_buffer
+      #@pixels_java
     end
       
     private
