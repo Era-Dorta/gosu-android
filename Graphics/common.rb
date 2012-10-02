@@ -25,4 +25,5 @@ module Gosu
       false
     end    
   end
+    
 end

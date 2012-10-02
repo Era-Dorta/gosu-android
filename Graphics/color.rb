@@ -4,8 +4,20 @@ module Gosu
   
   class HSV < Struct.new(:h, :s, :v)
   end
-  #TODO Maybe better for performace to make Color a subclass of Android Color
+
   class Color
+    private
+    def self.force_overflow(i)
+      if i < -2147483648
+          i & 0xffffffff 
+      elsif i > 2147483647 
+          -(-(i) & 0xffffffff)
+      else  
+          i
+      end    
+    end  
+    
+    public
     RED_OFFSET = 0
     GREEN_OFFSET = 8
     BLUE_OFFSET = 16
@@ -27,8 +39,8 @@ module Gosu
         
       #Constructor for alpha, Channel red, Channel green, Channel blue
       when 4
-          @rep = (args[0] << ALPHA_OFFSET) | (args[1] << RED_OFFSET) |
-                  (args[2] << GREEN_OFFSET) | (args[3] << BLUE_OFFSET)
+          @rep = force_overflow((args[0] << ALPHA_OFFSET) | (args[1] << RED_OFFSET) |
+                  (args[2] << GREEN_OFFSET) | (args[3] << BLUE_OFFSET))
       else
         raise ArgumentError
       end      
@@ -55,32 +67,32 @@ module Gosu
       (@rep >> ALPHA_OFFSET)&0x000000FF
     end
 
-    def setRed(value)
+    def red= value
         @rep &= ~(0xff << RED_OFFSET)
         @rep |= value << RED_OFFSET
     end
 
 
-    def setGreen(value)
+    def green= value
         @rep &= ~(0xff << GREEN_OFFSET)
         @rep |= value << GREEN_OFFSET
     end
     
-    def setBlue(value)
+    def blue= value
         @rep &= ~(0xff << BLUE_OFFSET)
         @rep |= value << BLUE_OFFSET
     end
 
-    def setAlpha(value)
+    def alpha= value
         @rep &= ~(0xff << ALPHA_OFFSET)
         @rep |= value << ALPHA_OFFSET
     end    
     
-    def fromHSV(h, s, v)
+    def from_HSV(h, s, v)
       fromAHSV(255, h, s, v)
     end
     
-    def fromAHSV(alpha, h, s, v)
+    def from_AHSV(alpha, h, s, v)
       if (s == 0)
         #Grey.
             return Color.new(alpha, v * 255, v * 255, v * 255)

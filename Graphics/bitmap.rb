@@ -3,7 +3,7 @@ require 'color'
 
 module Gosu
   class Bitmap
-    attr_reader :pixels, :pixels_java
+    attr_reader :pixels
     attr_reader :w, :h
     def initialize(*args)
       case args.length
@@ -15,9 +15,9 @@ module Gosu
         #TODO If creating the bitmap fails, raise runtime exception
         @w = bitmap.getWidth
         @h = bitmap.getHeight
-        @pixels_java = Array.new(@w*@h, 0).to_java(:int)
-        bitmap.getPixels(@pixels_java, 0, @w, 0, 0, @w, @h)    
-        to_color @pixels_java   
+        pixels_java = Array.new(@w*@h, 0).to_java(:int)
+        bitmap.getPixels(pixels_java, 0, @w, 0, 0, @w, @h)    
+        to_color pixels_java   
         bitmap.recycle          
       when 2
         initialize_3(args[0], args[1])
@@ -74,25 +74,19 @@ module Gosu
       end
     end      
     
-    def to_open_gl
-      #TODO Here @w and @h do not match real size of pixels
-      JavaImports::createBitmap(@pixels_java, @w, @h, JavaImports::Bitmap::Config::ARGB_8888)
-    end
-    
     def data
       @pixels
     end  
     
     def data_java
-      #TODO Make a real transformation from pixels to pixels_java
-      pbb = JavaImports::ByteBuffer.allocateDirect(@pixels_java.length*4)
+      p = @pixels.collect{|i| i.gl}
+      p_aux = p.to_java(:int)
+      pbb = JavaImports::ByteBuffer.allocateDirect(p_aux.length*4)
       pbb.order(JavaImports::ByteOrder.nativeOrder)
       pixel_buffer = pbb.asIntBuffer
-      #pixels_int = @pixels.collect{|i| i.gl}
-      pixel_buffer.put(@pixels_java)
+      pixel_buffer.put(p_aux)
       pixel_buffer.position(0)
       pixel_buffer
-      #@pixels_java
     end
       
     private
@@ -100,16 +94,10 @@ module Gosu
       @w = w
       @h = h
       @c = c
-      @pixels = Array.new(@w*@h, c)
-      #if @w > 0 and @h > 0
-        #bitmap = JavaImports::Bitmap.createBitmap(@w, @h, JavaImports::Bitmap::Config::ARGB_8888)
-        #@bitmap.eraseColor(c.gl)
-      #end       
+      @pixels = Array.new(@w*@h, c)      
     end
     
     def insert_internal(source, x, y, src_x, src_y, src_width, src_height)
-      #TODO This is not a real insert, should not copy pixels_java
-      @pixels_java = source.pixels_java
       if x < 0
         clip_left = -x
   
@@ -155,13 +143,10 @@ module Gosu
     
     def to_color pixels
       @pixels = []
-      #TODO Hex representacion is different on android and ruby, make everything
-      #match so transition between pixels and pixels java is right
-      length.times do |i|
-        @pixels.push Color.new(JavaImports::Color.red(pixels[i]), 
-          JavaImports::Color.green(pixels[i]), JavaImports::Color.blue(pixels[i]))
+      pixels.length.times do |i|
+        @pixels.push Color.new pixels[i]
       end  
-    end
+    end 
 
   end
   
