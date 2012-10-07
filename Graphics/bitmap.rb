@@ -12,7 +12,9 @@ module Gosu
         @h = 0
       when 1
         bitmap = JavaImports::BitmapFactory.decodeFile(args[0])  
-        #TODO If creating the bitmap fails, raise runtime exception
+        if bitmap == nil
+          raise "Could not load image at #{args[0]}"
+        end        
         @w = bitmap.getWidth
         @h = bitmap.getHeight
         pixels_java = Array.new(@w*@h, 0).to_java(:int)
