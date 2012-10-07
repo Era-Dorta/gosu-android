@@ -1,6 +1,7 @@
 require 'bitmap'
 require 'color'
 require 'graphicsBase'
+require 'math'
 
 module Gosu
   
@@ -83,6 +84,36 @@ module Gosu
       x2 = x + width*factor_x
       y2 = y + height*factor_y  
       @data.draw(x, y, c, x2, y, c, x, y2, c, x2, y2, c, z, mode) 
+    end
+    
+    def draw_rot(x, y, z, angle, center_x = 0.5, center_y = 0.5, factor_x = 1, 
+      factor_y = 1, c = Color::WHITE, mode = AM_DEFAULT)
+    
+      size_y = width  * factor_x
+      size_y = height * factor_y
+      offs_x = Gosu::offset_x(angle, 1)
+      offs_y = Gosu::offset_y(angle, 1)
+
+      #Offset to the centers of the original Image's edges when it is rotated
+      #by <angle> degrees.
+      dist_to_left_x   = +offs_y * size_y * center_x
+      dist_to_left_y   = -offs_x * size_y * center_x
+      dist_to_right_x  = -offs_y * size_y * (1 - center_x)
+      dist_to_right_y  = +offs_x * size_y * (1 - center_x)
+      dist_to_top_x    = +offs_x * size_y * center_y
+      dist_to_top_y    = +offs_y * size_y * center_y
+      dist_to_bottom_x = -offs_x * size_y * (1 - center_y)
+      dist_to_bottom_y = -offs_y * size_y * (1 - center_y)
+
+      data.draw(x + dist_to_left_x  + dist_to_top_x,
+        y + dist_to_left_y  + dist_to_top_y, c,
+        x + dist_to_right_x + dist_to_top_x,
+        y + dist_to_right_y + dist_to_top_y, c,
+        x + dist_to_left_x  + dist_to_bottom_x,
+        y + dist_to_left_y  + dist_to_bottom_y, c,
+        x + dist_to_right_x + dist_to_bottom_x,
+        y + dist_to_right_y + dist_to_bottom_y,
+        c, z, mode)
     end
             
   end
