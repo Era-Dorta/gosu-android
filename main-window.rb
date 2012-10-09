@@ -106,13 +106,15 @@ module Gosu
         @window = @activity.getWindow
         #Replace position and size with gosu metrics            
       else      
-        @activity.setTitle @caption
-        #@activity.content_view = @surface_view 
         @window = @activity.getWindow  
-        @window.setLayout(@width, @height)        
+        #Only the thread that created the view can change it, so setLayout
+        #and setTitle cannot be executed here
+        p = Proc.new do
+          @window.setLayout(@width, @height) 
+          @activity.setTitle @caption       
+        end
+        @activity.runOnUiThread(p)        
       end               
-      #Probably the surface has not been created yet, so the width
-      #and height will be 0, but real will be collected on_focus_changed
       @screen_width = @surface_view.get_width
       @screen_height = @surface_view.get_height
     end
@@ -246,7 +248,10 @@ module Gosu
     def caption= value    
       @caption = value  
       if @showing and not @fullscreen 
-        @activity.setTitle @caption
+        p = Proc.new do
+          @activity.setTitle @caption       
+        end
+        @activity.runOnUiThread(p)
       end
     end
     

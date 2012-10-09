@@ -36,9 +36,9 @@ module Gosu
           when 1
             texture.push right, top
           when 2
-            texture.push right, bottom
+            texture.push left, bottom            
           when 3
-            texture.push left, bottom
+            texture.push right, bottom
             i = -1
           end
           i += 1

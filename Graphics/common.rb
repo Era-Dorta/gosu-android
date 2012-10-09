@@ -14,7 +14,7 @@ module Gosu
   end 
 
   def self.is_p_to_the_left_of_ab(xa, ya, xb, yb, xp, yp)
-    return ((xb - xa) * (yp - ya) - (xp - xa) * (yb - ya)) > 0
+    ((xb - xa) * (yp - ya) - (xp - xa) * (yb - ya)) > 0
   end       
   
   def self.reorder_coordinates_if_necessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4)
