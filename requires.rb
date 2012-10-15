@@ -24,4 +24,9 @@ module JavaImports
   java_import "android.view.Window"
   java_import "android.view.WindowManager"
   java_import "android.view.KeyEvent"
+  
+  #Audio
+  java_import "android.media.SoundPool"
+  java_import "android.media.AudioManager"  
+  java_import "android.media.MediaPlayer"  
 end  

@@ -3,6 +3,7 @@ require 'requires'
 require 'graphics'
 require 'graphicsBase'
 require 'input'
+require 'audio'
 
 require 'singleton'
 
