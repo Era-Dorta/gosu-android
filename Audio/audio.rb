@@ -8,6 +8,16 @@ module Gosu
     end
   end
   
+  class AudioFocusListener
+      def onAudioFocusChange focusChange
+              puts "En focus change #{focusChange}"
+      end
+      
+      def toString
+              self.class.to_s
+      end    
+  end
+  
   #TODO ManageAudioFocus, when app loses, stop song
   #TODO Raise a warning is the file could not be loaded
   class Sample
@@ -60,8 +70,13 @@ module Gosu
       @window = window      
       if not defined? @@media_player
         @@media_player = JavaImports::MediaPlayer.new
+        @@audio_focus_listener = AudioFocusListener.new
+        context = $activity.getApplicationContext
+        @@audio_manager = context.getSystemService(Context::AUDIO_SERVICE)                
+        focus = @@audio_manager.requestAudioFocus(@@audio_focus_listener, JavaImports::AudioManager::STREAM_MUSIC, JavaImports::AudioManager::AUDIOFOCUS_GAIN)         
       else
         @@media_player.reset
+        focus = @@audio_manager.requestAudioFocus(@@audio_focus_listener, JavaImports::AudioManager::STREAM_MUSIC, JavaImports::AudioManager::AUDIOFOCUS_GAIN)  
       end  
       @@media_player.setDataSource filename
       @@media_player.prepareAsync 

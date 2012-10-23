@@ -32,9 +32,9 @@ module Gosu
         end        
       when 7
         if args[1].class == Bitmap
-          initialize_3_bitmap(args[0], args[1], args[2], args[3], args[4], args[5], args[6])
+          initialize_7_bitmap(args[0], args[1], args[2], args[3], args[4], args[5], args[6])
         else
-          initialize_3_file_name(args[0], args[1], args[2], args[3], args[4], args[5], args[6])
+          initialize_7_file_name(args[0], args[1], args[2], args[3], args[4], args[5], args[6])
         end         
       else
         raise ArgumentError
@@ -105,7 +105,7 @@ module Gosu
       dist_to_bottom_x = -offs_x * size_y * (1 - center_y)
       dist_to_bottom_y = -offs_y * size_y * (1 - center_y)
 
-      data.draw(x + dist_to_left_x  + dist_to_top_x,
+      @data.draw(x + dist_to_left_x  + dist_to_top_x,
         y + dist_to_left_y  + dist_to_top_y, c,
         x + dist_to_right_x + dist_to_top_x,
         y + dist_to_right_y + dist_to_top_y, c,
@@ -114,6 +114,36 @@ module Gosu
         x + dist_to_right_x + dist_to_bottom_x,
         y + dist_to_right_y + dist_to_bottom_y,
         c, z, mode)
+    end
+    
+    def self.load_tiles(window, bmp, tile_width, tile_height, tileable)
+      images = []
+      
+      #If bmp is a file path
+      if bmp.class == String
+        bmp = Gosu::load_image_file(bmp)
+      end  
+      
+      if (tile_width > 0)
+        tiles_x = bmp.width / tile_width
+      else
+        tiles_x = -tile_width
+        tile_width = bmp.width / tiles_x
+      end
+      
+      if (tile_height > 0)
+        tiles_y = bmp.height / tile_height
+      else
+        tiles_y = -tile_height
+        tile_height = bmp.height / tiles_y
+      end
+      
+      tiles_y.times do |y|
+        tiles_x.times do |x|
+          images.push Image.new(window, bmp, x * tile_width, y * tile_height, tile_width, tile_height, tileable)
+        end
+      end
+      images
     end
             
   end
