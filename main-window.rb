@@ -4,6 +4,7 @@ require 'graphics'
 require 'graphicsBase'
 require 'input'
 require 'audio'
+require 'time'
 
 require 'singleton'
 
