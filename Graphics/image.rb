@@ -86,8 +86,8 @@ module Gosu
       @data.draw(x, y, c, x2, y, c, x, y2, c, x2, y2, c, z, mode) 
     end
     
-    def draw_rot(x, y, z, angle, center_x = 0.5, center_y = 0.5, factor_x = 1, 
-      factor_y = 1, c = Color::WHITE, mode = AM_DEFAULT)
+    def draw_rot(x, y, z, angle, center_x = 0.5, center_y = 0.5, factor_x = 1.0, 
+      factor_y = 1.0, c = Color::WHITE, mode = AM_DEFAULT)
     
       size_y = width  * factor_x
       size_y = height * factor_y

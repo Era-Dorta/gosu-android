@@ -4,7 +4,7 @@ require 'graphics'
 require 'graphicsBase'
 require 'input'
 require 'audio'
-require 'time'
+require 'timing'
 
 require 'singleton'
 
@@ -259,6 +259,7 @@ module Gosu
     
     def do_tick    
       @input.update
+      self.update
       @graphics.begin(Color::BLACK)  
       self.draw 
       @graphics.end 

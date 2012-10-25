@@ -28,7 +28,7 @@ module Gosu
         self[:vertices].each do |vertex|          
           index.push vertex.x
           index.push vertex.y
-          index.push self[:z]
+          index.push 0
           
           case i
           when 0
@@ -61,7 +61,7 @@ module Gosu
           
           index.push vertex.x
           index.push vertex.y
-          index.push self[:z]
+          index.push 0
         end
         
         cbb = JavaImports::ByteBuffer.allocateDirect(color.length*4)
