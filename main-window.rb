@@ -40,18 +40,15 @@ module Gosu
     def set_events
       self.initialize_ruboto_callbacks do
         def on_touch_event(event)
-            puts "tocado"
             @input.feed_touch_event(event)     
           return true 
         end
         
         def on_key_down(keyCode, event)
-          puts "tecla down"
           @input.feed_key_event(keyCode, event)
         end
         
         def on_key_up(keyCode, event)
-          puts "tecla up"
           @input.feed_key_event(keyCode, event)
         end
         

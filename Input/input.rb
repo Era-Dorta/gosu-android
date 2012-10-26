@@ -46,12 +46,10 @@ module Gosu
     end
     
     def feed_touch_event(event)
-      puts "Guardando un touch event"
       @touch_event_list.push event
     end
     
     def feed_key_event(keyCode, event)
-      puts "Guardando un key event"
       @key_event_list.push [keyCode, event]
     end  
   
@@ -94,15 +92,17 @@ module Gosu
     # mouse is and calls onButtonUp/onButtonDown, if assigned.
     def update
       @touch_event_list.each do |touch_event|
-        touch = Touch.new(touch_event.getEventTime, touch_event.getX, touch_event.getY)
-        case touch_event.getAction
-        when JavaImports::MotionEvent::ACTION_DOWN          
-          @window.touch_began(touch)
-        when JavaImports::MotionEvent::ACTION_MOVE
-          @window.touch_moved(touch)
-        when JavaImports::MotionEvent::ACTION_UP
-          @window.touch_ended(touch)
-        end    
+        touch_event.getPointerCount.times do |index|
+          touch = Touch.new(touch_event. getPointerId(index), touch_event.getX(index), touch_event.getY(index))
+          case touch_event.getAction
+          when JavaImports::MotionEvent::ACTION_DOWN          
+            @window.touch_began(touch)
+          when JavaImports::MotionEvent::ACTION_MOVE
+            @window.touch_moved(touch)
+          when JavaImports::MotionEvent::ACTION_UP
+            @window.touch_ended(touch)
+          end   
+        end   
       end  
       @touch_event_list = []    
     end
