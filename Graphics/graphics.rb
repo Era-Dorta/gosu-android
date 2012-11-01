@@ -6,6 +6,7 @@ require 'drawOpQueue'
 require 'image'
 require 'bitmapUtils'
 require 'texture'
+require 'font'
 
 module Gosu
   class Graphics

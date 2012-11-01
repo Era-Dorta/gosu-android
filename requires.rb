@@ -13,6 +13,7 @@ module JavaImports
   java_import "android.graphics.BitmapFactory"
   java_import "android.graphics.Bitmap"
   java_import "android.graphics.Color"
+  
   #Objects for textures
   java_import "android.opengl.GLUtils"
   java_import "java.io.InputStream"  
@@ -20,10 +21,18 @@ module JavaImports
   java_import "java.nio.ByteBuffer"
   java_import "java.nio.ByteOrder"
   java_import "java.nio.IntBuffer"
+  
+  #Event callbacks
   java_import "android.view.MotionEvent"
   java_import "android.view.Window"
   java_import "android.view.WindowManager"
   java_import "android.view.KeyEvent"
+  
+  #Fonts
+  java_import "android.graphics.Canvas"
+  java_import "android.graphics.Paint"
+  java_import "android.graphics.Color"
+  java_import "android.graphics.Typeface"
   
   #Audio
   java_import "android.media.SoundPool"

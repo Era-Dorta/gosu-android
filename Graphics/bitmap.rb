@@ -11,10 +11,14 @@ module Gosu
         @w = 0
         @h = 0
       when 1
-        bitmap = JavaImports::BitmapFactory.decodeFile(args[0])  
-        if bitmap == nil
-          raise "Could not load image at #{args[0]}"
-        end        
+        if args[0].class == String
+          bitmap = JavaImports::BitmapFactory.decodeFile(args[0])  
+          if bitmap == nil
+            raise "Could not load image at #{args[0]}"
+          end        
+        else
+          bitmap = args[0]
+        end    
         @w = bitmap.getWidth
         @h = bitmap.getHeight
         pixels_java = Array.new(@w*@h, 0).to_java(:int)
