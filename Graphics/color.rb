@@ -88,6 +88,10 @@ module Gosu
         @rep |= value << ALPHA_OFFSET
     end    
     
+    def == other   
+      @rep == other.gl
+    end 
+    
     def from_HSV(h, s, v)
       fromAHSV(255, h, s, v)
     end

@@ -13,6 +13,8 @@ module Gosu
     end
     
     def perform(nextOp)
+      #TODO On Gosu even textures can have color, here every start on 
+      #tutorial.rb is white
       if self[:vertices_or_block_index] < 2 or self[:vertices_or_block_index] > 4
         raise "Wrong vertices_or_block_index"
       end

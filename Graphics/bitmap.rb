@@ -95,6 +95,16 @@ module Gosu
       pixel_buffer
     end
       
+    def replace(what, with)
+      @pixels.collect! do |i|
+        if i == what
+          with
+        else
+          i 
+        end
+      end
+    end
+      
     private
     def initialize_3(w, h, c = Color::NONE)
       @w = w
