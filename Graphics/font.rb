@@ -39,15 +39,12 @@ module Gosu
         end
         @c = c
         @paint.setARGB(@c.alpha, @c.red, @c.green, @c.blue)
-        bitmap_java = JavaImports::Bitmap.createBitmap(@paint.measureText(text), @height, JavaImports::Bitmap::Config::RGB_565)
+        bitmap_java = JavaImports::Bitmap.createBitmap(@paint.measureText(text), @height, JavaImports::Bitmap::Config::ARGB_8888)
         @canvas = JavaImports::Canvas.new(bitmap_java)
-        #TODO Make a real solution, this is crappy
-        #This should put the background in transparent color but it does not
-        @canvas.drawARGB(Color::NONE.alpha, Color::NONE.red, Color::NONE.green, Color::NONE.blue)
+
         @canvas.drawText(@text, 0, @height, @paint)    
         bitmap = Bitmap.new bitmap_java     
-        #So before creating the image change every black pixel to a transparent pixel
-        bitmap.replace(Color::BLACK, Color::NONE)
+
         @image = Image.new(@window, bitmap)
       end  
       @image.draw(x, y, z, factor_x, factor_y, c, mode)
