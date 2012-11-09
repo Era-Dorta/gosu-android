@@ -5,6 +5,7 @@ require 'graphicsBase'
 require 'input'
 require 'audio'
 require 'timing'
+require 'physicsManager'
 
 require 'singleton'
 
@@ -91,6 +92,7 @@ module Gosu
       @graphics.initialize_window(@width, @height, @fullscreen, self) 
       #@surface_view.renderer =  @graphics 
       @surface_view.set_render_mode(JavaImports::GLSurfaceView::RENDERMODE_WHEN_DIRTY)
+      @physics_manager = PhysicsManager.new self
     end
     
     # Enters a modal loop where the Window is visible on screen and receives calls to draw, update etc.
@@ -257,8 +259,10 @@ module Gosu
     def do_tick    
       @input.update
       self.update
+      @physics_manager.update
       @graphics.begin(Color::BLACK)  
       self.draw 
+      @physics_manager.draw
       @graphics.end 
       @surface_view.request_render  
     end
@@ -277,5 +281,10 @@ module Gosu
     def create_image(source, src_x, src_y, src_width, src_height, tileable)
       @graphics.create_image(source, src_x, src_y, src_width, src_height, tileable)
     end
+    
+    def register_new_object object
+      @physics_manager.register_new_object object
+    end
+    
   end
 end  
