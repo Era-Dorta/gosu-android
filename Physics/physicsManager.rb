@@ -5,7 +5,7 @@ module Gosu
   class PhysicsManager
     
     def initialize(window, gravity = 9.8)
-      @dt = 0.1
+      @dt = @window.update_interval
       @gravity = gravity
       @squares = []
       @planes = []
@@ -22,11 +22,11 @@ module Gosu
     
     def update
       #Gravity
-#      @squares.each do |square| 
-#        if square.mass_inverted > 0
-#          square.velocity[0] += @dt*@gravity
-#        end 
-#      end
+      @squares.each do |square| 
+        if square.mass_inverted > 0
+          square.velocity[1] += @dt*@gravity
+        end 
+      end
       
      #Collision detection
      @squares.each do |square|
