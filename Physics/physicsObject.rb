@@ -11,16 +11,18 @@ module Gosu
   end
   
   class Square
-    attr_accessor :draw
-    attr_reader :position, :velocity, :mass_inverted 
+    attr_accessor :draw, :velocity
+    attr_reader :position
+    attr_reader :mass_inverted, :restitution 
     def initialize(window, file_name, x, y, z, size, mass_inverted, 
-      velocity_x = 0, velocity_y = 0, draw = true, tileable = false)
+      velocity_x = 0, velocity_y = 0, restitution = 1, draw = true, tileable = false)
       @window = window
       @position = [x,y]
       @size = size / 2
       @center = [@position[0] + @size, @position[1] + @size] 
       @z = z
       @draw = draw
+      @restitution = restitution
       @velocity = [velocity_x, velocity_y]
       @mass_inverted = mass_inverted
       @image = Gosu::Image.new(@window, file_name , tileable)
@@ -44,8 +46,8 @@ module Gosu
         #is moving towards the plane        
         if distance < @size and product < 0
           #Calculate new velocity, after the hit          
-          @velocity[0] -= 2 * other_object.normal[0] * product
-          @velocity[1] -= 2 * other_object.normal[1] * product 
+          @velocity[0] -= (1 + @restitution) * other_object.normal[0] * product
+          @velocity[1] -= (1 + @restitution) * other_object.normal[1] * product 
         end
       end
     end
