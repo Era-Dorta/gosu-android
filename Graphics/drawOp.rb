@@ -30,7 +30,6 @@ module Gosu
         self[:vertices].each do |vertex|          
           index.push vertex.x
           index.push vertex.y
-          index.push 0
           
           case i
           when 0
@@ -63,7 +62,6 @@ module Gosu
           
           index.push vertex.x
           index.push vertex.y
-          index.push 0
         end
         
         cbb = JavaImports::ByteBuffer.allocateDirect(color.length*4)
@@ -84,7 +82,7 @@ module Gosu
         @gl.glColorPointer(4, JavaImports::GL10::GL_FLOAT, 0, color_buffer)
       end 
       
-      @gl.glVertexPointer(3, JavaImports::GL10::GL_FLOAT, 0, vertex_buffer)
+      @gl.glVertexPointer(2, JavaImports::GL10::GL_FLOAT, 0, vertex_buffer)
       
       if self[:render_state].tex_name != NO_TEXTURE      
         @gl.glTexCoordPointer(2, JavaImports::GL10::GL_FLOAT, 0, texture_buffer)  
