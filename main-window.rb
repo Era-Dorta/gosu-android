@@ -6,6 +6,7 @@ require 'input'
 require 'audio'
 require 'timing'
 require 'physicsManager'
+require 'font'
 
 require 'singleton'
 
@@ -69,6 +70,8 @@ module Gosu
     attr_reader :width, :height
     attr_reader :fullscreen?
     attr_reader :update_interval
+    attr_reader :physics_manager
+    attr_reader :fonts_manager
     
     # update_interval:: Interval in milliseconds between two calls
     # to the update member function. The default means the game will run
@@ -93,6 +96,7 @@ module Gosu
       #@surface_view.renderer =  @graphics 
       @surface_view.set_render_mode(JavaImports::GLSurfaceView::RENDERMODE_WHEN_DIRTY)
       @physics_manager = PhysicsManager.new self
+      @fonts_manager = FontsManager.new self
     end
     
     # Enters a modal loop where the Window is visible on screen and receives calls to draw, update etc.

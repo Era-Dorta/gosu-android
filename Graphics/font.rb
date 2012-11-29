@@ -1,24 +1,38 @@
 require 'requires'
 require 'color'
 require 'graphicsBase'
-require 'bitmap'
+require 'image'
 
 module Gosu
+  
+  class FontsManager
+    
+    def initialize(window)
+       file = "/mnt/sdcard/jruby/media/characterAtlas2.png"
+       font_vector = Gosu::Image::load_tiles(window, file, 25, 25, false)
+       symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-/*\'\"!?[]{}_.,:; <>"
+       @font_symbols = {}
+       i = 0
+       symbols.each_char do |symbol|
+         @font_symbols[symbol] = font_vector[i]
+         i += 1
+       end 
+    end
+    
+    def getSymbol(symbol)
+      @font_symbols[symbol]
+    end
+    
+  end
   
   class Font
     attr_reader :name, :flags
     def initialize(window, font_name, font_height, font_flags = :ff_bold)
       @window = window
+      @fonts_manager = window.fonts_manager
       @name = font_name
       @height = font_height * 2
-      @flags = flags
-      
-      @paint = JavaImports::Paint.new     
-
-      @paint.setStyle(JavaImports::Paint::Style::FILL)
-      @paint.setTextSize(@height)
-      @paint.setAntiAlias(true)
-      @paint.setTypeface(font_name)             
+      @flags = flags         
     end
     
     def height
@@ -29,25 +43,13 @@ module Gosu
     #param text Formatted text without line-breaks.
     def draw(text, x, y, z, factor_x = 1, factor_y = 1, c = Color::WHITE, 
       mode = AM_DEFAULT)
-      #To avoid creating the bitmap every frame check is the text or color
-      #has change. If any changed create a new Image, otherwise just draw the
-      #image that was created on some previous call
-      if(@text != text or @c != c) 
-        @text = text
-        if c.class != Color
-          c = Color.new c
-        end
-        @c = c
-        @paint.setARGB(@c.alpha, @c.red, @c.green, @c.blue)
-        bitmap_java = JavaImports::Bitmap.createBitmap(@paint.measureText(text), @height, JavaImports::Bitmap::Config::ARGB_8888)
-        @canvas = JavaImports::Canvas.new(bitmap_java)
-
-        @canvas.drawText(@text, 0, @height, @paint)    
-        bitmap = Bitmap.new bitmap_java     
-
-        @image = Image.new(@window, bitmap)
-      end  
-      @image.draw(x, y, z, factor_x, factor_y, c, mode)
+      
+      offset = 0
+      text.each_char do |char|
+        (@fonts_manager.getSymbol char ).draw(x + offset, y, z, factor_x, factor_y, c, mode)
+        offset += 20 
+      end
+      
     end  
     
   end

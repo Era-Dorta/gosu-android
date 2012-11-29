@@ -3,13 +3,14 @@ require 'physicsObject'
 module Gosu
   
   class PhysicsManager
-    
-    def initialize(window, gravity = 9.8)
+    attr_accessor :gravity_x, :gravity_y
+    def initialize(window)
       @dt = @window.update_interval
-      @gravity = gravity
       @squares = []
       @planes = []
       @window = window
+      @gravity_x = 0
+      @gravity_y = 98 #10 pixels are 1 meter
     end
     
     def register_new_object object
@@ -24,7 +25,8 @@ module Gosu
       #Gravity
       @squares.each do |square| 
         if square.mass_inverted > 0
-          square.velocity[1] += @dt*@gravity
+          square.velocity[0] += @dt*@gravity_x
+          square.velocity[1] += @dt*@gravity_y
         end 
       end
       
