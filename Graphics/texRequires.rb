@@ -1,2 +1,0 @@
-require 'texture'
-require 'texChunk'
