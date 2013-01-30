@@ -15,16 +15,18 @@ module Gosu
   class AndroidInitializer
     include Singleton
     attr_reader :graphics, :surface_view
+    attr_reader :activity
     
-    def start
-      @surface_view = GosuSurfaceView.new($activity)   
+    def start activity
+      @activity = activity
+      @surface_view = GosuSurfaceView.new(@activity)   
       @graphics = Graphics.new(self) 
       @surface_view.renderer =  @graphics 
-      $activity.content_view = @surface_view 
+      @activity.content_view = @surface_view 
     end   
     
     def on_ready
-      $activity.on_ready
+      @activity.on_ready
     end
   end  
   
@@ -68,6 +70,7 @@ module Gosu
     attr_reader :update_interval
     attr_reader :physics_manager
     attr_reader :fonts_manager
+    attr_reader :activity
     
     # update_interval:: Interval in milliseconds between two calls
     # to the update member function. The default means the game will run
@@ -76,7 +79,7 @@ module Gosu
       android_initializer = AndroidInitializer.instance
       @fullscreen = fullscreen
       @showing = false
-      @activity = $activity
+      @activity = android_initializer.activity
       @display = @activity.getWindowManager.getDefaultDisplay
       @width = width
       @height= height

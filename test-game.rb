@@ -100,7 +100,7 @@ end
 $activity.start_ruboto_activity "$gosu" do
   def on_create(bundle)
     puts "On create activity"
-    Gosu::AndroidInitializer.instance.start
+    Gosu::AndroidInitializer.instance.start self
     rescue Exception => e
       puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!"    
   end  
