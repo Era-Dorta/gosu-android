@@ -19,6 +19,8 @@ module Gosu
         #With arguments, use struct's initialize  
         old_initialize *args
       end  
+     rescue 
+      puts "FAllo en initialize" 
     end
     
     def apply_texture gl
@@ -28,6 +30,8 @@ module Gosu
         gl.glEnable(JavaImports::GL10::GL_TEXTURE_2D)
         gl.glBindTexture(JavaImports::GL10::GL_TEXTURE_2D, self[:tex_name])
       end
+      rescue 
+      puts "FAllo en apllyt texture"      
     end
  
     def apply_alpha_mode gl         
@@ -39,7 +43,9 @@ module Gosu
         else
           gl.glBlendFunc(JavaImports::GL10::GL_SRC_ALPHA, JavaImports::GL10::GL_ONE_MINUS_SRC_ALPHA)
         end
-      end  
+      end
+           rescue 
+      puts "FAllo en apply_alpha:mode"   
     end      
     
     def apply_clip_rect gl
@@ -49,6 +55,8 @@ module Gosu
         gl.glEnable(JavaImports::GL10::GL_SCISSOR_TEST)
         gl.glScissor(self[:clip_rect].x, self[:clip_rect].y, self[:clip_rect].width, self[:clip_rect].height)
       end     
+           rescue 
+      puts "FAllo en apply_clip_rect" 
     end 
      
   end
@@ -59,6 +67,8 @@ module Gosu
         gl.glLoadIdentity
         #TODO on C it was (&(*transform)[0]), check to_java
         gl.glMultMatrixd(transform[0])   
+             rescue 
+      puts "FAllo en apply_transform"      
     end    
     private :apply_transform
     
@@ -72,23 +82,29 @@ module Gosu
       #Preserve previous MV matrix
       @gl.glMatrixMode(JavaImports::GL10::GL_MODELVIEW)
       @gl.glPushMatrix
+               rescue 
+      puts "FAllo en initialize2"      
     end
     
     def RenderStateManager.finalize(id)
-        no_clipping = ClipRect.new
-        no_clipping.width = NO_CLIPPING
-        self.clip_rect = no_clipping
-        self.tex_name = NO_TEXTURE
+       # no_clipping = ClipRect.new
+       # no_clipping.width = NO_CLIPPING
+        #self[:clip_rect] = no_clipping
+        #self[:tex_name] = NO_TEXTURE
         #Return to previous MV matrix
-        @gl.glMatrixMode(JavaImports::GL10::GL_MODELVIEW)
-        @gl.glPopMatrix
+        #@gl.glMatrixMode(JavaImports::GL10::GL_MODELVIEW)
+        #@gl.glPopMatrix
+    rescue Exception => e
+    puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!"   
     end
     
     def render_state= rs
-      self.tex_name = rs.tex_name
-      self.transform = rs.transform
-      self.clip_rect = rs.clip_rect
-      self.alpha_mode = rs.mode   
+      self[:tex_name] = rs.tex_name
+      self[:transform] = rs.transform
+      self[:clip_rect] = rs.clip_rect
+      self[:mode] = rs.mode  
+                   rescue 
+      puts "FAllo en render_state="   
     end
     
     def tex_name= new_tex_name
@@ -105,7 +121,9 @@ module Gosu
           #New texture is NO_TEXTURE, disable texturing.
           @gl.glDisable(JavaImports::GL10::GL_TEXTURE_2D)
       end    
-      self[:tex_name] = new_tex_name     
+      self[:tex_name] = new_tex_name  
+                   rescue 
+      puts "FAllo en tex_name="     
     end
     
     def transform= new_transform
@@ -114,6 +132,8 @@ module Gosu
       end
         self[:transform] = new_transform
         apply_transform(@gl)
+                     rescue 
+      puts "FAllo en transform="  
     end
     
     def clip_rect= new_clip_rect
@@ -139,6 +159,8 @@ module Gosu
             end
          end   
       end
+                   rescue 
+      puts "FAllo en clip_rec="  
     end 
     
     def alpha_mode= new_mode
@@ -146,7 +168,9 @@ module Gosu
         return
       end    
       self[:mode] = new_mode
-      apply_alpha_mode @gl      
+      apply_alpha_mode @gl  
+                   rescue 
+      puts "FAllo en alpha_mode="      
     end
 
     #The cached values may have been messed with. Reset them again.
@@ -157,6 +181,8 @@ module Gosu
       apply_transform @gl
       apply_clip_rect @gl
       apply_alpha_mode @gl      
+                   rescue 
+      puts "FAllo en untrustedGL"  
     end   
         
   end
