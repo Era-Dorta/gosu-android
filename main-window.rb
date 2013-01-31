@@ -37,23 +37,23 @@ module Gosu
       @input = input
     end
     
-    def on_touch_event(event)
+    def onTouchEvent(event)
       super
       @input.feed_touch_event(event)     
       return true 
     end
     
-    def on_key_down(keyCode, event)
+    def onKeyDown(keyCode, event)
       super
       @input.feed_key_event(keyCode, event)
     end
     
-    def on_key_up(keyCode, event)
+    def onKeyUp(keyCode, event)
       super
       @input.feed_key_event(keyCode, event)
     end
     
-    def on_window_focus_changed(has_focus) 
+    def onWindowFocusChanged(has_focus) 
       super
       @window.focus_changed(has_focus, self.get_width, self.get_height)
     end
