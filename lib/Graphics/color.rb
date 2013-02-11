@@ -7,7 +7,7 @@ module Gosu
 
   class Color
     private
-    def self.force_overflow(i)
+    def force_overflow(i)
       if i < -2147483648
           i & 0xffffffff 
       elsif i > 2147483647 

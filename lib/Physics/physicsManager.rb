@@ -5,10 +5,10 @@ module Gosu
   class PhysicsManager
     attr_accessor :gravity_x, :gravity_y
     def initialize(window)
+      @window = window
       @dt = @window.update_interval
       @squares = []
-      @planes = []
-      @window = window
+      @planes = []      
       @gravity_x = 0
       @gravity_y = 98 #10 pixels are 1 meter
     end

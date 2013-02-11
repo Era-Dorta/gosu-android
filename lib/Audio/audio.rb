@@ -71,7 +71,7 @@ module Gosu
       if not defined? @@media_player
         @@media_player = JavaImports::MediaPlayer.new
         @@audio_focus_listener = AudioFocusListener.new
-        context = $activity.getApplicationContext
+        context = @window.activity.getApplicationContext
         @@audio_manager = context.getSystemService(Context::AUDIO_SERVICE)                
         focus = @@audio_manager.requestAudioFocus(@@audio_focus_listener, JavaImports::AudioManager::STREAM_MUSIC, JavaImports::AudioManager::AUDIOFOCUS_GAIN)         
       else

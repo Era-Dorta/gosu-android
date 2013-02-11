@@ -1,5 +1,4 @@
 require 'ruboto/activity'
-require 'ruboto/generate'
 
 module JavaImports
   #Opengl classes

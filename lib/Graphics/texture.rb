@@ -69,7 +69,7 @@ module Gosu
                                 block.width - 2 * padding, block.height - 2 * padding, padding)
   
       @gl.glTexSubImage2D(JavaImports::GL10::GL_TEXTURE_2D, 0, block.left, block.top, block.width, block.height, 
-        Color::GL_FORMAT, JavaImports::GL10::GL_UNSIGNED_BYTE, aux_buffer)      
+        Color::GL_FORMAT, JavaImports::GL10::GL_UNSIGNED_BYTE, bmp.data_java)     
       #@gl.glBindTexture(JavaImports::GL10::GL_TEXTURE_2D, @name[0])
       #JavaImports::GLUtils.texImage2D(JavaImports::GL10::GL_TEXTURE_2D, 0, bmp.to_open_gl, 0) 
   
