@@ -55,7 +55,9 @@ module Gosu
     
     def onWindowFocusChanged(has_focus) 
       super
-      @window.focus_changed(has_focus, self.get_width, self.get_height)
+      if(@window)
+        @window.focus_changed(has_focus, self.get_width, self.get_height)
+      end  
     end
   end  
   
@@ -66,7 +68,7 @@ module Gosu
     attr_accessor :mouse_y
     attr_accessor :text_input
     attr_reader :width, :height
-    attr_reader :fullscreen?
+    attr_reader :fullscreen
     attr_reader :update_interval
     attr_reader :physics_manager
     attr_reader :fonts_manager
