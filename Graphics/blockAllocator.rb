@@ -74,6 +74,8 @@ module Gosu
         return [true, b]
       end
 
+      b.top = 0
+      b.left = 0
       #Brute force: Look for a free place on this texture.
       while(b.top <= (height - a_height)) do 
         while(b.left <= (width - a_width)) do
