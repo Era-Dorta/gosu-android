@@ -17,7 +17,7 @@ public class Bitmap {
         pixels = null;
     }     
     
-    public Bitmap( String name){
+    public Bitmap( Context context, String name){
         android.graphics.Bitmap bitmap = BitmapFactory.decodeFile(name);
         if(bitmap == null){
             throw new RuntimeException("Could not load image " + name);
@@ -33,6 +33,20 @@ public class Bitmap {
             pixels.add(j);
         }
         bitmap.recycle();          
+    }
+    
+    public Bitmap( Context context, int id){
+    	android.graphics.Bitmap bitmap;
+    	bitmap = BitmapFactory.decodeResource( context.getResources(), id);
+        w = bitmap.getWidth();
+        h = bitmap.getHeight();
+        int pArray[] = new int[w*h];
+        bitmap.getPixels(pArray, 0, w, 0, 0, w, h);   
+        pixels.ensureCapacity(pArray.length); 
+        for(int i = 0; i < pArray.length; i++){
+            pixels.add(new Color(pArray[i]));
+        }
+        bitmap.recycle();        	
     }
 
     public Bitmap( android.graphics.Bitmap bmp ){
