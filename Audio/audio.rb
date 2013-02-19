@@ -10,11 +10,11 @@ module Gosu
   
   class AudioFocusListener
       def onAudioFocusChange focusChange
-              puts "En focus change #{focusChange}"
+        puts "In focus change #{focusChange}"
       end
       
       def toString
-              self.class.to_s
+        self.class.to_s
       end    
   end
   
@@ -31,7 +31,12 @@ module Gosu
       if not defined? @@pool
         @@pool = JavaImports::SoundPool.new(MAX_SAMPLES, JavaImports::AudioManager::STREAM_MUSIC, 0) 
       end  
-      @id = @@pool.load(filename, 1)
+      
+      if(filename.class == Fixnum )
+        @id = @@pool.load( @window.activity.getApplicationContext, filename, 1 )
+      else
+        @id = @@pool.load(filename, 1)
+      end     
     end
     
     #Plays the sample without panning.
@@ -78,6 +83,12 @@ module Gosu
         @@media_player.reset
         focus = @@audio_manager.requestAudioFocus(@@audio_focus_listener, JavaImports::AudioManager::STREAM_MUSIC, JavaImports::AudioManager::AUDIOFOCUS_GAIN)  
       end  
+      
+      if filename.class == Fixnum
+        afd = @window.activity.getApplicationContext.getResources.openRawResourceFd(filename)
+        filename = afd.getFileDescriptor
+      end
+        
       @@media_player.setDataSource filename
       @@media_player.prepareAsync 
       @playing = false  
