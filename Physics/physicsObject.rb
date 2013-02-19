@@ -48,6 +48,8 @@ module Gosu
           #Calculate new velocity, after the hit          
           @velocity[0] -= (1 + @restitution) * other_object.normal[0] * product
           @velocity[1] -= (1 + @restitution) * other_object.normal[1] * product 
+          #Call window event
+          @window.object_collided( @position[0], @position[1], other_object )
         end
       end
     end

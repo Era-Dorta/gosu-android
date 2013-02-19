@@ -3,11 +3,20 @@ require 'gosu'
 class Player
   attr_reader :score
 
-  def initialize(window)
-    @image = Gosu::Image.new(window, "/mnt/sdcard/jruby/media/Ship.png", false)
-    @beep = Gosu::Sample.new(window, "/mnt/sdcard/jruby/media/Beep.wav")
-    @x = @y = 0.0
+  def initialize(window, x, y)
+    @image = Gosu::Image.new(window, Ruboto::R::drawable::player, false)
+    @beep = Gosu::Sample.new(window, Ruboto::R::raw::beep)
+    @x = x
+    @y = y
     @score = 0
+  end
+  
+  def warp(x, y)
+    @y = y
+  end
+
+  def draw
+    @image.draw(@x, @y, ZOrder::Player)
   end
 
 end
@@ -19,19 +28,32 @@ class GameWindow < Gosu::Window
     super(640, 480, false)
     self.caption = "Pong Game"
         
-    @player = Player.new(self)
-    @player.warp(420, 240)
+    @player = Player.new(self, 0, 50)
 
-    @player2 = Player.new(self)
-    @player2.warp(120, 240)
+    @player2 = Player.new(self, 300, 50)
+    
+    @squ = Gosu::Square.new(self, Ruboto::R::drawable::ball, 100, 200, 0, 50, 20, 100, 100)
+    
+    @p1 = Gosu::Plane.new(self, 1, 0, 0)
+    @p2 = Gosu::Plane.new(self, 0, 1, 0)
+    @p3 = Gosu::Plane.new(self, -1, 0, 600)
+    @p4 = Gosu::Plane.new(self, 0, -1, 480)    
 
-    @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
   end
 
   def update
   end
 
+  def object_collied( coordinates )
+    
+  end
+
   def touch_moved(touch)
+    if(touch.x < 100)
+      @player.warp(touch.x, touch.y)
+    else
+      @player2.warp(touch.x, touch.y)
+    end
   end
 
   def draw

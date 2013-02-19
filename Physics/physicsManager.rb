@@ -43,14 +43,7 @@ module Gosu
           square.integrate
         end 
       end        
-    end
-    
-    def draw
-      @squares.each do |square|
-        square.draw
-      end
-    end
-    
+    end    
   end  
   
 end

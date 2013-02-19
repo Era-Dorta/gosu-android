@@ -176,6 +176,9 @@ module Gosu
     # Called when the user finished a touch on the screen
     def touch_ended(touch); end    
     
+    # Called when and object collides with another object
+    def object_collided(x, y, object); end
+    
     # Draws a line from one point to another (last pixel exclusive).
     # Note: OpenGL lines are not reliable at all and may have a missing pixel at the start
     # or end point. Please only use this for debugging purposes. Otherwise, use a quad or
@@ -266,7 +269,6 @@ module Gosu
       @physics_manager.update
       @graphics.begin(Color::BLACK)  
       self.draw 
-      @physics_manager.draw
       @graphics.end 
       @surface_view.request_render  
     end
