@@ -70,6 +70,7 @@ end
 
 class PongActivity
   def on_create(bundle)
+    super(bundle)
     Gosu::AndroidInitializer.instance.start(self)
     rescue Exception => e
       puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!"    

@@ -120,7 +120,7 @@ module Gosu
       images = []
       
       #If bmp is a file path
-      if bmp.class == String
+      if bmp.class == String or bmp.class == Fixnum 
         bmp = Gosu::load_image_file(window, bmp)
       end  
       
