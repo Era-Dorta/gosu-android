@@ -27,7 +27,6 @@ module Gosu
       @mass_inverted = mass_inverted
       @image = Gosu::Image.new(@window, file_name , tileable)
       @dt = @window.update_interval
-      @window.register_new_object self
     end
 
     def integrate
@@ -71,7 +70,6 @@ module Gosu
       @velocity = [velocity_x, velocity_y]
       @mass_inverted = mass_inverted
       @dt = @window.update_interval
-      @window.register_new_object self
     end
 
     def integrate

@@ -179,6 +179,16 @@ module Gosu
     # Called when and object collides with another object
     def object_collided(x, y, object); end
     
+    # This object should be subject to the physics manager
+    def apply_physics(object)
+      @physics_manager.register_new_object(object)
+    end   
+    
+    # Stop applying physics to the given object  
+    def stop_physics(object)
+      @physics_manager.delete_object(object)
+    end     
+    
     # Draws a line from one point to another (last pixel exclusive).
     # Note: OpenGL lines are not reliable at all and may have a missing pixel at the start
     # or end point. Please only use this for debugging purposes. Otherwise, use a quad or
@@ -286,10 +296,6 @@ module Gosu
     
     def create_image(source, src_x, src_y, src_width, src_height, tileable)
       @graphics.create_image(source, src_x, src_y, src_width, src_height, tileable)
-    end
-    
-    def register_new_object object
-      @physics_manager.register_new_object object
     end
     
   end

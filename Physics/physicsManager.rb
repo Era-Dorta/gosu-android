@@ -20,7 +20,15 @@ module Gosu
         @planes.push object
       end
     end
-    
+
+    def delete_object object 
+      if object.class == Square
+        @squares.delete object
+      elsif
+        @planes.delete object
+      end
+    end
+        
     def update
       #Gravity
       @squares.each do |square| 
