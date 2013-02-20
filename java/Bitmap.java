@@ -1,6 +1,7 @@
 package gosu.java;
 
 import android.graphics.BitmapFactory;
+import android.content.Context;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.ByteOrder;
@@ -15,8 +16,8 @@ public class Bitmap {
         w = 0;
         h = 0;
         pixels = null;
-    }     
-    
+    }
+      
     public Bitmap( Context context, String name){
         android.graphics.Bitmap bitmap = BitmapFactory.decodeFile(name);
         if(bitmap == null){
