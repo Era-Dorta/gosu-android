@@ -34,10 +34,19 @@ class GameWindow < Gosu::Window
     
     @squ = Gosu::Square.new(self, Ruboto::R::drawable::ball, 100, 200, 0, 50, 20, 100, 100)
     
-    @p1 = Gosu::Plane.new(self, 1, 0, 0)
-    @p2 = Gosu::Plane.new(self, 0, 1, 0)
-    @p3 = Gosu::Plane.new(self, -1, 0, 600)
-    @p4 = Gosu::Plane.new(self, 0, -1, 480)    
+    @p1 = Gosu::Plane.new(self, [0,0], [0,480] ,0)
+    #Top plane
+    @p2 = Gosu::Plane.new(self,  [600,0], [0,0], 0 )
+    #Right plane
+    @p3 = Gosu::Plane.new(self, [600,480], [600,0],0)
+    #Bottom plane
+    @p4 = Gosu::Plane.new(self, [0,480], [600,480],  0)
+    
+    self.apply_physics @squ
+    self.apply_physics @p1
+    self.apply_physics @p2
+    self.apply_physics @p3
+    self.apply_physics @p4
 
   end
 
