@@ -29,7 +29,7 @@ module Gosu
   
   class Square
     attr_accessor :velocity
-    attr_reader :position
+    attr_reader :position, :center
     attr_reader :mass_inverted, :restitution 
     def initialize(window, file_name, x, y, z, size, mass_inverted, 
       velocity_x = 0, velocity_y = 0, restitution = 1, tileable = false)
