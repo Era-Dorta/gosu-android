@@ -88,8 +88,8 @@ module Gosu
       @z = z
       @normal = Gosu::cross_product d0, d1
       @normal[2] = -(@normal[0]*p0[0] + @normal[1]*p0[1]) 
-      @top_limit = p0
-      @bottom_limit = p1
+      @top_limit = Array.new p0
+      @bottom_limit = Array.new p1
       @velocity = [velocity_x, velocity_y]
       @mass_inverted = mass_inverted
       @dt = @window.update_interval
