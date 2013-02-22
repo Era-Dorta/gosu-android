@@ -54,8 +54,8 @@ module Gosu
     def generate_contact other_object
       if other_object.class == Square
       elsif other_object.class == Plane
-        if( @position[0] <= other_object.top_limit[0] and @position[0] >= other_object.bottom_limit[0] and
-           @position[1] <= other_object.top_limit[1] and @position[1] >= other_object.bottom_limit[1] )
+        if( @center[0] - @size <= other_object.top_limit[0] and @center[0] + @size >= other_object.bottom_limit[0] and 
+          @center[1] - @size <= other_object.top_limit[1] and @center[1] + @size >= other_object.bottom_limit[1] )
           #Calculate distance to current plane
           distance = Gosu::dot_product(@center, other_object.normal) + other_object.normal[2]
           product = Gosu::dot_product(@velocity, other_object.normal)
