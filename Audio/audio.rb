@@ -87,10 +87,11 @@ module Gosu
       if filename.class == Fixnum
         afd = @window.activity.getApplicationContext.getResources.openRawResourceFd(filename)
         filename = afd.getFileDescriptor
-      end
-        
-      @@media_player.setDataSource filename
+      end        
+      
+      @@media_player.setDataSource filename  
       @@media_player.prepareAsync 
+      @window.media_player = @@media_player
       @playing = false  
       @file_name = filename
       if not defined? @@current_song

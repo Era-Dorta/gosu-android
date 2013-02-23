@@ -67,6 +67,7 @@ module Gosu
     attr_accessor :mouse_x
     attr_accessor :mouse_y
     attr_accessor :text_input
+    attr_accessor :media_player
     attr_reader :width, :height
     attr_reader :fullscreen
     attr_reader :update_interval
@@ -97,6 +98,7 @@ module Gosu
       @surface_view.set_render_mode(JavaImports::GLSurfaceView::RENDERMODE_WHEN_DIRTY)
       @physics_manager = PhysicsManager.new self
       @fonts_manager = FontsManager.new self
+      @media_player = nil
     end
     
     # Enters a modal loop where the Window is visible on screen and receives calls to draw, update etc.
@@ -286,6 +288,13 @@ module Gosu
     def focus_changed has_focus, width, height
       @screen_width = width
       @screen_height = height
+      if @showing and @media_player != nil
+        if has_focus
+          @media_player.start
+        else
+          @media_player.pause
+        end   
+     end      
     end
     
     def show_soft_keyboard

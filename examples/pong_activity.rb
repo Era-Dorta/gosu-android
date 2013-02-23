@@ -7,6 +7,7 @@ class GameWindow < Gosu::Window
     self.physics_manager.gravity_y = 0
     @p1score = 0
     @p2score = 0  
+    @song = Gosu::Song.new(self, Ruboto::R::raw::chriss_onac_tempo)
     @beep = Gosu::Sample.new(self, Ruboto::R::raw::beep)
     @p1x = 0
     @p1y = 250
@@ -29,6 +30,7 @@ class GameWindow < Gosu::Window
     self.apply_physics @p3
     self.apply_physics @p4
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+    @song.play
   end
 
   def update
