@@ -22,7 +22,7 @@ module Gosu
       manager = RenderStateManager.new(@gl)
       @ops.each do |op|  
           manager.render_state = op.render_state      
-          op.perform(0) if op.vertices_or_block_index >= 0
+          op.perform(nil) if op.vertices_or_block_index >= 0
       end
     end
     
