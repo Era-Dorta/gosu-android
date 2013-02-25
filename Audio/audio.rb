@@ -92,8 +92,8 @@ module Gosu
       end        
       
       @@media_player.on_prepared_listener = (proc{media_player_ready})
-      @@media_player.prepareAsync
-      @@media_player.setDataSource filename  
+      @@media_player.setDataSource filename 
+      @@media_player.prepareAsync       
       @player_ready = false
       @window.media_player = @@media_player
       @playing = false  
