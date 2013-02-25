@@ -9,25 +9,40 @@ module Gosu
     end
     sum
   end
+
+  def self.cross_product(l1,l2)
+    res = []
+    res.push( l1[1]*l2[2] - l1[2]*l2[1] );
+    res.push( l1[2]*l2[0] - l1[0]*l2[2] );
+    res.push( l1[0]*l2[1] - l1[1]*l2[0] ); 
+    d = res.max
+    if(d == 0)
+      d = res.min
+      res[0] = res[0]/-d
+      res[1] = res[1]/-d
+    else
+      res[0] = res[0]/d
+      res[1] = res[1]/d    
+    end 
+    res
+  end 
   
   class Square
-    attr_accessor :draw, :velocity
-    attr_reader :position
+    attr_accessor :velocity
+    attr_reader :position, :center
     attr_reader :mass_inverted, :restitution 
     def initialize(window, file_name, x, y, z, size, mass_inverted, 
-      velocity_x = 0, velocity_y = 0, restitution = 1, draw = true, tileable = false)
+      velocity_x = 0, velocity_y = 0, restitution = 1, tileable = false)
       @window = window
       @position = [x,y]
       @size = size / 2
       @center = [@position[0] + @size, @position[1] + @size] 
       @z = z
-      @draw = draw
       @restitution = restitution
       @velocity = [velocity_x, velocity_y]
       @mass_inverted = mass_inverted
       @image = Gosu::Image.new(@window, file_name , tileable)
       @dt = @window.update_interval
-      @window.register_new_object self
     end
 
     def integrate
@@ -39,15 +54,20 @@ module Gosu
     def generate_contact other_object
       if other_object.class == Square
       elsif other_object.class == Plane
-        #Calculate distance to current plane
-        distance = Gosu::dot_product(@center, other_object.normal) + other_object.normal[2]
-        product = Gosu::dot_product(@velocity, other_object.normal)
-        #If distance is less thant zero and the object 
-        #is moving towards the plane        
-        if distance < @size and product < 0
-          #Calculate new velocity, after the hit          
-          @velocity[0] -= (1 + @restitution) * other_object.normal[0] * product
-          @velocity[1] -= (1 + @restitution) * other_object.normal[1] * product 
+        if( @center[0] - @size <= other_object.top_limit[0] and @center[0] + @size >= other_object.bottom_limit[0] and 
+          @center[1] - @size <= other_object.top_limit[1] and @center[1] + @size >= other_object.bottom_limit[1] )
+          #Calculate distance to current plane
+          distance = Gosu::dot_product(@center, other_object.normal) + other_object.normal[2]
+          product = Gosu::dot_product(@velocity, other_object.normal)
+          #If distance is less thant zero and the object 
+          #is moving towards the plane        
+          if distance < @size and product < 0
+            #Calculate new velocity, after the hit          
+            @velocity[0] -= (1 + @restitution) * other_object.normal[0] * product
+            @velocity[1] -= (1 + @restitution) * other_object.normal[1] * product 
+            #Call window event
+            @window.object_collided( @position[0], @position[1], other_object )
+          end
         end
       end
     end
@@ -59,17 +79,20 @@ module Gosu
   end
 
   class Plane
-    attr_accessor :draw
     attr_reader :normal, :velocity, :mass_inverted 
-    def initialize(window, a, b, c, mass_inverted = 0, 
-      velocity_x = 0, velocity_y = 0, draw = false)
+    attr_accessor :bottom_limit, :top_limit
+    def initialize(window, p0, p1, z, mass_inverted = 0, velocity_x = 0, velocity_y = 0)
       @window = window
-      @normal = [a,b,c]
-      @draw = draw
+      d0 = [  p1[0] - p0[0], p1[1] - p0[1], 0]
+      d1 = [0,0,1]
+      @z = z
+      @normal = Gosu::cross_product d0, d1
+      @normal[2] = -(@normal[0]*p0[0] + @normal[1]*p0[1]) 
+      @top_limit = Array.new p0
+      @bottom_limit = Array.new p1
       @velocity = [velocity_x, velocity_y]
       @mass_inverted = mass_inverted
       @dt = @window.update_interval
-      @window.register_new_object self
     end
 
     def integrate

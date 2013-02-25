@@ -99,6 +99,7 @@ end
 
 $activity.start_ruboto_activity "$gosu" do
   def on_create(bundle)
+    super(bundle)
     puts "On create activity"
     Gosu::AndroidInitializer.instance.start self
     rescue Exception => e

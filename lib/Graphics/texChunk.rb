@@ -46,10 +46,10 @@ module Gosu
         x3, y3, c3, x4, y4, c4 = x4, y4,c4, x3, y3, c3
       end  
       op.vertices_or_block_index = 4
-      op.vertices[0] = DrawOp::Vertex.new(x1, y1, c1)
-      op.vertices[1] = DrawOp::Vertex.new(x2, y2, c2)
-      op.vertices[2] = DrawOp::Vertex.new(x3, y3, c3)
-      op.vertices[3] = DrawOp::Vertex.new(x4, y4, c4)
+      op.vertices[0] = Vertex.new(x1, y1, c1)
+      op.vertices[1] = Vertex.new(x2, y2, c2)
+      op.vertices[2] = Vertex.new(x3, y3, c3)
+      op.vertices[3] = Vertex.new(x4, y4, c4)
       
       op.left = @info.left
       op.top = @info.top

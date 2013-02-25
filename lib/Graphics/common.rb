@@ -3,15 +3,7 @@ module Gosu
   NO_CLIPPING = 0xffffffff
   #In various places in Gosu, width==NO_CLIPPING conventionally means
   #that no clipping should happen.  
-  class ClipRect < Struct.new(:x, :y, :width, :height)
-    def == other
-      #No clipping
-      (self[:width] == NO_CLIPPING && other.width == NO_CLIPPING) ||
-        #Clipping, but same
-        (self[:x] == other.x && self[:y] == other.y && 
-          self[:width] == other.width && self[:height] == other.height)
-    end
-  end 
+  java_import 'gosu.java.ClipRect'
 
   def self.is_p_to_the_left_of_ab(xa, ya, xb, yb, xp, yp)
     ((xb - xa) * (yp - ya) - (xp - xa) * (yb - ya)) > 0

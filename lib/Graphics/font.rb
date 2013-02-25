@@ -8,8 +8,8 @@ module Gosu
   class FontsManager
     
     def initialize(window)
-       file = "/mnt/sdcard/jruby/media/characterAtlas2.png"
-       font_vector = Gosu::Image::load_tiles(window, file, 25, 25, false)
+       file = "/mnt/sdcard/jruby/media/characterAtlas3.png"
+       font_vector = Gosu::Image::load_tiles(window, file, 16, 25, false)
        symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-/*\'\"!?[]{}_.,:; <>"
        @font_symbols = {}
        i = 0

@@ -67,6 +67,7 @@ module Gosu
     attr_accessor :mouse_x
     attr_accessor :mouse_y
     attr_accessor :text_input
+    attr_accessor :media_player
     attr_reader :width, :height
     attr_reader :fullscreen
     attr_reader :update_interval
@@ -97,6 +98,7 @@ module Gosu
       @surface_view.set_render_mode(JavaImports::GLSurfaceView::RENDERMODE_WHEN_DIRTY)
       @physics_manager = PhysicsManager.new self
       @fonts_manager = FontsManager.new self
+      @media_player = nil
     end
     
     # Enters a modal loop where the Window is visible on screen and receives calls to draw, update etc.
@@ -175,6 +177,19 @@ module Gosu
     def touch_moved(touch); end    
     # Called when the user finished a touch on the screen
     def touch_ended(touch); end    
+    
+    # Called when and object collides with another object
+    def object_collided(x, y, object); end
+    
+    # This object should be subject to the physics manager
+    def apply_physics(object)
+      @physics_manager.register_new_object(object)
+    end   
+    
+    # Stop applying physics to the given object  
+    def stop_physics(object)
+      @physics_manager.delete_object(object)
+    end     
     
     # Draws a line from one point to another (last pixel exclusive).
     # Note: OpenGL lines are not reliable at all and may have a missing pixel at the start
@@ -266,7 +281,6 @@ module Gosu
       @physics_manager.update
       @graphics.begin(Color::BLACK)  
       self.draw 
-      @physics_manager.draw
       @graphics.end 
       @surface_view.request_render  
     end
@@ -274,6 +288,13 @@ module Gosu
     def focus_changed has_focus, width, height
       @screen_width = width
       @screen_height = height
+      if @showing and @media_player != nil
+        if has_focus
+          @media_player.start
+        else
+          @media_player.pause
+        end   
+     end      
     end
     
     def show_soft_keyboard
@@ -284,10 +305,6 @@ module Gosu
     
     def create_image(source, src_x, src_y, src_width, src_height, tileable)
       @graphics.create_image(source, src_x, src_y, src_width, src_height, tileable)
-    end
-    
-    def register_new_object object
-      @physics_manager.register_new_object object
     end
     
   end

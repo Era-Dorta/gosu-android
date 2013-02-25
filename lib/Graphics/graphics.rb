@@ -4,6 +4,7 @@ require 'lib/Graphics/color'
 require 'lib/Graphics/drawOp'
 require 'lib/Graphics/drawOpQueue'
 require 'lib/Graphics/image'
+require 'lib/Graphics/largeImageData'
 require 'lib/Graphics/bitmapUtils'
 require 'lib/Graphics/texture'
 require 'lib/Graphics/font'
@@ -101,8 +102,8 @@ module Gosu
       op = DrawOp.new(@gl)
       op.render_state.mode = mode
       op.vertices_or_block_index = 2
-      op.vertices[0] = DrawOp::Vertex.new(x1, y1, c1)
-      op.vertices[1] = DrawOp::Vertex.new(x2, y2, c2)
+      op.vertices[0] = Vertex.new(x1, y1, c1)
+      op.vertices[1] = Vertex.new(x2, y2, c2)
       op.z = z  
       @queues.schedule_draw_op op
     end
@@ -111,9 +112,9 @@ module Gosu
       op = DrawOp.new(@gl)
       op.render_state.mode = mode
       op.vertices_or_block_index = 3
-      op.vertices[0] = DrawOp::Vertex.new(x1, y1, c1)
-      op.vertices[1] = DrawOp::Vertex.new(x2, y2, c2)
-      op.vertices[2] = DrawOp::Vertex.new(x3, y3, c3)
+      op.vertices[0] = Vertex.new(x1, y1, c1)
+      op.vertices[1] = Vertex.new(x2, y2, c2)
+      op.vertices[2] = Vertex.new(x3, y3, c3)
       op.z = z  
       @queues.schedule_draw_op op        
     end
@@ -122,10 +123,10 @@ module Gosu
       op = DrawOp.new(@gl)
       op.render_state.mode = mode
       op.vertices_or_block_index = 4
-      op.vertices[0] = DrawOp::Vertex.new(x1, y1, c1)
-      op.vertices[1] = DrawOp::Vertex.new(x2, y2, c2)
-      op.vertices[2] = DrawOp::Vertex.new(x3, y3, c3)
-      op.vertices[3] = DrawOp::Vertex.new(x4, y4, c4)
+      op.vertices[0] = Vertex.new(x1, y1, c1)
+      op.vertices[1] = Vertex.new(x2, y2, c2)
+      op.vertices[2] = Vertex.new(x3, y3, c3)
+      op.vertices[3] = Vertex.new(x4, y4, c4)
       op.z = z  
       @queues.schedule_draw_op op       
     end
