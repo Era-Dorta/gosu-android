@@ -91,21 +91,35 @@ module Gosu
         filename = afd.getFileDescriptor
       end        
       
+      @@media_player.on_prepared_listener = (proc{media_player_ready})
+      @@media_player.prepareAsync
       @@media_player.setDataSource filename  
-      @@media_player.prepareAsync 
+      @player_ready = false
       @window.media_player = @@media_player
       @playing = false  
-      @file_name = filename
+      @file_name = filename   
+
       if not defined? @@current_song
         @@current_song = 0
       end  
+    end
+
+    def media_player_ready
+      @player_ready = true
+      #Song should be playing but media player was not ready
+      #so start playing now
+      if @playing
+        @@media_player.start
+      end
     end
     
     #Starts or resumes playback of the song. This will stop all other
     #songs and set the current song to this object.    
     def play(looping = false)
       @@media_player.setLooping(looping)
-      @@media_player.start
+      if @player_ready      
+        @@media_player.start
+      end 
       @@current_song = @file_name
       @playing = true
     end
@@ -113,7 +127,9 @@ module Gosu
     #Pauses playback of the song. It is not considered being played.
     #currentSong will stay the same.    
     def pause
-      @@media_player.pause
+      if @player_ready 
+        @@media_player.pause
+      end 
       @playing = false
     end
     
@@ -131,8 +147,10 @@ module Gosu
     #Stops playback of this song if it is currently played or paused.
     #Afterwards, current_song will return 0.     
     def stop
-      @@media_player.pause
-      @@media_player.stop
+      if @player_ready
+        @@media_player.pause
+        @@media_player.stop
+      end  
       @@current_song = 0
     end
         
