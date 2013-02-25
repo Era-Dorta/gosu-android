@@ -22,7 +22,7 @@ public class RenderStateManager extends RenderState{
         gl.glPushMatrix();
 	}
 	
-/*	protected void finalize () {
+	protected void finalize () {
         ClipRect noClipping = new ClipRect();
         noClipping.setWidth( ClipRect.NO_CLIPPING);
         setClipRect(noClipping);
@@ -30,12 +30,12 @@ public class RenderStateManager extends RenderState{
         // Return to previous MV matrix
         gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glPopMatrix();
-    }*/
+    }
 	
     public void setRenderState(RenderState rs)
     {
         setTexName(rs.getTexName());
-        //setTransform(rs.transform);
+        setTransform(rs.getTransform());
         setClipRect(rs.getClipRect());
         setAlphaMode(rs.mode);
     }	
@@ -43,17 +43,17 @@ public class RenderStateManager extends RenderState{
     @Override
     public void setTexName(int newTexture)
     {
-        if (newTexture == getTexName()){
+        if (newTexture == texName){
             return;
         }
         
         if (newTexture != ClipRect.NO_TEXTURE)
         {
             // New texture *is* really a texture - change to it.            
-            if (getTexName() == ClipRect.NO_TEXTURE){
+            if (texName == ClipRect.NO_TEXTURE){
                 gl.glEnable(GL10.GL_TEXTURE_2D);
             }
-            gl.glBindTexture(GL10.GL_TEXTURE_2D, getTexName());
+            gl.glBindTexture(GL10.GL_TEXTURE_2D, newTexture);
         }
         else{
             // New texture is NO_TEXTURE, disable texturing.
