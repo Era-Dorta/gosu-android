@@ -6,7 +6,7 @@ module Gosu
   end
 
   #Custom java files
-  java_import 'gosu.Color'
+  java_import 'gosu.java.Color'
     
   Gosu::Color::NONE = Color.new(0x00000000)
   Gosu::Color::BLACK = Color.new(0xff000000)
