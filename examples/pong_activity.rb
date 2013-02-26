@@ -10,11 +10,12 @@ class GameWindow < Gosu::Window
     @song = Gosu::Song.new(self, Ruboto::R::raw::chriss_onac_tempo)
     @beep = Gosu::Sample.new(self, Ruboto::R::raw::beep)
     @p1x = 0
-    @p1y = 250
+    # 25 is to compesate square size of the ball
+    @p1y = 250 + 25
     @p3x = 593
-    @p3y = 100
+    @p3y = 100 + 25
     @size = 110
-    @size2 = @size/2
+    @size2 = @size/2 - 25
     @squ = Gosu::Square.new(self, Ruboto::R::drawable::ball, 100, 200, 0, 50, 20, 100, 100)
     #Left plane
     @p1 = Gosu::Plane.new(self, Ruboto::R::drawable::bar, [@p1x,@p1y], [@p1x, @p1y + @size] ,0)
@@ -30,7 +31,7 @@ class GameWindow < Gosu::Window
     self.apply_physics @p3
     self.apply_physics @p4
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
-    @song.play
+    @song.play true
   end
 
   def update
@@ -39,6 +40,7 @@ class GameWindow < Gosu::Window
       @p1score += 1
       #Reset the ball
       @squ.position[0] = 300
+      @squ.velocity[0] = -@squ.velocity[0]
       @beep.play
     else
       if @squ.center[0] > 600
@@ -46,6 +48,7 @@ class GameWindow < Gosu::Window
         @p2score += 1
         #Reset the ball
         @squ.position[0] = 300
+        @squ.velocity[0] = -@squ.velocity[0]
         @beep.play
       end
     end  

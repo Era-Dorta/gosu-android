@@ -9,6 +9,7 @@ require 'lib/Physics/physicsManager'
 require 'lib/timing'
 
 require 'singleton'
+require 'ruboto/util/toast'
 
 module Gosu
   
@@ -18,11 +19,13 @@ module Gosu
     attr_reader :activity
     
     def start activity
+      activity.toast 'Still loading please wait'
       @activity = activity
       @surface_view = GosuSurfaceView.new(@activity)   
       @graphics = Graphics.new(self) 
       @surface_view.renderer =  @graphics 
       @activity.content_view = @surface_view 
+      activity.toast 'Still loading please wait'
     end   
     
     def on_ready

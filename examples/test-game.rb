@@ -97,20 +97,18 @@ class GameWindow < Gosu::Window
   end
 end
 
-$activity.start_ruboto_activity "$gosu" do
+class TestGameActivity
   def on_create(bundle)
     super(bundle)
-    puts "On create activity"
-    Gosu::AndroidInitializer.instance.start self
+    Gosu::AndroidInitializer.instance.start(self)
     rescue Exception => e
       puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!"    
   end  
   
   def on_ready
-    puts "On ready activity"
     window = GameWindow.new
     window.show    
     rescue Exception => e
-    puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!"    
+      puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!"    
   end
 end
