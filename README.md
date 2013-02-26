@@ -4,9 +4,13 @@ A Gosu implementation for Adroid devices.
 
 Instalation
 -----------
-Download the sources and add them to a [ruboto](http://github.com/ruboto/ruboto) proyect.
-They should be placed where `gosu.rb` file will be accesible to your application, so you can add the
-require without further trouble $ require 'gosu'
+Sadly right now you need to manually copy every file to every ruboto proyect you want to use it.
+
+- Download the sources
+- Copy the lib folder and the `gosu.rb` to the src folder inside your [ruboto](http://github.com/ruboto/ruboto) proyect.
+- Copy the gosu.java.jar in the libs folder.
+- Place the res files in the res folder.
+
 
 General Information
 -------------------
