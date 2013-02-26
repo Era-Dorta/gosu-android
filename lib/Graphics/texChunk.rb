@@ -1,5 +1,4 @@
 require 'lib/Graphics/imageData'
-require 'lib/Graphics/texRequires'
 require 'lib/Graphics/common'
 
 module Gosu

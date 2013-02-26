@@ -1,4 +1,4 @@
-require 'imageData'
+require 'lib/Graphics/imageData'
 
 module Gosu
   
