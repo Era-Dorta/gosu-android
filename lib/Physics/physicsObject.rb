@@ -79,10 +79,11 @@ module Gosu
   end
 
   class Plane
-    attr_reader :normal, :velocity, :mass_inverted 
+    attr_reader :normal, :velocity, :mass_inverted
     attr_accessor :bottom_limit, :top_limit
-    def initialize(window, p0, p1, z, mass_inverted = 0, velocity_x = 0, velocity_y = 0)
+    def initialize(window, file_name, p0, p1, z, mass_inverted = 0, velocity_x = 0, velocity_y = 0)
       @window = window
+      @image = Gosu::Image.new(@window, file_name)
       d0 = [  p1[0] - p0[0], p1[1] - p0[1], 0]
       d1 = [0,0,1]
       @z = z
@@ -93,13 +94,14 @@ module Gosu
       @velocity = [velocity_x, velocity_y]
       @mass_inverted = mass_inverted
       @dt = @window.update_interval
+      if(@bottom_limit[0] > @top_limit[0] or @bottom_limit[1] > @top_limit[1])
+        @top_limit, @bottom_limit = @bottom_limit, @top_limit
+      end     
     end
 
-    def integrate
-      @position[0] += @velocity[0]*@dt 
-      @position[1] += @velocity[1]*@dt 
+    def draw(x,y,z = @z) 
+      @image.draw(x,y,z)
     end
         
   end
-
 end
