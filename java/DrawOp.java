@@ -22,11 +22,18 @@ public class DrawOp implements Comparable<DrawOp>{
     private int verticesOrBlockIndex;
     
     private GL10 gl;
+    private float index[];
+    private float texture[];
+    private int color[];
     
     public DrawOp( GL10 gl_ ){
     	gl = gl_;
     	vertices = new Vertex[4];
     	renderState = new RenderState();
+    	index = new float[vertices.length*2];
+    	texture = new float[vertices.length*2];
+    	color = new int[vertices.length*2];
+    	verticesOrBlockIndex = 0;
     }
     
     public RenderState getRenderState(){
@@ -55,11 +62,8 @@ public class DrawOp implements Comparable<DrawOp>{
         	throw new RuntimeException("Wrong verticesOrBlockIndex");
         }
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY); 
-;
 
-        float []index = new float[vertices.length*2];
-        float []texture = new float[vertices.length*2];
-        //Vertex index[] = new Vertex[vertices.length];      
+       //Vertex index[] = new Vertex[vertices.length];      
         if(renderState.texName != ClipRect.NO_TEXTURE){
           gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
           
@@ -98,7 +102,6 @@ public class DrawOp implements Comparable<DrawOp>{
           textureBuffer.position(0); 
         }else{      
           gl.glEnableClientState(GL10.GL_COLOR_ARRAY); 
-          int []color = new int[vertices.length*4];
           
           int k = 0, l = 0;
           for(int i = 0; i < vertices.length; i++){
@@ -170,3 +173,4 @@ public class DrawOp implements Comparable<DrawOp>{
 		return 0;		
 	}    	
 }
+
