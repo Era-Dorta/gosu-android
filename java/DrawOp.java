@@ -2,7 +2,6 @@ package gosu.java;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -13,7 +12,7 @@ public class DrawOp implements Comparable<DrawOp>{
     
     private RenderState renderState;
     // Only valid if renderState.texName != NO_TEXTURE
-    public float top, left, bottom, right;
+    public int top, left, bottom, right;
     
     // TODO: Merge with Gosu::ArrayVertex.
     public Vertex vertices[];
@@ -22,13 +21,13 @@ public class DrawOp implements Comparable<DrawOp>{
     private int verticesOrBlockIndex;
     
     private GL10 gl;
-    private float index[];
-    private float texture[];
-    private float color[];
+    private int index[];
+    private int texture[];
+    private int color[];
     
-	private FloatBuffer colorBuffer;
-	private FloatBuffer textureBuffer;
-	private FloatBuffer vertexBuffer;
+	private IntBuffer colorBuffer;
+	private IntBuffer textureBuffer;
+	private IntBuffer vertexBuffer;
 	
 	//Buffers for textures, color and vertices
 	private ByteBuffer tbb; 
@@ -39,22 +38,22 @@ public class DrawOp implements Comparable<DrawOp>{
     	gl = gl_;
     	vertices = new Vertex[4];
     	renderState = new RenderState();
-    	index = new float[vertices.length*2];
-    	texture = new float[vertices.length*2];
-    	color = new float[vertices.length*4];
+    	index = new int[vertices.length*2];
+    	texture = new int[vertices.length*2];
+    	color = new int[vertices.length*4];
     	verticesOrBlockIndex = 0;
     	
         tbb = ByteBuffer.allocateDirect(texture.length*4);
         tbb.order(ByteOrder.nativeOrder());
-        textureBuffer = tbb.asFloatBuffer();   
+        textureBuffer = tbb.asIntBuffer();   
         
         cbb = ByteBuffer.allocateDirect(color.length*4);
         cbb.order(ByteOrder.nativeOrder());
-        colorBuffer = cbb.asFloatBuffer();    
+        colorBuffer = cbb.asIntBuffer();    
         
         vbb = ByteBuffer.allocateDirect(index.length*4);
         vbb.order(ByteOrder.nativeOrder());
-        vertexBuffer = vbb.asFloatBuffer();        
+        vertexBuffer = vbb.asIntBuffer();        
     }
     
     public RenderState getRenderState(){
@@ -88,8 +87,8 @@ public class DrawOp implements Comparable<DrawOp>{
           int i = 0;
           int k = 0;
           for(int j = 0; j < verticesOrBlockIndex; j++){
-	    	  index[k] = vertices[j].x;
-	    	  index[k+1] = vertices[j].y;
+	    	  index[k] = (int)vertices[j].x;
+	    	  index[k+1] = (int)vertices[j].y;
 	  
 	    	  switch(i){
 	    	  case 0:
@@ -125,8 +124,8 @@ public class DrawOp implements Comparable<DrawOp>{
         	  color[k + 2] = vertices[i].c.getBlue();
         	  color[k + 3] = vertices[i].c.getAlpha();
         	  
-        	  index[l] = vertices[i].x;
-        	  index[l + 1] = vertices[i].y;
+        	  index[l] = (int)vertices[i].x;
+        	  index[l + 1] = (int)vertices[i].y;
         	  k += 4;
         	  l += 2;
           }
@@ -139,13 +138,13 @@ public class DrawOp implements Comparable<DrawOp>{
         vertexBuffer.position(0);
 
         if(renderState.texName == ClipRect.NO_TEXTURE){
-          gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);
+          gl.glColorPointer(4, GL10.GL_FIXED, 0, colorBuffer);
         } 
         
-        gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
+        gl.glVertexPointer(2, GL10.GL_FIXED, 0, vertexBuffer);
         
         if(renderState.texName != ClipRect.NO_TEXTURE){      
-          gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);  
+          gl.glTexCoordPointer(2, GL10.GL_FIXED, 0, textureBuffer);  
         }
               
         switch(verticesOrBlockIndex){
