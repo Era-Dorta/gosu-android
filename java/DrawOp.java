@@ -26,6 +26,15 @@ public class DrawOp implements Comparable<DrawOp>{
     private float texture[];
     private int color[];
     
+	private IntBuffer colorBuffer;
+	private FloatBuffer textureBuffer;
+	private FloatBuffer vertexBuffer;
+	
+	//Buffers for textures, color and vertices
+	private ByteBuffer tbb; 
+	private ByteBuffer cbb;
+	private ByteBuffer vbb;
+    
     public DrawOp( GL10 gl_ ){
     	gl = gl_;
     	vertices = new Vertex[4];
@@ -34,6 +43,18 @@ public class DrawOp implements Comparable<DrawOp>{
     	texture = new float[vertices.length*2];
     	color = new int[vertices.length*2];
     	verticesOrBlockIndex = 0;
+    	
+        tbb = ByteBuffer.allocateDirect(texture.length*4);
+        tbb.order(ByteOrder.nativeOrder());
+        textureBuffer = tbb.asFloatBuffer();   
+        
+        cbb = ByteBuffer.allocateDirect(color.length*4);
+        cbb.order(ByteOrder.nativeOrder());
+        colorBuffer = cbb.asIntBuffer();    
+        
+        vbb = ByteBuffer.allocateDirect(index.length*4);
+        vbb.order(ByteOrder.nativeOrder());
+        vertexBuffer = vbb.asFloatBuffer();        
     }
     
     public RenderState getRenderState(){
@@ -52,10 +73,7 @@ public class DrawOp implements Comparable<DrawOp>{
     	verticesOrBlockIndex = verticesOrBlockIndex_;
     }
     
-    public void perform( DrawOp nextOp){
-    	IntBuffer colorBuffer = null;
-    	FloatBuffer textureBuffer = null;
-    	
+    public void perform( DrawOp nextOp){   	
         //TODO On Gosu even textures can have color, here every star on 
         //tutorial.rb is white
         if(verticesOrBlockIndex < 2 || verticesOrBlockIndex > 4){
@@ -94,10 +112,7 @@ public class DrawOp implements Comparable<DrawOp>{
 	    	  k += 2; 
 	    	  i++;
           }            
-          
-          ByteBuffer tbb = ByteBuffer.allocateDirect(texture.length*4);
-          tbb.order(ByteOrder.nativeOrder());
-          textureBuffer = tbb.asFloatBuffer();          
+                   
           textureBuffer.put(texture);
           textureBuffer.position(0); 
         }else{      
@@ -116,25 +131,18 @@ public class DrawOp implements Comparable<DrawOp>{
         	  l += 2;
           }
           
-          ByteBuffer cbb = ByteBuffer.allocateDirect(color.length*4);
-          cbb.order(ByteOrder.nativeOrder());
-          colorBuffer = cbb.asIntBuffer();
           colorBuffer.put(color);
           colorBuffer.position(0);         
         }
                
-      
-        ByteBuffer vbb = ByteBuffer.allocateDirect(index.length*4);
-        vbb.order(ByteOrder.nativeOrder());
-        FloatBuffer vertex_buffer = vbb.asFloatBuffer();
-        vertex_buffer.put(index);
-        vertex_buffer.position(0);
+        vertexBuffer.put(index);
+        vertexBuffer.position(0);
 
         if(renderState.texName == ClipRect.NO_TEXTURE){
           gl.glColorPointer(4, GL10.GL_FLOAT, 0, colorBuffer);
         } 
         
-        gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertex_buffer);
+        gl.glVertexPointer(2, GL10.GL_FLOAT, 0, vertexBuffer);
         
         if(renderState.texName != ClipRect.NO_TEXTURE){      
           gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);  
