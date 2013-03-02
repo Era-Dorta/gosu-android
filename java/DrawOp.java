@@ -24,9 +24,9 @@ public class DrawOp implements Comparable<DrawOp>{
     private GL10 gl;
     private float index[];
     private float texture[];
-    private int color[];
+    private float color[];
     
-	private IntBuffer colorBuffer;
+	private FloatBuffer colorBuffer;
 	private FloatBuffer textureBuffer;
 	private FloatBuffer vertexBuffer;
 	
@@ -41,7 +41,7 @@ public class DrawOp implements Comparable<DrawOp>{
     	renderState = new RenderState();
     	index = new float[vertices.length*2];
     	texture = new float[vertices.length*2];
-    	color = new int[vertices.length*4];
+    	color = new float[vertices.length*4];
     	verticesOrBlockIndex = 0;
     	
         tbb = ByteBuffer.allocateDirect(texture.length*4);
@@ -50,7 +50,7 @@ public class DrawOp implements Comparable<DrawOp>{
         
         cbb = ByteBuffer.allocateDirect(color.length*4);
         cbb.order(ByteOrder.nativeOrder());
-        colorBuffer = cbb.asIntBuffer();    
+        colorBuffer = cbb.asFloatBuffer();    
         
         vbb = ByteBuffer.allocateDirect(index.length*4);
         vbb.order(ByteOrder.nativeOrder());
