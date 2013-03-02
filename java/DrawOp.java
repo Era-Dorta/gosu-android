@@ -41,7 +41,7 @@ public class DrawOp implements Comparable<DrawOp>{
     	renderState = new RenderState();
     	index = new float[vertices.length*2];
     	texture = new float[vertices.length*2];
-    	color = new int[vertices.length*2];
+    	color = new int[vertices.length*4];
     	verticesOrBlockIndex = 0;
     	
         tbb = ByteBuffer.allocateDirect(texture.length*4);
@@ -87,7 +87,7 @@ public class DrawOp implements Comparable<DrawOp>{
           
           int i = 0;
           int k = 0;
-          for(int j = 0; j < vertices.length; j++){
+          for(int j = 0; j < verticesOrBlockIndex; j++){
 	    	  index[k] = vertices[j].x;
 	    	  index[k+1] = vertices[j].y;
 	  
@@ -119,14 +119,14 @@ public class DrawOp implements Comparable<DrawOp>{
           gl.glEnableClientState(GL10.GL_COLOR_ARRAY); 
           
           int k = 0, l = 0;
-          for(int i = 0; i < vertices.length; i++){
+          for(int i = 0; i < verticesOrBlockIndex; i++){
         	  color[k] = vertices[i].c.getRed();
         	  color[k + 1] = vertices[i].c.getGreen();
         	  color[k + 2] = vertices[i].c.getBlue();
         	  color[k + 3] = vertices[i].c.getAlpha();
         	  
         	  index[l] = vertices[i].x;
-        	  index[l + 1] = vertices[i].x;
+        	  index[l + 1] = vertices[i].y;
         	  k += 4;
         	  l += 2;
           }
