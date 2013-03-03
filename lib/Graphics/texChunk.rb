@@ -21,18 +21,7 @@ module Gosu
       @info.left = @x.to_f / @texture.size
       @info.top = @y.to_f / @texture.size
       @info.right = (@x.to_f + @w) / @texture.size
-      @info.bottom = (@y.to_f + @h) / @texture.size   
-      @op = DrawOp.new(@graphics.gl)
-      @op.render_state.tex_name = @info.tex_name
-      @op.vertices_or_block_index = 4
-      @op.vertices[0] = Vertex.new(0,0,0)
-      @op.vertices[1] = Vertex.new(0,0,0)
-      @op.vertices[2] = Vertex.new(0,0,0)
-      @op.vertices[3] = Vertex.new(0,0,0)   
-      @op.left = @info.left
-      @op.top = @info.top
-      @op.right = @info.right
-      @op.bottom = @info.bottom        
+      @info.bottom = (@y.to_f + @h) / @texture.size      
     end
     
     def TexChunk.finalize(id)
@@ -48,18 +37,26 @@ module Gosu
     end
     
     def draw( x1,  y1,  c1, x2,  y2,  c2, x3,  y3,  c3, x4,  y4,  c4, z, mode)
-      @op.render_state.mode = mode
+      op = DrawOp.new(@graphics.gl)
+      op.render_state.tex_name = @info.tex_name
+      op.render_state.mode = mode
       
       if Gosu::reorder_coordinates_if_necessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4)
         x3, y3, c3, x4, y4, c4 = x4, y4,c4, x3, y3, c3
       end  
-      @op.vertices[0].set(x1, y1, c1)
-      @op.vertices[1].set(x2, y2, c2)
-      @op.vertices[2].set(x3, y3, c3)
-      @op.vertices[3].set(x4, y4, c4)   
-
-      @op.z = z
-      @queues.schedule_draw_op(@op)   
+      op.vertices_or_block_index = 4
+      op.vertices[0] = Vertex.new(x1, y1, c1)
+      op.vertices[1] = Vertex.new(x2, y2, c2)
+      op.vertices[2] = Vertex.new(x3, y3, c3)
+      op.vertices[3] = Vertex.new(x4, y4, c4)
+      
+      op.left = @info.left
+      op.top = @info.top
+      op.right = @info.right
+      op.bottom = @info.bottom
+      
+      op.z = z
+      @queues.schedule_draw_op(op) 
     end  
         
     def glTexInfo
