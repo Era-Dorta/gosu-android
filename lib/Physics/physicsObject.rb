@@ -59,15 +59,25 @@ module Gosu
           #Calculate distance to current plane
           distance = Gosu::dot_product(@center, other_object.normal) + other_object.normal[2]
           product = Gosu::dot_product(@velocity, other_object.normal)
+
+          distance_inv = Gosu::dot_product(@center, other_object.normal_inv) - other_object.normal_inv[2]
+          product_inv = Gosu::dot_product(@velocity, other_object.normal_inv)                   
           #If distance is less thant zero and the object 
           #is moving towards the plane        
-          if distance < @size and product < 0
+          if distance < @size and product < 0 
             #Calculate new velocity, after the hit          
             @velocity[0] -= (1 + @restitution) * other_object.normal[0] * product
             @velocity[1] -= (1 + @restitution) * other_object.normal[1] * product 
             #Call window event
             @window.object_collided( @position[0], @position[1], other_object )
-          end
+          else if distance_inv < @size and product_inv < 0 
+            #Calculate new velocity, after the hit          
+            @velocity[0] -= (1 + @restitution) * other_object.normal_inv[0] * produc_inv
+            @velocity[1] -= (1 + @restitution) * other_object.normal_inv[1] * product_inv 
+            #Call window event
+            @window.object_collided( @position[0], @position[1], other_object )
+            end                    
+          end   
         end
       end
     end
@@ -80,6 +90,7 @@ module Gosu
 
   class Plane
     attr_reader :normal, :velocity, :mass_inverted
+    attr_reader :normal_inv
     attr_accessor :bottom_limit, :top_limit
     def initialize(window, file_name, p0, p1, z, mass_inverted = 0, velocity_x = 0, velocity_y = 0)
       @window = window
@@ -89,6 +100,7 @@ module Gosu
       @z = z
       @normal = Gosu::cross_product d0, d1
       @normal[2] = -(@normal[0]*p0[0] + @normal[1]*p0[1]) 
+      @normal_inv = @normal.collect {|x| -x } 
       @top_limit = Array.new p0
       @bottom_limit = Array.new p1
       @velocity = [velocity_x, velocity_y]

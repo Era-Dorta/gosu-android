@@ -99,34 +99,34 @@ module Gosu
     #or end po. Please only use this for debugging purposes. Otherwise, use a quad or
     #image to simulate lines, or contribute a better drawLine to Gosu.
     def draw_line( x1,  y1,  c1, x2,  y2,  c2, z,  mode) 
-      op = DrawOp.new(@gl)
+      op = @queues.op_pool.newDrawOp
       op.render_state.mode = mode
       op.vertices_or_block_index = 2
-      op.vertices[0] = Vertex.new(x1, y1, c1)
-      op.vertices[1] = Vertex.new(x2, y2, c2)
+      op.vertices[0].set(x1, y1, c1)
+      op.vertices[1].set(x2, y2, c2)
       op.z = z  
       @queues.schedule_draw_op op
     end
 
     def draw_triangle( x1,  y1,  c1, x2,  y2,  c2, x3,  y3,  c3, z,  mode)
-      op = DrawOp.new(@gl)
+      op = @queues.op_pool.newDrawOp
       op.render_state.mode = mode
       op.vertices_or_block_index = 3
-      op.vertices[0] = Vertex.new(x1, y1, c1)
-      op.vertices[1] = Vertex.new(x2, y2, c2)
-      op.vertices[2] = Vertex.new(x3, y3, c3)
+      op.setvertices[0].set(x1, y1, c1)
+      op.vertices[1].set(x2, y2, c2)
+      op.vertices[2].set(x3, y3, c3)
       op.z = z  
       @queues.schedule_draw_op op        
     end
 
     def draw_quad( x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode)
-      op = DrawOp.new(@gl)
+      op = @queues.op_pool.newDrawOp
       op.render_state.mode = mode
       op.vertices_or_block_index = 4
-      op.vertices[0] = Vertex.new(x1, y1, c1)
-      op.vertices[1] = Vertex.new(x2, y2, c2)
-      op.vertices[2] = Vertex.new(x3, y3, c3)
-      op.vertices[3] = Vertex.new(x4, y4, c4)
+      op.vertices[0].set(x1, y1, c1)
+      op.vertices[1].set(x2, y2, c2)
+      op.vertices[2].set(x3, y3, c3)
+      op.vertices[3].set(x4, y4, c4)
       op.z = z  
       @queues.schedule_draw_op op       
     end

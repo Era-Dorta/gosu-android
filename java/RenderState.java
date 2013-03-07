@@ -64,8 +64,7 @@ public class RenderState{
         {
             gl.glEnable(GL10.GL_TEXTURE_2D);
             gl.glBindTexture(GL10.GL_TEXTURE_2D, texName);
-        }
-        else{
+        }else{
             gl.glDisable(GL10.GL_TEXTURE_2D);	
         }
 	}

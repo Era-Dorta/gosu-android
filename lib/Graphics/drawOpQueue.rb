@@ -2,13 +2,15 @@ require 'lib/Graphics/renderState'
 
 module Gosu
   class DrawOpQueue
+    attr_reader :op_pool 
     def initialize(gl)
       @ops = []
       @gl = gl
+      @op_pool = DrawOpPool.new(@gl, 50)
     end
     
     def gl= gl
-      @gl = gl
+      @gl = gl      
     end  
     
     def schedule_draw_op(op)
@@ -23,12 +25,14 @@ module Gosu
       @ops.each do |op|  
           manager.render_state = op.render_state      
           op.perform(nil) if op.vertices_or_block_index >= 0
+          @op_pool.freeDrawOp
       end
     end
     
     
     def clear_queue
       @ops = []
+      @op_pool.clearPool
     end
     
   end

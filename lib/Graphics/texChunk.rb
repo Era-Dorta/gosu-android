@@ -37,7 +37,7 @@ module Gosu
     end
     
     def draw( x1,  y1,  c1, x2,  y2,  c2, x3,  y3,  c3, x4,  y4,  c4, z, mode)
-      op = DrawOp.new(@graphics.gl)
+      op = @queues.op_pool.newDrawOp
       op.render_state.tex_name = @info.tex_name
       op.render_state.mode = mode
       
@@ -45,10 +45,10 @@ module Gosu
         x3, y3, c3, x4, y4, c4 = x4, y4,c4, x3, y3, c3
       end  
       op.vertices_or_block_index = 4
-      op.vertices[0] = Vertex.new(x1, y1, c1)
-      op.vertices[1] = Vertex.new(x2, y2, c2)
-      op.vertices[2] = Vertex.new(x3, y3, c3)
-      op.vertices[3] = Vertex.new(x4, y4, c4)
+      op.vertices[0].set(x1, y1, c1)
+      op.vertices[1].set(x2, y2, c2)
+      op.vertices[2].set(x3, y3, c3)
+      op.vertices[3].set(x4, y4, c4)
       
       op.left = @info.left
       op.top = @info.top

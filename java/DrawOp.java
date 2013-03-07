@@ -180,4 +180,3 @@ public class DrawOp implements Comparable<DrawOp>{
 		return 0;		
 	}    	
 }
-
