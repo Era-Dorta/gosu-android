@@ -54,7 +54,26 @@ module Gosu
     def generate_contact other_object
       if other_object.class == Square
       elsif other_object.class == Plane
-        if( @center[0] - @size <= other_object.top_limit[0] and @center[0] + @size >= other_object.bottom_limit[0] and 
+        if other_object.type == :vertical
+          
+          if @center[0] - @size <= other_object.top_limit[0] and @center[0] + @size >= other_object.top_limit[0]
+            #Calculate new velocity, after the hit          
+            @velocity[1] -= (1 + @restitution) * @velocity[1]
+            #Call window event
+            @window.object_collided( @position[0], @position[1], other_object )            
+          end
+          
+          if @center[0] - @size <= other_object.bottom_limit[0] and @center[0] + @size >= other_object.bottom_limit[0]
+            #Calculate new velocity, after the hit          
+            @velocity[1] -= (1 + @restitution) * @velocity[1]
+            #Call window event
+            @window.object_collided( @position[0], @position[1], other_object )            
+          end         
+           
+        else
+          
+        end
+        if( @center[0] - @size <= C.top_limit[0] and @center[0] + @size >= other_object.bottom_limit[0] and 
           @center[1] - @size <= other_object.top_limit[1] and @center[1] + @size >= other_object.bottom_limit[1] )
           #Calculate distance to current plane
           distance = Gosu::dot_product(@center, other_object.normal) + other_object.normal[2]
@@ -89,26 +108,22 @@ module Gosu
   end
 
   class Plane
-    attr_reader :normal, :velocity, :mass_inverted
-    attr_reader :normal_inv
     attr_accessor :bottom_limit, :top_limit
-    def initialize(window, file_name, p0, p1, z, mass_inverted = 0, velocity_x = 0, velocity_y = 0)
+    attr_accessor :type
+    def initialize(window, file_name, p0, p1, z)
       @window = window
       @image = Gosu::Image.new(@window, file_name)
-      d0 = [  p1[0] - p0[0], p1[1] - p0[1], 0]
-      d1 = [0,0,1]
       @z = z
-      @normal = Gosu::cross_product d0, d1
-      @normal[2] = -(@normal[0]*p0[0] + @normal[1]*p0[1]) 
-      @normal_inv = @normal.collect {|x| -x } 
       @top_limit = Array.new p0
       @bottom_limit = Array.new p1
-      @velocity = [velocity_x, velocity_y]
-      @mass_inverted = mass_inverted
-      @dt = @window.update_interval
       if(@bottom_limit[0] > @top_limit[0] or @bottom_limit[1] > @top_limit[1])
         @top_limit, @bottom_limit = @bottom_limit, @top_limit
       end     
+      if @bottom_limit[0] == @top_limit[0]
+        @type = :horizontal
+      else
+        @type = :vertical
+      end
     end
 
     def draw(x,y,z = @z) 
