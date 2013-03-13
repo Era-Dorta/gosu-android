@@ -63,13 +63,13 @@ class GameWindow < Gosu::Window
     if touch.x < 300
       #Player1
       @p1y = touch.y
-      @p1.bottom_limit[1] = @p1y 
-      @p1.top_limit[1] = @p1y + @size
+      @p1.bottom_limit[1] = @p1y + @size
+      @p1.top_limit[1] = @p1y  
     else
       #Player2
       @p3y = touch.y
-      @p3.bottom_limit[1] = @p3y 
-      @p3.top_limit[1] = @p3y + @size     
+      @p3.bottom_limit[1] = @p3y + @size  
+      @p3.top_limit[1] =  @p3y     
     end
   end
   

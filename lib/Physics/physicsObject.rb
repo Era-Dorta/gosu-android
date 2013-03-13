@@ -55,6 +55,7 @@ module Gosu
       if other_object.class == Square
       elsif other_object.class == Plane
         
+        #FIXME Do some optimizations here
         isHorizontalCollision = false
         isVerticalCollision = false
         
@@ -63,57 +64,36 @@ module Gosu
           left = @center[0] - @size
           right = @center[0] + @size
           top = @center[1] - @size
-          bottom = @center[1] + @size          
-          #Left edge of the square
-          if left <= other_object.top_limit[0] 
+          bottom = @center[1] + @size       
+          
+          if left <= other_object.top_limit[0] and other_object.bottom_limit[0] <= right
             isHorizontalCollision = true        
-          end
-          
-          #Right edge of the square
-          if right >= other_object.bottom_limit[0] 
-            isHorizontalCollision = true          
-          end         
+          end 
 
-          #Top edge of the square
-          if top >= other_object.top_limit[1] 
+          if top <= other_object.bottom_limit[1] and other_object.top_limit[1] <= bottom 
             isVerticalCollision = true        
-          end
-          
-          #Bottom edge of the square
-          if bottom <= other_object.bottom_limit[1] 
-            isVerticalCollision = true          
-          end     
+          end             
           
           if isHorizontalCollision and isVerticalCollision
             #Calculate new velocity, after the hit          
             @velocity[0] -= (1 + @restitution) * @velocity[0]
             #Call window event
             @window.object_collided( @position[0], @position[1], other_object )        
-          end                
+          end            
+              
         else
           #Is horizontal plane
           left = @center[0] - @size
           right = @center[0] + @size
           top = @center[1] - @size
-          bottom = @center[1] + @size          
-          #Left edge of the square
-          if left <= other_object.top_limit[0] 
+          bottom = @center[1] + @size  
+                  
+          if left <= other_object.top_limit[0] and other_object.bottom_limit[0] <= right
             isHorizontalCollision = true        
-          end
-          
-          #Right edge of the square
-          if right >= other_object.bottom_limit[0] 
-            isHorizontalCollision = true          
-          end         
+          end 
 
-          #Top edge of the square
-          if top >= other_object.top_limit[1] 
+          if top <= other_object.bottom_limit[1] and other_object.top_limit[1] <= bottom 
             isVerticalCollision = true        
-          end
-          
-          #Bottom edge of the square
-          if bottom <= other_object.bottom_limit[1] 
-            isVerticalCollision = true          
           end     
           
           if isHorizontalCollision and isVerticalCollision
@@ -122,6 +102,7 @@ module Gosu
             #Call window event
             @window.object_collided( @position[0], @position[1], other_object )         
           end   
+          
         end
       end
     end
@@ -148,14 +129,19 @@ module Gosu
       @z = z
       @top_limit = Array.new p0
       @bottom_limit = Array.new p1
+      
       if(@bottom_limit[0] > @top_limit[0] or @bottom_limit[1] < @top_limit[1])
         @top_limit, @bottom_limit = @bottom_limit, @top_limit
-      end     
+      end  
+         
       if @bottom_limit[0] == @top_limit[0]
         @type = :vertical
-      else
+      elsif @bottom_limit[1] == @top_limit[1]
         @type = :horizontal
+      else
+        raise "Planes can only be horizontal or vertical"
       end
+      
     end
 
     def draw(x,y,z = @z) 
