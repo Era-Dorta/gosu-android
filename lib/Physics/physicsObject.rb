@@ -54,48 +54,73 @@ module Gosu
     def generate_contact other_object
       if other_object.class == Square
       elsif other_object.class == Plane
+        
+        isHorizontalCollision = false
+        isVerticalCollision = false
+        
         if other_object.type == :vertical
           
-          if @center[0] - @size <= other_object.top_limit[0] and @center[0] + @size >= other_object.top_limit[0]
-            #Calculate new velocity, after the hit          
-            @velocity[1] -= (1 + @restitution) * @velocity[1]
-            #Call window event
-            @window.object_collided( @position[0], @position[1], other_object )            
+          left = @center[0] - @size
+          right = @center[0] + @size
+          top = @center[1] - @size
+          bottom = @center[1] + @size          
+          #Left edge of the square
+          if left <= other_object.top_limit[0] 
+            isHorizontalCollision = true        
           end
           
-          if @center[0] - @size <= other_object.bottom_limit[0] and @center[0] + @size >= other_object.bottom_limit[0]
+          #Right edge of the square
+          if right >= other_object.bottom_limit[0] 
+            isHorizontalCollision = true          
+          end         
+
+          #Top edge of the square
+          if top >= other_object.top_limit[1] 
+            isVerticalCollision = true        
+          end
+          
+          #Bottom edge of the square
+          if bottom <= other_object.bottom_limit[1] 
+            isVerticalCollision = true          
+          end     
+          
+          if isHorizontalCollision and isVerticalCollision
+            #Calculate new velocity, after the hit          
+            @velocity[0] -= (1 + @restitution) * @velocity[0]
+            #Call window event
+            @window.object_collided( @position[0], @position[1], other_object )        
+          end                
+        else
+          #Is horizontal plane
+          left = @center[0] - @size
+          right = @center[0] + @size
+          top = @center[1] - @size
+          bottom = @center[1] + @size          
+          #Left edge of the square
+          if left <= other_object.top_limit[0] 
+            isHorizontalCollision = true        
+          end
+          
+          #Right edge of the square
+          if right >= other_object.bottom_limit[0] 
+            isHorizontalCollision = true          
+          end         
+
+          #Top edge of the square
+          if top >= other_object.top_limit[1] 
+            isVerticalCollision = true        
+          end
+          
+          #Bottom edge of the square
+          if bottom <= other_object.bottom_limit[1] 
+            isVerticalCollision = true          
+          end     
+          
+          if isHorizontalCollision and isVerticalCollision
             #Calculate new velocity, after the hit          
             @velocity[1] -= (1 + @restitution) * @velocity[1]
             #Call window event
-            @window.object_collided( @position[0], @position[1], other_object )            
-          end         
-           
-        else
-          
-        end
-        if( @center[0] - @size <= C.top_limit[0] and @center[0] + @size >= other_object.bottom_limit[0] and 
-          @center[1] - @size <= other_object.top_limit[1] and @center[1] + @size >= other_object.bottom_limit[1] )
-          #Calculate distance to current plane
-          distance = Gosu::dot_product(@center, other_object.normal) + other_object.normal[2]
-          product = Gosu::dot_product(@velocity, other_object.normal)
-
-          distance_inv = Gosu::dot_product(@center, other_object.normal_inv) - other_object.normal_inv[2]
-          product_inv = Gosu::dot_product(@velocity, other_object.normal_inv)                   
-          #If distance is less thant zero and the object 
-          #is moving towards the plane        
-          if distance < @size and product < 0 
-            #Calculate new velocity, after the hit          
-            @velocity[0] -= (1 + @restitution) * other_object.normal[0] * product
-            @velocity[1] -= (1 + @restitution) * other_object.normal[1] * product 
-            #Call window event
-            @window.object_collided( @position[0], @position[1], other_object )
-          else if distance_inv < @size and product_inv < 0 
-            #Calculate new velocity, after the hit          
-            @velocity[0] -= (1 + @restitution) * other_object.normal_inv[0] * produc_inv
-            @velocity[1] -= (1 + @restitution) * other_object.normal_inv[1] * product_inv 
-            #Call window event
-            @window.object_collided( @position[0], @position[1], other_object )
-            end                    
+            @window.object_collided( @position[0], @position[1], other_object )         
           end   
         end
       end
@@ -107,6 +132,13 @@ module Gosu
         
   end
 
+  # Bottom ----- Top
+  #
+  #  Top
+  #   |
+  #   |
+  #   |
+  # Bottom
   class Plane
     attr_accessor :bottom_limit, :top_limit
     attr_accessor :type
@@ -116,13 +148,13 @@ module Gosu
       @z = z
       @top_limit = Array.new p0
       @bottom_limit = Array.new p1
-      if(@bottom_limit[0] > @top_limit[0] or @bottom_limit[1] > @top_limit[1])
+      if(@bottom_limit[0] > @top_limit[0] or @bottom_limit[1] < @top_limit[1])
         @top_limit, @bottom_limit = @bottom_limit, @top_limit
       end     
       if @bottom_limit[0] == @top_limit[0]
-        @type = :horizontal
-      else
         @type = :vertical
+      else
+        @type = :horizontal
       end
     end
 
