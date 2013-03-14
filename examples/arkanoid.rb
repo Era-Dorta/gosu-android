@@ -35,8 +35,11 @@ class GameWindow < Gosu::Window
       3.times do |j|
         @blocks.push Gosu::Plane.new(self, img, [block_x + (@size + 30)*i , block_y + 30*j ], [block_x + (@size + 30)*(i + 1), block_y + 30*j ],  0)
         @blocks_position.push [block_x + (@size + 30)*i, block_y + 30*j]
-        self.apply_physics @blocks[i]
       end
+    end
+    
+    6.times do |i|
+      self.apply_physics @blocks[i]
     end
     
     self.apply_physics @ball

@@ -24,7 +24,7 @@ module Gosu
     def delete_object object 
       if object.class == Square
         @squares.delete object
-      elsif
+      elsif  object.class == Plane
         @planes.delete object
       end
     end
