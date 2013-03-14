@@ -10,6 +10,7 @@ Sadly right now you need to manually copy every file to every ruboto proyect you
 - Copy the `lib` folder and the `gosu.rb` to the `proyect_name/src/` folder inside your [ruboto](http://github.com/ruboto/ruboto) proyect.
 - Copy the `gosu.java.jar` in the `proyect_name/libs/` folder.
 - Place the `res` files in the `proyect_name/res` folder.
+- It is very important that you do not copy the `java` files in your proyect folder, they are included for developers only.
 
 
 General Information
