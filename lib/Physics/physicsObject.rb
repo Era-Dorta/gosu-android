@@ -53,50 +53,18 @@ module Gosu
     
     def generate_contact other_object
       if other_object.class == Square
-      elsif other_object.class == Plane
-        
-        #FIXME Do some optimizations here
-        isHorizontalCollision = false
-        isVerticalCollision = false
-        
-        if other_object.type == :vertical
-          
-          left = @center[0] - @size
-          right = @center[0] + @size
-          top = @center[1] - @size
-          bottom = @center[1] + @size       
-          
-          if left < other_object.top_limit[0] and other_object.bottom_limit[0] < right and
-            top < other_object.bottom_limit[1] and other_object.top_limit[1] < bottom 
-            #Calculate new velocity, after the hit          
+      elsif other_object.class == Plane  
+        if @center[0] - @size < other_object.top_limit[0] and other_object.bottom_limit[0] < @center[0] + @size and
+          @center[1] - @size < other_object.bottom_limit[1] and other_object.top_limit[1] < @center[1] + @size 
+          #Calculate new velocity, after the hit  
+          if other_object.type == :vertical        
             @velocity[0] -= (1 + @restitution) * @velocity[0]
-            #Call window event
-            @window.object_collided( @position[0], @position[1], other_object )    
-          end         
-              
-        else
-          #Is horizontal plane
-          left = @center[0] - @size
-          right = @center[0] + @size
-          top = @center[1] - @size
-          bottom = @center[1] + @size  
-                  
-          if left < other_object.top_limit[0] and other_object.bottom_limit[0] < right
-            isHorizontalCollision = true        
-          end 
-
-          if top < other_object.bottom_limit[1] and other_object.top_limit[1] < bottom 
-            isVerticalCollision = true        
-          end     
-          
-          if isHorizontalCollision and isVerticalCollision
-            #Calculate new velocity, after the hit          
+          else
             @velocity[1] -= (1 + @restitution) * @velocity[1]
-            #Call window event
-            @window.object_collided( @position[0], @position[1], other_object )         
-          end   
-          
-        end
+          end
+          #Call window event
+          @window.object_collided( @position[0], @position[1], other_object )    
+        end                  
       end
     end
     
