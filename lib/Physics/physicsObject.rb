@@ -66,20 +66,13 @@ module Gosu
           top = @center[1] - @size
           bottom = @center[1] + @size       
           
-          if left <= other_object.top_limit[0] and other_object.bottom_limit[0] <= right
-            isHorizontalCollision = true        
-          end 
-
-          if top <= other_object.bottom_limit[1] and other_object.top_limit[1] <= bottom 
-            isVerticalCollision = true        
-          end             
-          
-          if isHorizontalCollision and isVerticalCollision
+          if left < other_object.top_limit[0] and other_object.bottom_limit[0] < right and
+            top < other_object.bottom_limit[1] and other_object.top_limit[1] < bottom 
             #Calculate new velocity, after the hit          
             @velocity[0] -= (1 + @restitution) * @velocity[0]
             #Call window event
-            @window.object_collided( @position[0], @position[1], other_object )        
-          end            
+            @window.object_collided( @position[0], @position[1], other_object )    
+          end         
               
         else
           #Is horizontal plane
@@ -88,11 +81,11 @@ module Gosu
           top = @center[1] - @size
           bottom = @center[1] + @size  
                   
-          if left <= other_object.top_limit[0] and other_object.bottom_limit[0] <= right
+          if left < other_object.top_limit[0] and other_object.bottom_limit[0] < right
             isHorizontalCollision = true        
           end 
 
-          if top <= other_object.bottom_limit[1] and other_object.top_limit[1] <= bottom 
+          if top < other_object.bottom_limit[1] and other_object.top_limit[1] < bottom 
             isVerticalCollision = true        
           end     
           

@@ -57,7 +57,12 @@ class GameWindow < Gosu::Window
   end
  
   def object_collided( x, y, other_object ) 
-    @score += 1
+    if(@blocks.include? other_object )      
+      @score += 1
+      self.stop_physics other_object
+      @blocks_position.delete_at(@blocks.index other_object)
+      @blocks.delete other_object
+    end
     @beep.play
   end 
 

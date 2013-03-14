@@ -77,7 +77,7 @@ class GameWindow < Gosu::Window
     @squ.draw
     @p1.draw(@p1x,@p1y,0)
     @p3.draw(@p3x,@p3y,0)
-    @font.draw("Score: p1 #{@p1score} p2#{@p2score} ", 10, 10, 3, 1.0, 1.0, 0xffffff00)
+    @font.draw("Score: A #{@p1score} B #{@p2score} ", 10, 10, 3, 1.0, 1.0, 0xffffff00)
   end
  
 end
