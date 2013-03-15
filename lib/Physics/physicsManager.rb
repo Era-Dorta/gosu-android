@@ -15,9 +15,9 @@ module Gosu
     
     def register_new_object object
       if object.class == Square
-        @squares.push object
-      elsif
-        @planes.push object
+        @squares.push object unless @squares.include? object
+      elsif object.class == Plane
+        @planes.push object unless @planes.include? object
       end
     end
 
