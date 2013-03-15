@@ -24,4 +24,4 @@ FAQ
 -------------------
 * I get `(SystemStackError) stack level too deep` in `require 'gosu'` 
 	Replace `require 'gosu'` by `with_large_stack { require 'gosu' }` 
-	Thanks @ashes999
+	Thanks [@ashes999](https://github.com/ashes999)
