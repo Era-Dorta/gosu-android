@@ -7,7 +7,7 @@ class GameWindow < Gosu::Window
     self.physics_manager.gravity_y = 0
     @p1score = 0
     @p2score = 0  
-    @song = Gosu::Song.new(self, Ruboto::R::raw::chriss_onac_tempo)
+    @song = Gosu::Song.new(self, Ruboto::R::raw::chriss_onac_tempo_red)
     @beep = Gosu::Sample.new(self, Ruboto::R::raw::beep)
     @p1x = 0
     # 25 is to compesate square size of the ball
