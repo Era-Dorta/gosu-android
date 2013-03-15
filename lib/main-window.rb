@@ -130,12 +130,12 @@ module Gosu
     end
     
     def do_show
-      start_time = Time.now
+      @start_time = Time.now
       do_tick
       #TODO gosu dark side
-      end_time = Time.now
-      if (start_time <= end_time and (end_time - start_time) < @update_interval)
-          sleep(@update_interval - (end_time - start_time)) 
+      @end_time = Time.now
+      if (@start_time <= @end_time and (@end_time - @start_time) < @update_interval)
+          sleep(@update_interval - (@end_time - @start_time)) 
       end      
     end
     
