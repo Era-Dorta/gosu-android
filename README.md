@@ -19,3 +19,9 @@ General Information
 * There are some known bugs that I hope to fix soon.
 * In its current status there are some small changes to Gosu Window initialization, check examples.
 * A new object with some basic physics has been added.
+
+FAQ
+-------------------
+* I get `(SystemStackError) stack level too deep` in `require 'gosu'` 
+	Replace `require 'gosu'` by `with_large_stack { require 'gosu' }` 
+	Thanks @ashes999
