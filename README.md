@@ -23,11 +23,11 @@ General Information
 Troubleshooting
 -------------------
 * If you're using Ruboto 0.10.4 or earlier, you ma get an error when trying to require the gosu libraries: `(SystemStackError) stack level too deep` in `require 'gosu'`. If this happens:
-	Replace `require 'gosu'` with  `with_large_stack { require 'gosu' }`. If it still doesn't work:
-	Try `with_large_stack(256)
+	* Replace `require 'gosu'` with  `with_large_stack { require 'gosu' }`. If it still doesn't work:
+	* Try `with_large_stack(256)
 		rrequire 'gosu'
 	end`. If it still doesn't work, try again with `512` instead of `256`.
-	Alternatively, update to the latest Ruboto (0.11 or better).
-	Relevant Ruboto issues:
-		https://github.com/ruboto/ruboto/issues/359
-		https://github.com/ruboto/ruboto/issues/375
+	* Alternatively, update to the latest Ruboto (0.11 or better).
+	* Relevant Ruboto issues:
+		* https://github.com/ruboto/ruboto/issues/359
+		* https://github.com/ruboto/ruboto/issues/375
