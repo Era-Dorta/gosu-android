@@ -50,11 +50,15 @@ public class DrawOpPool{
     public void freeDrawOp(){    
     	if(size == 0){
     		return;
-    	}
+    	}    	
     	size -= 1;
+    	opPool.get(size).getRenderState().reset();
     }    
     
     public void clearPool(){    
+    	for(int i = 0; i < size; i++){
+    		opPool.get(i).getRenderState().reset();
+    	}
     	size = 0;
     }     
 }

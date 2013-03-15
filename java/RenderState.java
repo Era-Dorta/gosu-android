@@ -27,6 +27,13 @@ public class RenderState{
 		mode = mode_;				
 	}	
 	
+	public void reset(){
+		texName = ClipRect.NO_TEXTURE;
+		transform = 0;
+		clipRect.setWidth(ClipRect.NO_CLIPPING);
+		mode = AM_DEFAULT;		
+	}
+	
 	public void setTexName(int texName_){
 		texName = texName_;
 	}
