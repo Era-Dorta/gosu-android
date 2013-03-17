@@ -82,6 +82,7 @@ module Gosu
     # to the update member function. The default means the game will run
     # at 60 FPS, which is ideal on standard 60 Hz TFT screens.
     def initialize(width, height, fullscreen, update_interval=16.666666)  
+    with_large_stack(256){  
       android_initializer = AndroidInitializer.instance
       @fullscreen = fullscreen
       @showing = false
@@ -102,6 +103,7 @@ module Gosu
       @physics_manager = PhysicsManager.new self
       @fonts_manager = FontsManager.new self
       @media_player = nil
+    }
     end
     
     # Enters a modal loop where the Window is visible on screen and receives calls to draw, update etc.
