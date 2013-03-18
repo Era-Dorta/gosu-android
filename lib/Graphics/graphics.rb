@@ -112,7 +112,7 @@ module Gosu
       op = @queues.op_pool.newDrawOp
       op.render_state.mode = mode
       op.vertices_or_block_index = 3
-      op.setvertices[0].set(x1, y1, c1)
+      op.vertices[0].set(x1, y1, c1)
       op.vertices[1].set(x2, y2, c2)
       op.vertices[2].set(x3, y3, c3)
       op.z = z  
