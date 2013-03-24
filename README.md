@@ -31,3 +31,5 @@ Troubleshooting
 	* Relevant Ruboto issues:
 		* https://github.com/ruboto/ruboto/issues/359
 		* https://github.com/ruboto/ruboto/issues/375
+* When using several audio files made sure all have the same codification or you could get: `E/MediaPlayer(16127): Unable to to create media player`
+ 	* http://forums.pragprog.com/forums/152/topics/9144
