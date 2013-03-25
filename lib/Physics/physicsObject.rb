@@ -83,7 +83,7 @@ module Gosu
   # Bottom
   class Plane
     attr_accessor :bottom_limit, :top_limit
-    attr_accessor :type
+    attr_reader :type
     def initialize(window, file_name, p0, p1, z)
       @window = window
       @image = Gosu::Image.new(@window, file_name)
