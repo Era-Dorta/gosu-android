@@ -66,7 +66,28 @@ module Gosu
         FileUtils.cp(src, dst)  
         src = gem_root + "/gosu.java.jar"
         dst = root + "/libs/gosu.java.jar"
-        FileUtils.cp(src, dst)          
+        FileUtils.cp(src, dst)  
+        
+        #Resources files
+        gem_root = gem_root + "_"
+        gem_root.slice! "/lib_" 
+        gem_root_s = gem_root + "/res/*"
+        gem_root_ss = gem_root + "/res/*/**"
+        
+        #Get all resources
+        lib_files = FileList[ gem_root_s, gem_root_ss ].to_a   
+
+        #Copy the resources
+        lib_files.each do |file|     
+          src = String.new file     
+          file.slice!(gem_root) 
+          dst = root + file
+          FileUtils.mkdir_p(File.dirname(dst))
+          if file.include? "."
+            FileUtils.cp(src, dst)   
+          end     
+        end   
+             
       end
       
       def self.delete_files 

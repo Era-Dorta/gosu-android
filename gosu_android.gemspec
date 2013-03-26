@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{https://github.com/neochuky/gosu-android/}
   s.description = Gosu::DESCRIPTION
   s.license = 'MIT'
-  s.files = FileList['[A-Z]*', 'examples/{*,.*}', 'bin/*', 'lib/**/*'].to_a
+  s.files = FileList['[A-Z]*', 'examples/{*,.*}', 'bin/*', 'lib/**/*', 'res/*/*'].to_a
   s.executables = %w(gosu_android)
   s.default_executable = 'gosu_android'
   s.add_dependency('ruboto', '>=0.8.0')
