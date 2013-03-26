@@ -4,11 +4,22 @@ A Gosu implementation for Adroid devices.
 
 Installation
 -----------
+
+### Linux 
+
+`gem install gosu_android`
+
+As with ruboto, place yourselfe in the root directory of your app and execute
+`gosu_android -a` or `gosu_android --add` to automatically copy every gosu_android file to your ruboto project.
+
+### Other platforms 
+
+
 Sadly right now you need to manually copy every file to every ruboto proyect you want to use it.
 
 - Download the sources
-- Copy the `lib` folder and the `gosu.rb` to the `proyect_name/src/` folder inside your [ruboto](http://github.com/ruboto/ruboto) proyect.
-- Copy the `gosu.java.jar` in the `proyect_name/libs/` folder.
+- Copy the `lib/gosu_android` folder and the `gosu.rb` to the `proyect_name/src/` folder inside your [ruboto](http://github.com/ruboto/ruboto) proyect.
+- Copy the `lib/gosu.java.jar` in the `proyect_name/libs/` folder.
 - Place the `res` files in the `proyect_name/res` folder.
 - It is very important that you do not copy the `java` files in your proyect folder, they are included for developers only.
 
