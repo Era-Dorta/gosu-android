@@ -1,4 +1,4 @@
-require 'lib/graphics/image'
+require 'gosu_android/graphics/image'
 
 module Gosu
 
@@ -14,7 +14,7 @@ module Gosu
     res = []
     res.push( l1[1]*l2[2] - l1[2]*l2[1] );
     res.push( l1[2]*l2[0] - l1[0]*l2[2] );
-    res.push( l1[0]*l2[1] - l1[1]*l2[0] ); 
+    res.push( l1[0]*l2[1] - l1[1]*l2[0] );
     d = res.max
     if(d == 0)
       d = res.min
@@ -22,21 +22,21 @@ module Gosu
       res[1] = res[1]/-d
     else
       res[0] = res[0]/d
-      res[1] = res[1]/d    
-    end 
+      res[1] = res[1]/d
+    end
     res
-  end 
-  
+  end
+
   class Square
     attr_accessor :velocity
     attr_reader :position, :center
-    attr_reader :mass_inverted, :restitution 
-    def initialize(window, file_name, x, y, z, size, mass_inverted, 
+    attr_reader :mass_inverted, :restitution
+    def initialize(window, file_name, x, y, z, size, mass_inverted,
       velocity_x = 0, velocity_y = 0, restitution = 1, tileable = false)
       @window = window
       @position = [x,y]
       @size = size / 2
-      @center = [@position[0] + @size, @position[1] + @size] 
+      @center = [@position[0] + @size, @position[1] + @size]
       @z = z
       @restitution = restitution
       @velocity = [velocity_x, velocity_y]
@@ -46,32 +46,32 @@ module Gosu
     end
 
     def integrate
-      @position[0] += @velocity[0]*@dt 
-      @position[1] += @velocity[1]*@dt 
+      @position[0] += @velocity[0]*@dt
+      @position[1] += @velocity[1]*@dt
       @center = [@position[0] + @size, @position[1] + @size]
     end
-    
+
     def generate_contact other_object
       if other_object.class == Square
-      elsif other_object.class == Plane  
+      elsif other_object.class == Plane
         if @center[0] - @size < other_object.top_limit[0] and other_object.bottom_limit[0] < @center[0] + @size and
-          @center[1] - @size < other_object.bottom_limit[1] and other_object.top_limit[1] < @center[1] + @size 
-          #Calculate new velocity, after the hit  
-          if other_object.type == :vertical        
+          @center[1] - @size < other_object.bottom_limit[1] and other_object.top_limit[1] < @center[1] + @size
+          #Calculate new velocity, after the hit
+          if other_object.type == :vertical
             @velocity[0] -= (1 + @restitution) * @velocity[0]
           else
             @velocity[1] -= (1 + @restitution) * @velocity[1]
           end
           #Call window event
-          @window.object_collided( @position[0], @position[1], other_object )    
-        end                  
+          @window.object_collided( @position[0], @position[1], other_object )
+        end
       end
     end
-    
+
     def draw
       @image.draw(@position[0], @position[1], @z)
     end
-        
+
   end
 
   # Bottom ----- Top
@@ -90,11 +90,11 @@ module Gosu
       @z = z
       @top_limit = Array.new p0
       @bottom_limit = Array.new p1
-      
+
       if(@bottom_limit[0] > @top_limit[0] or @bottom_limit[1] < @top_limit[1])
         @top_limit, @bottom_limit = @bottom_limit, @top_limit
-      end  
-         
+      end
+
       if @bottom_limit[0] == @top_limit[0]
         @type = :vertical
       elsif @bottom_limit[1] == @top_limit[1]
@@ -102,12 +102,12 @@ module Gosu
       else
         raise "Planes can only be horizontal or vertical"
       end
-      
+
     end
 
-    def draw(x,y,z = @z) 
+    def draw(x,y,z = @z)
       @image.draw(x,y,z)
     end
-        
+
   end
 end

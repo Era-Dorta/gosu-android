@@ -1,4 +1,4 @@
-require 'lib/requires'
+require 'gosu_android/requires'
 
 
 module Gosu
@@ -40,7 +40,7 @@ module Gosu
   KbZ = JavaImports::KeyEvent::KEYCODE_Z
   KbBackspace = JavaImports::KeyEvent::KEYCODE_DEL
   KbDelete = JavaImports::KeyEvent::KEYCODE_DEL
-  KbDown = JavaImports::KeyEvent::KEYCODE_DPAD_DOWN 
+  KbDown = JavaImports::KeyEvent::KEYCODE_DPAD_DOWN
   # On Numpad
   KbHome = JavaImports::KeyEvent::KEYCODE_HOME
   KbLeft = JavaImports::KeyEvent::KEYCODE_DPAD_LEFT
@@ -58,16 +58,16 @@ module Gosu
   KbTab = JavaImports::KeyEvent::KEYCODE_TAB
   KbUp = JavaImports::KeyEvent::KEYCODE_DPAD_UP
   #TODO Fix mouse buttons, Mouse access to motion event
-  #MsLeft = JavaImports::MotionEvent::BUTTON_PRIMARY 
-  #MsMiddle = JavaImports::MotionEvent::BUTTON_TERTIARY 
-  #MsRight = JavaImports::MotionEvent::BUTTON_SECONDARY 
+  #MsLeft = JavaImports::MotionEvent::BUTTON_PRIMARY
+  #MsMiddle = JavaImports::MotionEvent::BUTTON_TERTIARY
+  #MsRight = JavaImports::MotionEvent::BUTTON_SECONDARY
   #TODO Axis wheel is not right
   #MsWheelDown = JavaImports::MotionEvent::AXIS_WHEEL
   #MsWheelUp = JavaImports::MotionEvent::AXIS_WHEEL
   NoButton = 0xffffffff
-  #Not Supported GpDown, GpLeft, GpRight, GpUp 
-  
-  #Load supported buttons on android above 3.0.0 
+  #Not Supported GpDown, GpLeft, GpRight, GpUp
+
+  #Load supported buttons on android above 3.0.0
   if android.os.Build::VERSION::SDK_INT >= 11
     KbEnd = JavaImports::KeyEvent::KEYCODE_MOVE_END
     # On Numpad
@@ -84,7 +84,7 @@ module Gosu
     KbF6 = JavaImports::KeyEvent::KEYCODE_F6
     KbF7 = JavaImports::KeyEvent::KEYCODE_F7
     KbF8 = JavaImports::KeyEvent::KEYCODE_F8
-    KbF9 = JavaImports::KeyEvent::KEYCODE_F9    
+    KbF9 = JavaImports::KeyEvent::KEYCODE_F9
     KbInsert = JavaImports::KeyEvent::KEYCODE_INSERT
     KbLeftControl = JavaImports::KeyEvent::KEYCODE_CTRL_LEFT
     KbNumpad0 = JavaImports::KeyEvent::KEYCODE_NUMPAD_0
@@ -100,12 +100,12 @@ module Gosu
     KbNumpadAdd = JavaImports::KeyEvent::KEYCODE_NUMPAD_ADD
     KbNumpadDivide = JavaImports::KeyEvent::KEYCODE_NUMPAD_DIVIDE
     KbNumpadMultiply = JavaImports::KeyEvent::KEYCODE_NUMPAD_MULTIPLY
-    KbNumpadSubtract = JavaImports::KeyEvent::KEYCODE_NUMPAD_SUBTRACT  
+    KbNumpadSubtract = JavaImports::KeyEvent::KEYCODE_NUMPAD_SUBTRACT
     # Above the right shift key
-    KbRightControl = JavaImports::KeyEvent::KEYCODE_CTRL_RIGHT  
-  end 
-  
-  #Load supported buttons on android above 4.0.0 
+    KbRightControl = JavaImports::KeyEvent::KEYCODE_CTRL_RIGHT
+  end
+
+  #Load supported buttons on android above 4.0.0
   if android.os.Build::VERSION::SDK_INT >= 15
     Game pad
     GpButton0 = JavaImports::KeyEvent::KEYCODE_BUTTON_1
@@ -123,6 +123,6 @@ module Gosu
     GpButton6 = JavaImports::KeyEvent::KEYCODE_BUTTON_7
     GpButton7 = JavaImports::KeyEvent::KEYCODE_BUTTON_8
     GpButton8 = JavaImports::KeyEvent::KEYCODE_BUTTON_9
-    GpButton9 = JavaImports::KeyEvent::KEYCODE_BUTTON_10    
+    GpButton9 = JavaImports::KeyEvent::KEYCODE_BUTTON_10
   end
-end  
+end
