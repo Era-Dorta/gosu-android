@@ -1,4 +1,4 @@
-require 'lib/Input/buttons'
+require 'lib/input/buttons'
 
 module Gosu
   class Button

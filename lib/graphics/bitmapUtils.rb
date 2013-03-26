@@ -1,4 +1,4 @@
-require 'lib/Graphics/graphicsBase'
+require 'lib/graphics/graphicsBase'
 
 module Gosu
   def self.apply_border_flags(dest, source, src_x, src_y, src_width, src_height, border_flags)

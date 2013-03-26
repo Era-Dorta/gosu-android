@@ -1,4 +1,4 @@
-require 'lib/Physics/physicsObject'
+require 'lib/physics/physicsObject'
 
 module Gosu
   

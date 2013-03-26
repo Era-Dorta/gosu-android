@@ -1,4 +1,4 @@
-require 'lib/Graphics/renderState'
+require 'lib/graphics/renderState'
 
 module Gosu
   class DrawOpQueue

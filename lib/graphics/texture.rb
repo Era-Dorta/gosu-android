@@ -1,5 +1,5 @@
-require 'lib/Graphics/blockAllocator'
-require 'lib/Graphics/texChunk'
+require 'lib/graphics/blockAllocator'
+require 'lib/graphics/texChunk'
 require 'lib/requires'
 
 module Gosu

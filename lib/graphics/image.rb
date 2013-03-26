@@ -1,6 +1,6 @@
-require 'lib/Graphics/bitmap'
-require 'lib/Graphics/color'
-require 'lib/Graphics/graphicsBase'
+require 'lib/graphics/bitmap'
+require 'lib/graphics/color'
+require 'lib/graphics/graphicsBase'
 require 'lib/math'
 
 module Gosu

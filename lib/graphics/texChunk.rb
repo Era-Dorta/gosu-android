@@ -1,5 +1,5 @@
-require 'lib/Graphics/imageData'
-require 'lib/Graphics/common'
+require 'lib/graphics/imageData'
+require 'lib/graphics/common'
 
 module Gosu
   class TexChunk < ImageData

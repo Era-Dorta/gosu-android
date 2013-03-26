@@ -1,13 +1,13 @@
 require 'lib/requires'
-require 'lib/Graphics/graphicsBase'
-require 'lib/Graphics/color'
-require 'lib/Graphics/drawOp'
-require 'lib/Graphics/drawOpQueue'
-require 'lib/Graphics/image'
-require 'lib/Graphics/largeImageData'
-require 'lib/Graphics/bitmapUtils'
-require 'lib/Graphics/texture'
-require 'lib/Graphics/font'
+require 'lib/graphics/graphicsBase'
+require 'lib/graphics/color'
+require 'lib/graphics/drawOp'
+require 'lib/graphics/drawOpQueue'
+require 'lib/graphics/image'
+require 'lib/graphics/largeImageData'
+require 'lib/graphics/bitmapUtils'
+require 'lib/graphics/texture'
+require 'lib/graphics/font'
 
 module Gosu
   class Graphics

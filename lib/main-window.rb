@@ -1,11 +1,11 @@
 require 'lib/requires'
 
-require 'lib/Graphics/graphics'
-require 'lib/Graphics/graphicsBase'
-require 'lib/Graphics/font'
-require 'lib/Input/input'
-require 'lib/Audio/audio'
-require 'lib/Physics/physicsManager'
+require 'lib/graphics/graphics'
+require 'lib/graphics/graphicsBase'
+require 'lib/graphics/font'
+require 'lib/input/input'
+require 'lib/audio/audio'
+require 'lib/physics/physicsManager'
 require 'lib/timing'
 
 require 'singleton'

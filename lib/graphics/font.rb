@@ -1,7 +1,7 @@
 require 'lib/requires'
-require 'lib/Graphics/color'
-require 'lib/Graphics/graphicsBase'
-require 'lib/Graphics/image'
+require 'lib/graphics/color'
+require 'lib/graphics/graphicsBase'
+require 'lib/graphics/image'
 
 module Gosu
   

@@ -1,5 +1,5 @@
 require 'lib/requires'
-require 'lib/Graphics/color'
+require 'lib/graphics/color'
 
 module Gosu
   #Custom java files

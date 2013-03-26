@@ -1,4 +1,4 @@
-require 'lib/Graphics/image'
+require 'lib/graphics/image'
 
 module Gosu
 
