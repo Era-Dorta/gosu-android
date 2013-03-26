@@ -98,25 +98,54 @@ module Gosu
         begin        
           FileUtils.rm_rf to_delete        
         rescue => e
-          $stderr.puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!" 
+          $stderr.puts e.message
         end  
         
         #Deleting gosu_android.rb file
         to_delete = root + "/src/gosu_android.rb"
         begin    
-          FileUtils.rm_rf to_delete        
+          File.delete to_delete        
         rescue => e
-            $stderr.puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!" 
+          $stderr.puts e.message
         end 
         
         #Deleting gosu.java.jar file
         to_delete = root + "/libs/gosu.java.jar"
         begin     
-          FileUtils.rm_rf to_delete        
+          File.delete to_delete        
         rescue => e
-          puts "Super error"
-          $stderr.puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!" 
+          $stderr.puts e.message
         end        
+        
+        #gem root -> where the gem is located
+        gem_root = File.expand_path(File.dirname(__FILE__))
+        gem_root.slice! "/commands"
+               
+        gem_root = gem_root + "/"
+        gem_root.slice! "/gosu_android/"
+
+        #Resources files
+        gem_root = gem_root + "_"
+        gem_root.slice! "/lib_" 
+        gem_root_s = gem_root + "/res/*"
+        gem_root_ss = gem_root + "/res/*/**"
+        
+        #Get all resources
+        lib_files = FileList[ gem_root_s, gem_root_ss ].to_a   
+
+        #Delete only the previous copied resources
+        lib_files.each do |file|      
+          file.slice!(gem_root) 
+          to_delete = root + file
+          if file.include? "."
+            begin     
+              File.delete to_delete        
+            rescue => e
+              $stderr.puts e.message
+            end   
+          end     
+        end          
+        
       end 
 
       def self.main
