@@ -1,4 +1,4 @@
-require 'gosu'
+require 'gosu_android'
 
 class GameWindow < Gosu::Window
   def initialize
