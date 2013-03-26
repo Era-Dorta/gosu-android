@@ -1,3 +1,4 @@
+require 'rake'
 
 module Gosu
   module Commands
@@ -22,11 +23,36 @@ module Gosu
       def self.add_files 
         root = Dir.pwd
         gem_root = File.expand_path(File.dirname(__FILE__))
-        puts "añadiendo #{root} #{gem_root}"
-        lib_files = FileList[ gem_root + 'gosu_android/lib/**/*'].to_a do |file|
+        gem_root.slice! "/commands"
+        puts "root #{root}\n"
+        gem_root_s = gem_root + "/*"
+        gem_root_ss = gem_root + "/*/*"
+        puts " gem_root #{gem_root_s}\n"
+        lib_files = FileList[ gem_root_s, gem_root_ss ].to_a
+        #puts "lib_files vale #{lib_files}"
+        not_copy_files = ["commands", "description", "version"]
+  
+        not_copy_files.each do |not_copy|
+          lib_files.delete_if do |element|
+            element.include? not_copy 
+          end
+        end
+        
+        lib_files.each do |file|
+          puts "Copiando file #{file}\n"
+          file.slice!(gem_root) 
+          puts "primera parte #{file}\n"
+          
+          puts "a root #{root + '/src/gosu_android' + file }\n\n"
           #FileUtils.mkdir_p(File.dirname(root + "/src"))
           #FileUtils.cp(file, dst)        
         end
+        puts "antes " + gem_root
+        gem_root = gem_root + "/"
+        gem_root.slice! "/gosu_android/"
+        puts "despues " + gem_root
+        puts gem_root + "/gosu_android.rb\n"
+        puts gem_root + "/gosu.java.jar.rb\n"
       end
       
       def self.delete_files 
