@@ -71,7 +71,31 @@ module Gosu
       
       def self.delete_files 
         root = Dir.pwd
-        puts "Borrando"
+        
+        #Deleting whole gosu_android folder
+        to_delete = root + "/src/gosu_android"   
+        begin        
+          FileUtils.rm_rf to_delete        
+        rescue => e
+          $stderr.puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!" 
+        end  
+        
+        #Deleting gosu_android.rb file
+        to_delete = root + "/src/gosu_android.rb"
+        begin    
+          FileUtils.rm_rf to_delete        
+        rescue => e
+            $stderr.puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!" 
+        end 
+        
+        #Deleting gosu.java.jar file
+        to_delete = root + "/libs/gosu.java.jar"
+        begin     
+          FileUtils.rm_rf to_delete        
+        rescue => e
+          puts "Super error"
+          $stderr.puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!" 
+        end        
       end 
 
       def self.main
@@ -118,13 +142,8 @@ module Gosu
           delete_files
           exit 0
         end 
-
-        
       end
-      
-      
-
-      
+        
     end
   end
 end
