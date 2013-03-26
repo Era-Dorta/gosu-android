@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+begin
+  require 'gosu_android/commands/base'
+rescue RuntimeError
+  puts $!.message
+  exit 1
+end
+
+# Run Base, which will handle actual commands
+Gosu::Commands::Base.main
