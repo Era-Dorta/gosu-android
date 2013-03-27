@@ -54,9 +54,6 @@ module Gosu
             FileUtils.cp(src, dst)   
           end     
         end
-       
-        #FIXME This is a dirty way to delete de last
-        #gosu_android from the gem_root variable
         
         #Main file and jar dependencies go in different folders
         #than normal files
@@ -121,14 +118,11 @@ module Gosu
         
         #gem root -> where the gem is located
         gem_root = File.expand_path(File.dirname(__FILE__))
-        gem_root.slice! "/commands"
-               
-        gem_root = gem_root + "/"
-        gem_root.slice! "/gosu_android/"
+        gem_root = gem_root.reverse.sub( "/gosu_android/commands".reverse, '' ).reverse
 
         #Resources files
-        gem_root = gem_root + "_"
-        gem_root.slice! "/lib_" 
+        #Delete last occurence of /lib
+        gem_root = gem_root.reverse.sub( "/lib".reverse, '' ).reverse
         gem_root_s = gem_root + "/res/*"
         gem_root_ss = gem_root + "/res/*/**"
         
