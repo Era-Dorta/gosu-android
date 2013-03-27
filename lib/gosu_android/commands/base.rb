@@ -5,9 +5,9 @@ module Gosu
     module Base
 
       def self.show_help
-        puts "Usage: gosu_android [OPTION]"
+        puts "Usage: gosu_android OPTION"
         puts "Adds or deletes dependencies for Gosu in a Ruboto project."
-        puts "If no argument is specified it adds the dependencies."  
+        puts "If no argument is specified it displays this help."  
         puts ""
         puts " -a, --add adds the files to the project"
         puts " -d, --delete deletes the files from the project"
@@ -25,14 +25,16 @@ module Gosu
         root = Dir.pwd
         #gem root -> where the gem is located
         gem_root = File.expand_path(File.dirname(__FILE__))
-        gem_root.slice! "/commands"
+        #Delete last occurence of /commands
+        gem_root = gem_root.reverse.sub( "/commands".reverse, '' ).reverse
 
-        #Get all the files needed for gosu android
+        #Add * to read all files in folder
         gem_root_s = gem_root + "/*"
         gem_root_ss = gem_root + "/*/*"
-
-        #List of not usefull files
+        
+        #Get all the files needed for gosu android
         lib_files = FileList[ gem_root_s, gem_root_ss ].to_a
+        #List of not usefull files
         not_copy_files = ["commands", "description", "version"]  
         
         #Do not copy the ones that are not needed
@@ -52,14 +54,14 @@ module Gosu
             FileUtils.cp(src, dst)   
           end     
         end
-        
+       
         #FIXME This is a dirty way to delete de last
         #gosu_android from the gem_root variable
         
         #Main file and jar dependencies go in different folders
         #than normal files
-        gem_root = gem_root + "/"
-        gem_root.slice! "/gosu_android/"
+        #Delete last occurence of /gosu_android
+        gem_root = gem_root.reverse.sub( "/gosu_android".reverse, '' ).reverse
 
         src = gem_root + "/gosu_android.rb"
         dst = root + "/src/gosu_android.rb"
@@ -69,8 +71,8 @@ module Gosu
         FileUtils.cp(src, dst)  
         
         #Resources files
-        gem_root = gem_root + "_"
-        gem_root.slice! "/lib_" 
+        #Delete last occurence of /lib
+        gem_root = gem_root.reverse.sub( "/lib".reverse, '' ).reverse
         gem_root_s = gem_root + "/res/*"
         gem_root_ss = gem_root + "/res/*/**"
         
@@ -87,7 +89,7 @@ module Gosu
             FileUtils.cp(src, dst)   
           end     
         end   
-             
+            
       end
       
       def self.delete_files 
@@ -169,7 +171,7 @@ module Gosu
           end    
         end
         
-        if help 
+        if help or not add and not delete
           show_help
           exit 0
         end
@@ -178,11 +180,7 @@ module Gosu
           $stderr.puts "Add and delete can not be perform at the same time\n"
           exit 1
         end 
-        
-        if not add and not delete
-          add = true
-        end
-        
+                
         if add 
           add_files
           exit 0
