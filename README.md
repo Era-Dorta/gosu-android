@@ -7,7 +7,7 @@ Installation
 
 `gem install gosu_android`
 
-As with ruboto, place yourselfe in the root directory of your app and execute
+As with ruboto, place yourself in the root directory of your app, then execute
 `gosu_android -a` or `gosu_android --add` to automatically copy every gosu_android file to your ruboto project.
 
 General Information
