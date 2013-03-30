@@ -10,7 +10,7 @@ class GameWindow < Gosu::Window
     @beep = Gosu::Sample.new(self, Ruboto::R::raw::beep)
     @p1x = 0
 
-    @ball = Gosu::Square.new(self, Ruboto::R::drawable::ball, 100, 200, 0, 50, 20, 100, 100)
+    @ball = Gosu::Square.new(self, Ruboto::R::drawable::yellow_square, 100, 200, 0, 50, 20, 100, 100)
 
     @player_x = 300
     @player_y = 473    
