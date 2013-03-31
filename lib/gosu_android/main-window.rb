@@ -33,7 +33,7 @@ module Gosu
     end
   end
 
-  class GosuSurfaceView < android.opengl.GLSurfaceView
+  class GosuSurfaceView < JavaImports::GLSurfaceView
 
     def atributes(window, input)
       @window = window
