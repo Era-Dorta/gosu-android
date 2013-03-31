@@ -2,8 +2,12 @@ require 'ruboto/activity'
 
 module JavaImports
   #Opengl classes
-  java_import "android.opengl.GLSurfaceView"
-  
+  if android.os.Build::VERSION::SDK_INT <= 10
+    java_import "gosu.java.GLSurfaceView"
+  else
+    java_import "android.opengl.GLSurfaceView"
+  end
+
   java_import "javax.microedition.khronos.egl.EGL10"
   java_import "javax.microedition.khronos.egl.EGLConfig"
   java_import "javax.microedition.khronos.opengles.GL10"
