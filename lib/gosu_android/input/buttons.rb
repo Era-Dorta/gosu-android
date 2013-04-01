@@ -107,7 +107,7 @@ module Gosu
 
   #Load supported buttons on android above 4.0.0
   if android.os.Build::VERSION::SDK_INT >= 15
-    Game pad
+    # Game pad
     GpButton0 = JavaImports::KeyEvent::KEYCODE_BUTTON_1
     GpButton1 = JavaImports::KeyEvent::KEYCODE_BUTTON_2
     GpButton10 = JavaImports::KeyEvent::KEYCODE_BUTTON_11
