@@ -183,6 +183,7 @@ module Gosu
         
         if version
         	puts Gosu::VERSION
+        	exit 0
         end
         
         if add and delete
