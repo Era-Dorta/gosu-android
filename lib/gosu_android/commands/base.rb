@@ -66,8 +66,8 @@ module Gosu
         #Delete last occurence of /gosu_android
         gem_root = gem_root.reverse.sub( "/gosu_android".reverse, '' ).reverse
 
-        src = gem_root + "/gosu_android.rb"
-        dst = root + "/src/gosu_android.rb"
+        src = gem_root + "/gosu.rb"
+        dst = root + "/src/gosu.rb"
         FileUtils.cp(src, dst)  
         src = gem_root + "/gosu.java.jar"
         dst = root + "/libs/gosu.java.jar"
@@ -106,8 +106,8 @@ module Gosu
           $stderr.puts e.message
         end  
         
-        #Deleting gosu_android.rb file
-        to_delete = root + "/src/gosu_android.rb"
+        #Deleting gosu.rb file
+        to_delete = root + "/src/gosu.rb"
         begin    
           File.delete to_delete        
         rescue => e
