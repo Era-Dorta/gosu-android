@@ -9,9 +9,7 @@ require 'gosu_android/physics/physicsManager'
 require 'gosu_android/timing'
 
 require 'singleton'
-if RUBY_PLATFORM =~ /java/
-	require 'ruboto/util/toast'
-end
+require 'ruboto/util/toast'
 
 
 module Gosu
