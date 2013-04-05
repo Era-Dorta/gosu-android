@@ -1,4 +1,4 @@
-require 'gosu_android'
+require 'gosu'
 
 module ZOrder
   Background, Stars, Player, UI = *0..3
