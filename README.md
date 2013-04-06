@@ -5,10 +5,11 @@ A Gosu implementation for Adroid devices.
 Installation
 -----------
 
+All you need to do is execute:
+
 `gem install gosu_android`
 
-As with ruboto, place yourself in the root directory of your app, then execute
-`gosu_android -a` or `gosu_android --add` to automatically copy every gosu_android file to your ruboto project.
+And you're done! For a quick-start sample project, see the Arkanoid example on the Ruboto wiki: https://github.com/ruboto/ruboto/wiki/Tutorial:-write-a-gosu-game
 
 General Information
 -------------------
