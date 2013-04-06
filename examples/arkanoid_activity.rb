@@ -88,7 +88,7 @@ class GameWindow < Gosu::Window
  
 end
 
-class GosuActivity
+class ArkanoidActivity
   def on_create(bundle)
     super(bundle)
     Gosu::AndroidInitializer.instance.start(self)
