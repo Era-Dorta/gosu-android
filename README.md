@@ -5,9 +5,11 @@ A Gosu implementation for Adroid devices.
 Installation
 -----------
 
-Install [ruboto](https://github.com/ruboto/ruboto/) and create a project.
+Install [ruboto](https://github.com/ruboto/ruboto/) and create a project. 
 
 ### Recomended
+
+With this installation method you will have a clean enviroment (bundler) to make your gosu games.
 
 * Create a file named `Gemfile.apk` in your ruboto project and add the lines:
 
@@ -23,6 +25,8 @@ in it. On linux you can do it easily with:
 `mv character_atlas8.png res/drawable-nodpi`
 
 ### Alternative
+With this installation method you will have a dirty enviroment (simple file copy) to try the samples.
+
 * `gem install gosu_android`
 
 * As with ruboto, place yourself in the root directory of your app, then execute
