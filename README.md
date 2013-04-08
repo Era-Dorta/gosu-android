@@ -34,7 +34,7 @@ General Information
 * This is still an early effort, so there are a number of features that had not yet been added. 
 * There are some known bugs that I hope to fix soon.
 * In its current status there are some small changes to Gosu Window initialization, check examples.
-* A new object with some basic physics has been added.
+* A new object with some basic physics has been added, check out the [wiki](https://github.com/neochuky/gosu-android/wiki/The-new-gosu-android-physics) to learn more.
 
 Troubleshooting
 -------------------
