@@ -5,7 +5,7 @@ A Gosu implementation for Adroid devices.
 Installation
 -----------
 
-### Easy way
+### Recomended
 
 * Create a file named Gemfile.apk in your ruboto project and add the lines
 
@@ -14,10 +14,13 @@ source "http://rubygems.org"
 gem 'gosu_android'
 ```
 
-* Create a folder inside `res` folder call `drawable-nodpi` and copy this file https://github.com/neochuky/gosu-android/tree/master/res/drawable-nodpi/character_atlas8.png
-in it.
+* Create a folder inside `res` folder call `drawable-nodpi` and copy this [file] (https://github.com/neochuky/gosu-android/tree/master/res/drawable-nodpi/character_atlas8.png)
+in it. On linux you can do it easily with: 
+`mkdir res/drawable-nodpi` 
+`wget https://raw.github.com/neochuky/gosu-android/master/res/drawable-nodpi/character_atlas8.png` 
+`mv character_atlas8.png res/drawable-nodpi`
 
-### Not so easy way 
+### Alternative
 * `gem install gosu_android`
 
 * As with ruboto, place yourself in the root directory of your app, then execute
