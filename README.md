@@ -18,7 +18,7 @@ source "http://rubygems.org"
 gem 'gosu_android'
 ```
 
-* Create a folder inside `res` folder call `drawable-nodpi` and copy this [file] (https://github.com/neochuky/gosu-android/tree/master/res/drawable-nodpi/character_atlas8.png)
+* Create a folder inside `res` called `drawable-nodpi` and copy this [file] (https://github.com/neochuky/gosu-android/tree/master/res/drawable-nodpi/character_atlas8.png)
 in it. On linux you can do it easily with: 
 `mkdir res/drawable-nodpi` 
 `wget https://raw.github.com/neochuky/gosu-android/master/res/drawable-nodpi/character_atlas8.png` 
