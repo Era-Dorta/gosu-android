@@ -10,8 +10,8 @@ Installation
 * Create a file named Gemfile.apk in your ruboto project and add the lines
 
 ```ruby
-  source "http://rubygems.org"
-  gem 'gosu_android'
+source "http://rubygems.org"
+gem 'gosu_android'
 ```
 
 * Create a folder inside `res` folder call `drawable-nodpi` and copy this file https://github.com/neochuky/gosu-android/tree/master/res/drawable-nodpi/character_atlas8.png
