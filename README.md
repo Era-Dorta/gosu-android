@@ -5,10 +5,24 @@ A Gosu implementation for Adroid devices.
 Installation
 -----------
 
-`gem install gosu_android`
+### Easy way
 
-As with ruboto, place yourself in the root directory of your app, then execute
-`gosu_android -a` or `gosu_android --add` to automatically copy every gosu_android file to your ruboto project.
+* Create a file named Gemfile.apk in your ruboto project and add the lines
+
+```ruby
+  source "http://rubygems.org"
+  gem 'gosu_android'
+```
+
+* Create a folder inside `res` folder call `drawable-nodpi` and copy this file https://github.com/neochuky/gosu-android/tree/master/res/drawable-nodpi/character_atlas8.png
+in it.
+
+### Not so easy way 
+* `gem install gosu_android`
+
+* As with ruboto, place yourself in the root directory of your app, then execute
+`gosu_android -a` or `gosu_android --add` to automatically copy every gosu_android file to your ruboto project. 
+It will also copy all the media files that are use in gosu_android examples.
 
 General Information
 -------------------
@@ -19,14 +33,5 @@ General Information
 
 Troubleshooting
 -------------------
-* If you're using Ruboto 0.10.4 or earlier, you may get an error when trying to require the gosu libraries: `(SystemStackError) stack level too deep` in `require 'gosu'`. If this happens:
-	* Replace `require 'gosu'` with  `with_large_stack { require 'gosu' }`. If it still doesn't work:
-	* Try `with_large_stack(256)
-		require 'gosu'
-	end`. If it still doesn't work, try again with `512` instead of `256`.
-	* Alternatively, update to the latest Ruboto (0.11 or better).
-	* Relevant Ruboto issues:
-		* https://github.com/ruboto/ruboto/issues/359
-		* https://github.com/ruboto/ruboto/issues/375
 * When using several audio files double check that all have the same codification or you could get: `E/MediaPlayer(16127): Unable to to create media player`
  	* http://forums.pragprog.com/forums/152/topics/9144

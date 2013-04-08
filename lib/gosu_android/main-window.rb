@@ -11,6 +11,7 @@ require 'gosu_android/timing'
 require 'singleton'
 require 'ruboto/util/toast'
 
+
 module Gosu
 
   class AndroidInitializer

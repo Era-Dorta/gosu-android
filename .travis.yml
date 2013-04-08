@@ -1,0 +1,55 @@
+# http://rkistner.github.com/android/2013/02/05/android-builds-on-travis-ci/
+language: ruby
+before_install:
+  - sudo apt-get update -qq
+  - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
+  - wget http://dl.google.com/android/android-sdk_r21-linux.tgz
+  - tar -zxf android-sdk_r21-linux.tgz
+  - export ANDROID_HOME=~/build/gosu_android/gosu_android/android-sdk-linux
+  - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
+  - android update sdk --no-ui --filter tool,platform-tool,android-8,android-$ANDROID_TARGET,sysimg-$ANDROID_TARGET
+  - wget http://ci.jruby.org/snapshots/master/jruby-jars-${MASTER}.gem
+  - if [ "$JRUBY_JARS_VERSION" == "" ] ; then export JRUBY_JARS_VERSION=$MASTER ; fi
+  - sudo gem install ruboto
+
+rvm:
+# - "1.8.7"
+# - "1.9.3"
+  - "2.0.0"
+# - jruby-18mode # JRuby in 1.8 mode
+# - jruby-19mode # JRuby in 1.9 mode
+# - jruby-20mode # JRuby in 2.0 mode
+# - rbx-18mode
+# - rbx-19mode
+
+jdk:
+  - oraclejdk6
+# - oraclejdk7
+# - openjdk7
+# - openjdk6
+
+branches:
+  only:
+    - travis_ci
+
+env:
+  global:
+    - GOSU_ANDROID_UPDATE_EXAMPLES=0
+    - MASTER=1.7.4.dev
+  matrix:
+    - ANDROID_TARGET=10 GOSU_ANDROID_PLATFORM=CURRENT
+#   - ANDROID_TARGET=10 GOSU_ANDROID_PLATFORM=FROM_GEM
+#   - ANDROID_TARGET=10 GOSU_ANDROID_PLATFORM=STANDALONE
+#   - ANDROID_TARGET=10 GOSU_ANDROID_PLATFORM=STANDALONE JRUBY_JARS_VERSION=1.7.3
+
+    - ANDROID_TARGET=15 GOSU_ANDROID_PLATFORM=CURRENT
+#   - ANDROID_TARGET=15 GOSU_ANDROID_PLATFORM=FROM_GEM
+#   - ANDROID_TARGET=15 GOSU_ANDROID_PLATFORM=STANDALONE
+#   - ANDROID_TARGET=15 GOSU_ANDROID_PLATFORM=STANDALONE JRUBY_JARS_VERSION=1.7.3
+
+    - ANDROID_TARGET=16 GOSU_ANDROID_PLATFORM=CURRENT
+#   - ANDROID_TARGET=16 GOSU_ANDROID_PLATFORM=FROM_GEM
+#   - ANDROID_TARGET=16 GOSU_ANDROID_PLATFORM=STANDALONE
+#   - ANDROID_TARGET=16 GOSU_ANDROID_PLATFORM=STANDALONE JRUBY_JARS_VERSION=1.7.3
+
+script: ./start_emulator.sh && ./run_tests.sh

@@ -1,4 +1,9 @@
 require 'rake'
+#gem root -> where the gem is located
+gem_root = File.expand_path(File.dirname(__FILE__))
+#Delete last occurence of /commands
+gem_root = gem_root.reverse.sub( "commands".reverse, '' ).reverse
+require gem_root + "version.rb"
 
 module Gosu
   module Commands
@@ -11,6 +16,7 @@ module Gosu
         puts ""
         puts " -a, --add adds the files to the project"
         puts " -d, --delete deletes the files from the project"
+        puts " -v, --version shows current version"
         puts " -h, --help display this help and exit"
         puts ""
         puts "The options -a and -d can not be given together."
@@ -60,8 +66,8 @@ module Gosu
         #Delete last occurence of /gosu_android
         gem_root = gem_root.reverse.sub( "/gosu_android".reverse, '' ).reverse
 
-        src = gem_root + "/gosu_android.rb"
-        dst = root + "/src/gosu_android.rb"
+        src = gem_root + "/gosu.rb"
+        dst = root + "/src/gosu.rb"
         FileUtils.cp(src, dst)  
         src = gem_root + "/gosu.java.jar"
         dst = root + "/libs/gosu.java.jar"
@@ -100,8 +106,8 @@ module Gosu
           $stderr.puts e.message
         end  
         
-        #Deleting gosu_android.rb file
-        to_delete = root + "/src/gosu_android.rb"
+        #Deleting gosu.rb file
+        to_delete = root + "/src/gosu.rb"
         begin    
           File.delete to_delete        
         rescue => e
@@ -148,6 +154,7 @@ module Gosu
        add = false
        delete = false
        help = false
+       version = false
         ARGV.each do|a|
           case a
           when "-a" 
@@ -162,12 +169,21 @@ module Gosu
             help = true
           when "--help"
             help = true
+          when "-v" 
+            version = true
+          when "--version"
+            version = true            
           end    
         end
         
-        if help or not add and not delete
+        if help or not add and not delete and not version
           show_help
           exit 0
+        end
+        
+        if version
+        	puts Gosu::VERSION
+        	exit 0
         end
         
         if add and delete

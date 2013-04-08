@@ -1,4 +1,4 @@
-require 'gosu_android'
+require 'gosu'
 
 class GameWindow < Gosu::Window
   def initialize
@@ -82,7 +82,7 @@ class GameWindow < Gosu::Window
  
 end
 
-class GosuActivity
+class PongActivity
   def on_create(bundle)
     super(bundle)
     Gosu::AndroidInitializer.instance.start(self)
