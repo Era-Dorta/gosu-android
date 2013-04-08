@@ -5,9 +5,11 @@ A Gosu implementation for Adroid devices.
 Installation
 -----------
 
+Install [ruboto](https://github.com/ruboto/ruboto/) and create a project.
+
 ### Recomended
 
-* Create a file named Gemfile.apk in your ruboto project and add the lines
+* Create a file named `Gemfile.apk` in your ruboto project and add the lines:
 
 ```ruby
 source "http://rubygems.org"
