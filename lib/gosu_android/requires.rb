@@ -33,6 +33,8 @@ module JavaImports
   
   #Handles the keyboard
   java_import "android.view.inputmethod.InputMethodManager"
+  java_import "android.inputmethodservice.InputMethodService"
+  java_import "android.inputmethodservice.KeyboardView.OnKeyboardActionListener"
   
   #Fonts
   java_import "android.graphics.Canvas"
