@@ -94,11 +94,12 @@ module Gosu
       @physics_manager = PhysicsManager.new self
       @fonts_manager = FontsManager.new self
       @media_player = nil
+      add_key_event_listener
     end
 
     #This method adds listeners to the activity that called gosu 
     #becouse the key events can only be cought in the activity 
-    def add_key_event_listener()
+    def add_key_event_listener
       # Get the class of the object.
       @activity.class.class_eval do
         
