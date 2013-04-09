@@ -1,6 +1,6 @@
 Gosu-Android
 ============
-A Gosu implementation for Adroid devices.
+A [Gosu](http://www.libgosu.org/) implementation for Adroid devices.
 
 Installation
 -----------
@@ -29,8 +29,8 @@ With this installation method you will have a dirty enviroment (simple file copy
 
 * `gem install gosu_android`
 
-* As with ruboto, place yourself in the root directory of your app, then execute
-`gosu_android -a` or `gosu_android --add` to automatically copy every gosu_android file to your ruboto project. 
+* As with ruboto, place yourself in the root directory of your app.
+* Then execute `gosu_android -a` or `gosu_android --add` to automatically copy every gosu_android file to your ruboto project. 
 It will also copy all the media files that are use in gosu_android examples.
 
 General Information
