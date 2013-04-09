@@ -1,6 +1,6 @@
 require 'gosu_android/requires'
 
-class SoftKeyboard < JavaImports::InputMethodService 
+class AndroidKeyboard < JavaImports::InputMethodService 
   include JavaImports::KeyboardView::OnKeyboardActionListener
   
   def initialize(window)
