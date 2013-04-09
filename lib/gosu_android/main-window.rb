@@ -338,7 +338,7 @@ module Gosu
     def show_soft_keyboard             
       context = @activity.getApplicationContext
       imm = context.getSystemService(Context::INPUT_METHOD_SERVICE)
-      imm.toggleSoftInput(JavaImports::InputMethodManager::SHOW_IMPLICIT,0)
+      imm.toggleSoftInput(JavaImports::InputMethodManager::SHOW_FORCED,0)
       @showing_keyboard = true
     end
     
