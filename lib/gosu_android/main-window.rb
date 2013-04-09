@@ -47,21 +47,12 @@ module Gosu
       return true
     end
 
-    def onKeyDown(keyCode, event)
-      super
-      @input.feed_key_event(keyCode, event)
-    end
-
-    def onKeyUp(keyCode, event)
-      super
-      @input.feed_key_event(keyCode, event)
-    end
-
     def onWindowFocusChanged(has_focus)
       super
       if(@window)
         @window.focus_changed(has_focus, self.get_width, self.get_height)
       end
+      return true
     end
   end
 
@@ -105,6 +96,29 @@ module Gosu
       @media_player = nil
     end
 
+    #This method adds listeners to the activity that called gosu 
+    #becouse the key events can only be cought in the activity 
+    def add_key_event_listener()
+      # Get the class of the object.
+      @activity.class.class_eval do
+        
+        def onKeyDown(keyCode, event)
+          super
+          puts "-------On key down #{keyCode}\n"
+          return true
+          #@input.feed_key_event(keyCode, event)
+        end
+    
+        def onKeyUp(keyCode, event)
+          super
+          puts "-------On key down #{keyCode}\n"
+          return true
+          #@input.feed_key_event(keyCode, event)
+        end
+        
+      end
+    end
+  
     # Enters a modal loop where the Window is visible on screen and receives calls to draw, update etc.
     def show
       @showing = true

@@ -30,12 +30,7 @@ module JavaImports
   java_import "android.view.Window"
   java_import "android.view.WindowManager"
   java_import "android.view.KeyEvent"
-  
-  #Handles the keyboard
-  java_import "android.view.inputmethod.InputMethodManager"
-  java_import "android.inputmethodservice.InputMethodService"
-  java_import "android.inputmethodservice.KeyboardView"
-  
+    
   #Fonts
   java_import "android.graphics.Canvas"
   java_import "android.graphics.Paint"
