@@ -95,6 +95,7 @@ module Gosu
       @fonts_manager = FontsManager.new self
       @media_player = nil
       add_key_event_listener
+      @showing_keyboard = false
     end
 
     #This method adds listeners to the activity that called gosu 
@@ -307,25 +308,45 @@ module Gosu
     def focus_changed has_focus, width, height
       @screen_width = width
       @screen_height = height
-      if @showing and @media_player != nil
-        if has_focus
-          @media_player.start
-        else
-          @media_player.pause
+      
+      if has_focus
+               
+        if @showing and @media_player != nil
+            @media_player.start
         end
-     end
+
+        #FIXME Keyboard does not appears again
+        if @showing_keyboard
+          show_soft_keyboard
+        end
+       
+      else
+        #Hide keyboard but mark it so it will be shown later
+        if @showing_keyboard
+          hide_soft_keyboard
+          @showing_keyboard = true
+        end
+        
+        if @showing and @media_player != nil
+            @media_player.pause
+        end
+        
+      end   
+      return true  
     end
 
     def show_soft_keyboard             
       context = @activity.getApplicationContext
       imm = context.getSystemService(Context::INPUT_METHOD_SERVICE)
       imm.toggleSoftInput(JavaImports::InputMethodManager::SHOW_IMPLICIT,0)
+      @showing_keyboard = true
     end
     
     def hide_soft_keyboard
       context = @activity.getApplicationContext
       imm = context.getSystemService(Context::INPUT_METHOD_SERVICE)
       imm.toggleSoftInput(JavaImports::InputMethodManager::HIDE_IMPLICIT_ONLY,0)    
+      @showing_keyboard = false
     end
 
     def create_image(source, src_x, src_y, src_width, src_height, tileable)
