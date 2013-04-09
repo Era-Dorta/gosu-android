@@ -1,5 +1,5 @@
 require 'gosu_android/input/buttons'
-require 'gosu_android/input/androidKeyBoard'
+require 'gosu_android/input/androidKeyboard'
 
 module Gosu
   class Button
