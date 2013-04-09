@@ -301,10 +301,16 @@ module Gosu
      end
     end
 
-    def show_soft_keyboard
+    def show_soft_keyboard             
       context = @activity.getApplicationContext
       imm = context.getSystemService(Context::INPUT_METHOD_SERVICE)
-      imm.toggleSoftInput(JavaImports::InputMethodManager::SHOW_FORCED,0)
+      imm.toggleSoftInput(JavaImports::InputMethodManager::SHOW_IMPLICIT,0)
+    end
+    
+    def hide_soft_keyboard
+      context = @activity.getApplicationContext
+      imm = context.getSystemService(Context::INPUT_METHOD_SERVICE)
+      imm.toggleSoftInput(JavaImports::InputMethodManager::HIDE_IMPLICIT_ONLY,0)    
     end
 
     def create_image(source, src_x, src_y, src_width, src_height, tileable)
