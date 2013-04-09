@@ -3,6 +3,10 @@ require 'gosu_android/requires'
 class SoftKeyboard < JavaImports::InputMethodService 
   include JavaImports::KeyboardView::OnKeyboardActionListener
   
+  def initialize(window)
+    @window = window
+  end
+  
 	def onKey(primaryCode, keyCodes)
 	  puts "onKey(primaryCode #{primaryCode}, keyCodes) #{keyCodes}" 
     return true
