@@ -41,7 +41,8 @@ module Gosu
     def initialize(display, window)
       @display = display
       @window = window
-      @keyboard_listener = AndroidKeyboard.new window
+      @keyboard_listener = AndroidKeyboard.new 
+      @keyboard_listener.gosu_window = window 
       @touch_event_list = []
       @key_event_list = []
       @id = 0

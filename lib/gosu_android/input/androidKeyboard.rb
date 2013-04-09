@@ -2,10 +2,7 @@ require 'gosu_android/requires'
 
 class AndroidKeyboard < JavaImports::InputMethodService 
   include JavaImports::KeyboardView::OnKeyboardActionListener
-  
-  def initialize(window)
-    @window = window
-  end
+  attr_accessor :gosu_window
   
 	def onKey(primaryCode, keyCodes)
 	  puts "onKey(primaryCode #{primaryCode}, keyCodes) #{keyCodes}" 
