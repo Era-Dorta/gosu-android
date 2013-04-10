@@ -135,11 +135,14 @@ module Gosu
       
       @key_event_list_up.each do |key_event|
         @window.button_up key_event
-      end  
-      
+      end       
+
+    end
+    
+    def clear
       @touch_event_list.clear
       @key_event_list_down.clear
-      @key_event_list_down.clear  
+      @key_event_list_up.clear        
     end
 
     # Assignable events that are called by update. You can bind these to your own functions.

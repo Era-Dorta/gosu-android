@@ -307,6 +307,7 @@ module Gosu
     def do_tick
       @input.update
       self.update
+      @input.clear
       @physics_manager.update
       @graphics.begin(Color::BLACK)
       self.draw
