@@ -31,7 +31,7 @@ module Gosu
 
 
     def clear_queue
-      @ops = []
+      @ops.clear
       @op_pool.clearPool
     end
 

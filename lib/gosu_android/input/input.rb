@@ -41,7 +41,8 @@ module Gosu
       @display = display
       @window = window
       @touch_event_list = []
-      @key_event_list = []
+      @key_event_list_up = []
+      @key_event_list_down = []
       @id = 0
       @ingnore_buttons = [JavaImports::KeyEvent::KEYCODE_VOLUME_DOWN, 
         JavaImports::KeyEvent::KEYCODE_VOLUME_MUTE, 
@@ -58,11 +59,19 @@ module Gosu
       @touch_event_list.push event
     end
 
-    def feed_key_event(keyCode, event)
+    def feed_key_event_down(keyCode)
       if @ingnore_buttons.include? keyCode
         return false
       end  
-      @key_event_list.push [keyCode, event]
+      @key_event_list_down.push keyCode
+      return true
+    end
+
+    def feed_key_event_up(keyCode)
+      if @ingnore_buttons.include? keyCode
+        return false
+      end  
+      @key_event_list_up.push keyCode
       return true
     end
 
@@ -75,7 +84,9 @@ module Gosu
 
     # Returns true if a button is currently pressed.
     # Updated every tick.
-    def down(btn); end
+    def button_down?(id)
+      return @key_event_list_down.include? id
+    end
 
     # Returns the horizontal position of the mouse relative to the top
     # left corner of the window given to Input's constructor.
@@ -116,8 +127,19 @@ module Gosu
             @window.touch_ended(touch)
           end
         end
+      end      
+      
+      @key_event_list_down.each do |key_event|
+        @window.button_down key_event
       end
-      @touch_event_list = []
+      
+      @key_event_list_up.each do |key_event|
+        @window.button_up key_event
+      end  
+      
+      @touch_event_list.clear
+      @key_event_list_down.clear
+      @key_event_list_down.clear  
     end
 
     # Assignable events that are called by update. You can bind these to your own functions.

@@ -109,7 +109,7 @@ module Gosu
         attr_accessor :input
         def onKeyDown(keyCode, event)
           puts "-------On key down #{keyCode}\n"          
-          if @input.feed_key_event(keyCode, event)
+          if @input.feed_key_event_down(keyCode)
             return true
           else
             return super keyCode, event
@@ -118,7 +118,7 @@ module Gosu
     
         def onKeyUp(keyCode, event)
           puts "-------On key down #{keyCode}\n"          
-          if @input.feed_key_event(keyCode, event)
+          if @input.feed_key_event_up(keyCode)
             return true
           else
             return super keyCode, event
@@ -196,7 +196,9 @@ module Gosu
     def button_up(id); end
 
     # Returns true if a button is currently pressed. Updated every tick.
-    def button_down?(id); end
+    def button_down?(id)
+      return @input.button_down? id
+    end
 
     # Called when the user started a touch on the screen
     def touch_began(touch); end
