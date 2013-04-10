@@ -95,27 +95,28 @@ module Gosu
       @fonts_manager = FontsManager.new self
       @media_player = nil
       add_key_event_listener
+      @activity.input = @input
       @showing_keyboard = false
     end
 
+    #FIXME This is monkey patching, there has to be a better way to do it 
     #This method adds listeners to the activity that called gosu 
     #becouse the key events can only be cought in the activity 
     def add_key_event_listener
       # Get the class of the object.
       @activity.class.class_eval do
         
+        attr_accessor :input
         def onKeyDown(keyCode, event)
           super
-          puts "-------On key down #{keyCode}\n"
-          return true
-          #@input.feed_key_event(keyCode, event)
+          puts "-------On key down #{keyCode}\n"          
+          return @input.feed_key_event(keyCode, event)
         end
     
         def onKeyUp(keyCode, event)
           super
-          puts "-------On key down #{keyCode}\n"
-          return true
-          #@input.feed_key_event(keyCode, event)
+          puts "-------On key down #{keyCode}\n"          
+          return @input.feed_key_event(keyCode, event)
         end
         
       end

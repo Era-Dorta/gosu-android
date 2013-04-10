@@ -43,6 +43,15 @@ module Gosu
       @touch_event_list = []
       @key_event_list = []
       @id = 0
+      @ingnore_buttons = [JavaImports::KeyEvent::KEYCODE_VOLUME_DOWN, 
+        JavaImports::KeyEvent::KEYCODE_VOLUME_MUTE, 
+        JavaImports::KeyEvent::KEYCODE_VOLUME_UP,
+        JavaImports::KeyEvent::KEYCODE_BACK,
+        JavaImports::KeyEvent::KEYCODE_HOME,
+        JavaImports::KeyEvent::KEYCODE_MENU,
+        JavaImports::KeyEvent::KEYCODE_POWER,
+        JavaImports::KeyEvent::KEYCODE_APP_SWITCH, 
+        JavaImports::KeyEvent::KEYCODE_UNKNOWN]      
     end
 
     def feed_touch_event(event)
@@ -50,7 +59,11 @@ module Gosu
     end
 
     def feed_key_event(keyCode, event)
+      if @ingnore_buttons.include? keyCode
+        return false
+      end  
       @key_event_list.push [keyCode, event]
+      return true
     end
 
     # Returns the character a button usually produces, or 0.
