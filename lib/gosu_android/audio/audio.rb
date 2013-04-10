@@ -69,7 +69,7 @@ module Gosu
   end
 
   #TODO Error on playing several songs, bear in mind mediaplayer states
-  #FIXME Set listener for when the data finished loading asynchronously
+  #TODO Set listener for when the data finished loading asynchronously
   # add some checks play is reached before that
   class Song
     attr_reader :current_song

@@ -99,7 +99,7 @@ module Gosu
       @showing_keyboard = false
     end
 
-    #FIXME This is monkey patching, there has to be a better way to do it 
+    #TODO This is monkey patching, there has to be a better way to do it 
     #This method adds listeners to the activity that called gosu 
     #becouse the key events can only be cought in the activity 
     def add_key_event_listener
@@ -323,7 +323,7 @@ module Gosu
             @media_player.start
         end
 
-        #FIXME Keyboard does not appears again
+        #TODO Keyboard does not appears again
         if @showing_keyboard
           show_soft_keyboard
         end
