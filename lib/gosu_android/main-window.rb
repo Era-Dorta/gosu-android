@@ -107,8 +107,7 @@ module Gosu
       @activity.class.class_eval do
         
         attr_accessor :input
-        def onKeyDown(keyCode, event)
-          puts "-------On key down #{keyCode}\n"          
+        def onKeyDown(keyCode, event)      
           if @input.feed_key_event_down(keyCode)
             return true
           else
@@ -116,8 +115,7 @@ module Gosu
           end
         end
     
-        def onKeyUp(keyCode, event)
-          puts "-------On key down #{keyCode}\n"          
+        def onKeyUp(keyCode, event)        
           if @input.feed_key_event_up(keyCode)
             return true
           else
