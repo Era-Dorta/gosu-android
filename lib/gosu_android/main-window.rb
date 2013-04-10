@@ -108,15 +108,21 @@ module Gosu
         
         attr_accessor :input
         def onKeyDown(keyCode, event)
-          super
           puts "-------On key down #{keyCode}\n"          
-          return @input.feed_key_event(keyCode, event)
+          if @input.feed_key_event(keyCode, event)
+            return true
+          else
+            return super keyCode, event
+          end
         end
     
         def onKeyUp(keyCode, event)
-          super
           puts "-------On key down #{keyCode}\n"          
-          return @input.feed_key_event(keyCode, event)
+          if @input.feed_key_event(keyCode, event)
+            return true
+          else
+            return super keyCode, event
+          end
         end
         
       end
