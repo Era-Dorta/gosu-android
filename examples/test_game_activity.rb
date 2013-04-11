@@ -8,8 +8,8 @@ class Player
   attr_reader :score
 
   def initialize(window)
-    @image = Gosu::Image.new(window, "/mnt/sdcard/jruby/media/Starfighter.bmp", false)
-    @beep = Gosu::Sample.new(window, "/mnt/sdcard/jruby/media/Beep.wav")
+    @image = Gosu::Image.new(window, Ruboto::R::drawable::ship, false)
+    @beep = Gosu::Sample.new(window, Ruboto::R::raw::beep)
     @x = @y = @vel_x = @vel_y = @angle = 0.0
     @score = 0
   end
@@ -60,15 +60,15 @@ class GameWindow < Gosu::Window
     super(640, 480, false)
     self.caption = "Gosu Tutorial Game"
     
-    #@background_image = Gosu::Image.new(self, "media/Space.png", true)
+    @background_image = Gosu::Image.new(self, Ruboto::R::drawable::space, true)
     
     @player = Player.new(self)
     @player.warp(320, 240)
 
-    @star_anim = Gosu::Image::load_tiles(self, "/mnt/sdcard/jruby/media/Star.png", 25, 25, false)
+    @star_anim = Gosu::Image::load_tiles(self, Ruboto::R::drawable::star, 25, 25, false)
     @stars = Array.new
     
-    #@font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+    @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
   end
 
   def update
@@ -84,10 +84,10 @@ class GameWindow < Gosu::Window
   end
 
   def draw
-    #@background_image.draw(0, 0, ZOrder::Background)
+    @background_image.draw(0, 0, ZOrder::Background)
     @player.draw
     @stars.each { |star| star.draw }
-    #@font.draw("Score: #{@player.score}", 10, 10, ZOrder::UI, 1.0, 1.0, 0xffffff00)
+    @font.draw("Score: #{@player.score}", 10, 10, ZOrder::UI, 1.0, 1.0, 0xffffff00)
   end
 
   def button_down(id)
