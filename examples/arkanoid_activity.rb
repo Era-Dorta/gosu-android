@@ -3,13 +3,14 @@ require 'gosu'
 class Ball
     attr_accessor :velocity
     attr_reader :position, :center
-  def initialize window, image, x, y, z, size, velocity_x, velocity_y
+  def initialize window, file_name, x, y, z, size, velocity_x, velocity_y
     @position = [x,y]
     @size = size / 2
     @center = [@position[0] + @size, @position[1] + @size]
     @z = z
     @velocity = [velocity_x, velocity_y]
-    @image = Gosu::Image.new(window, file_name , false)    
+    @image = Gosu::Image.new(window, file_name, false)    
+    @dt = @window.update_interval
   end
   
   def update
@@ -72,7 +73,7 @@ class GameWindow < Gosu::Window
     @p1x = 0
     @stillObjects = Array.new
   
-    @ball = Ball.new(self, Ruboto::R::drawable::yellow_square, 100, 200, 0, 50, 20, 100, 100)
+    @ball = Ball.new(self, Ruboto::R::drawable::yellow_square, 100, 200, 0, 50, 100, 100)
 
     @player_x = 300
     @player_y = 473    
