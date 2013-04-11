@@ -1,5 +1,66 @@
 require 'gosu'
 
+class Ball
+    attr_accessor :velocity
+    attr_reader :position, :center
+  def initialize window, image, x, y, z, size, velocity_x, velocity_y
+    @position = [x,y]
+    @size = size / 2
+    @center = [@position[0] + @size, @position[1] + @size]
+    @z = z
+    @velocity = [velocity_x, velocity_y]
+    @image = Gosu::Image.new(window, file_name , false)    
+  end
+  
+  def update
+    @position[0] += @velocity[0]*@dt
+    @position[1] += @velocity[1]*@dt
+    @center = [@position[0] + @size, @position[1] + @size]    
+  end
+  
+  def generate_contact other_object
+    if @center[0] - @size < other_object.top_limit[0] and other_object.bottom_limit[0] < @center[0] + @size and
+      @center[1] - @size < other_object.bottom_limit[1] and other_object.top_limit[1] < @center[1] + @size
+      #Calculate new velocity, after the hit
+      if other_object.type == :vertical
+        @velocity[0] -= 2 * @velocity[0]
+      else
+        @velocity[1] -= 2 * @velocity[1]
+      end
+    end
+  end  
+  
+  def draw
+    @image.draw(@position[0], @position[1], @z)
+  end
+end
+
+class StillObject
+  attr_accessor :bottom_limit, :top_limit
+  attr_reader :type
+  def initialize(window, file_name, p0, p1, z)
+    @image = Gosu::Image.new(@window, file_name)
+    @z = z
+    @top_limit = Array.new p0
+    @bottom_limit = Array.new p1
+  
+    if(@bottom_limit[0] > @top_limit[0] or @bottom_limit[1] < @top_limit[1])
+      @top_limit, @bottom_limit = @bottom_limit, @top_limit
+    end
+  
+    if @bottom_limit[0] == @top_limit[0]
+      @type = :vertical
+    elsif @bottom_limit[1] == @top_limit[1]
+      @type = :horizontal
+    end
+  
+  end
+
+  def draw(x,y,z = @z)
+    @image.draw(x,y,z)
+  end  
+end
+
 class GameWindow < Gosu::Window
   def initialize
     super 600, 480, false, 30
@@ -9,22 +70,23 @@ class GameWindow < Gosu::Window
     @song = Gosu::Song.new(self, Ruboto::R::raw::chriss_onac_tempo_red)
     @beep = Gosu::Sample.new(self, Ruboto::R::raw::beep)
     @p1x = 0
-
-    @ball = Gosu::Square.new(self, Ruboto::R::drawable::yellow_square, 100, 200, 0, 50, 20, 100, 100)
+    @stillObjects = Array.new
+  
+    @ball = Ball.new(self, Ruboto::R::drawable::yellow_square, 100, 200, 0, 50, 20, 100, 100)
 
     @player_x = 300
     @player_y = 473    
     @size = 110
     # 25 is to compesate square size of the ball
     @size2 = @size/2 - 25    
-    @player = Gosu::Plane.new(self,Ruboto::R::drawable::bar_hor, [@player_x, @player_y], [@player_x + @size, @player_y],  0)
+    @player = StillObject.new(self,Ruboto::R::drawable::bar_hor, [@player_x, @player_y], [@player_x + @size, @player_y],  0)
 
     #Left plane
-    @p1 = Gosu::Plane.new(self, Ruboto::R::drawable::bar, [0, 0], [0, 480], 0)
+    @p1 = StillObject.new(self, Ruboto::R::drawable::bar, [0, 0], [0, 480], 0)
     #Top plane
-    @p2 = Gosu::Plane.new(self, Ruboto::R::drawable::bar, [600, 0], [0, 0], 0)
+    @p2 = StillObject.new(self, Ruboto::R::drawable::bar, [600, 0], [0, 0], 0)
     #Right plane
-    @p3 = Gosu::Plane.new(self,Ruboto::R::drawable::bar, [600, 480], [600, 0], 0)
+    @p3 = StillObject.new(self,Ruboto::R::drawable::bar, [600, 480], [600, 0], 0)
     
     @blocks = []
     @blocks_position = []
@@ -33,38 +95,40 @@ class GameWindow < Gosu::Window
     img = Ruboto::R::drawable::bar_hor
     2.times do |i|
       3.times do |j|
-        @blocks.push Gosu::Plane.new(self, img, [block_x + (@size + 30)*i, block_y + 30*j ], [block_x + @size*(i + 1) + 30*i, block_y + 30*j ],  0)
+        @blocks.push StillObject.new(self, img, [block_x + (@size + 30)*i, block_y + 30*j ], [block_x + @size*(i + 1) + 30*i, block_y + 30*j ],  0)
         @blocks_position.push [block_x + (@size + 30)*i, block_y + 30*j]
+        @stillObjects.push @blocks.last
       end
     end
     
-    6.times do |i|
-      self.apply_physics @blocks[i]
-    end
-    
-    self.apply_physics @ball
-    self.apply_physics @player
-    self.apply_physics @p1
-    self.apply_physics @p2
-    self.apply_physics @p3
+    @stillObjects.push @p1, @p2, @p3, @player
     @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
     @song.play true
   end
 
   def update
+    
+   #Collision detection
+   @stillObjects.each do |obj|
+     @ball.generate_contact obj
+   end
+
+   @ball.update
+    
     if @ball.center[1] > 480
         @ball.position[1] = 200
         @ball.velocity[1] = -@ball.velocity[0]
         @beep.play      
     end
+    
   end
  
   def object_collided( x, y, other_object ) 
     if(@blocks.include? other_object )      
       @score += 1
-      self.stop_physics other_object
       @blocks_position.delete_at(@blocks.index other_object)
       @blocks.delete other_object
+      @stillObjects.delete other_object
     end
     @beep.play
   end 
