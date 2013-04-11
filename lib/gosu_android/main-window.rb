@@ -122,6 +122,16 @@ module Gosu
             return super keyCode, event
           end
         end
+
+        #TODO It does never get called, it does not matter how long
+        #the press was
+        def onKeyLongPress(keyCode, event) 
+          if @input.feed_key_event_up(keyCode)
+            return true
+          else
+            return super keyCode, event
+          end
+        end
         
       end
     end
@@ -343,6 +353,7 @@ module Gosu
       return true  
     end
 
+    #TODO It would be nice that the keyboard was transparent
     def show_soft_keyboard             
       context = @activity.getApplicationContext
       imm = context.getSystemService(Context::INPUT_METHOD_SERVICE)
