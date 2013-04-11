@@ -28,7 +28,9 @@ class Ball
       else
         @velocity[1] -= 2 * @velocity[1]
       end
+      return true
     end
+    return false
   end  
   
   def draw
@@ -109,31 +111,34 @@ class GameWindow < Gosu::Window
 
   def update
     
-   #Collision detection
-   @stillObjects.each do |obj|
-     @ball.generate_contact obj
-   end
-
-   @ball.update
+    #Collision detection
+    to_delete = nil
+    @stillObjects.each do |obj|
+      if @ball.generate_contact obj
+        if(@blocks.include? obj )      
+          @score += 1
+          to_delete = obj
+        end
+        @beep.play       
+      end
+    end
     
+    if to_delete != nil
+      @blocks_position.delete_at(@blocks.index to_delete)
+      @blocks.delete to_delete
+      @stillObjects.delete to_delete    
+    end
+    
+    @ball.update
+      
     if @ball.center[1] > 480
-        @ball.position[1] = 200
-        @ball.velocity[1] = -@ball.velocity[0]
-        @beep.play      
+      @ball.position[1] = 200
+      @ball.velocity[1] = -@ball.velocity[0]
+      @beep.play      
     end
     
   end
  
-  def object_collided( x, y, other_object ) 
-    if(@blocks.include? other_object )      
-      @score += 1
-      @blocks_position.delete_at(@blocks.index other_object)
-      @blocks.delete other_object
-      @stillObjects.delete other_object
-    end
-    @beep.play
-  end 
-
   def touch_moved(touch)
     touch.y = touch.y - @size2
     @player_x = touch.x
