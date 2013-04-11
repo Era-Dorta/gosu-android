@@ -10,7 +10,7 @@ class Ball
     @z = z
     @velocity = [velocity_x, velocity_y]
     @image = Gosu::Image.new(window, file_name, false)    
-    @dt = @window.update_interval
+    @dt = window.update_interval
   end
   
   def update
@@ -40,7 +40,7 @@ class StillObject
   attr_accessor :bottom_limit, :top_limit
   attr_reader :type
   def initialize(window, file_name, p0, p1, z)
-    @image = Gosu::Image.new(@window, file_name)
+    @image = Gosu::Image.new(window, file_name)
     @z = z
     @top_limit = Array.new p0
     @bottom_limit = Array.new p1
