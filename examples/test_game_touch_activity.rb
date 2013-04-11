@@ -97,7 +97,7 @@ class GameWindow < Gosu::Window
   end
 end
 
-class TestGameActivity
+class TestGameTouchActivity
   def on_create(bundle)
     super(bundle)
     Gosu::AndroidInitializer.instance.start(self)
