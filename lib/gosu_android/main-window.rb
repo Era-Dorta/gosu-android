@@ -172,13 +172,11 @@ module Gosu
     end
 
     # Tells the window to end the current show loop as soon as possible.
-    def close
+    def close     
+      #Self trigger window lost focus, since we are going to home
+      focus_changed false, @screen_width, @screen_height
       @showing = false
-      #Switch to home, android does not allow to close apps 
-      intent = new Intent(JavaImports::Intent.ACTION_MAIN)
-      intent.addCategory(JavaImports::Intent.CATEGORY_HOME)
-      intent.setFlags(JavaImports::Intent.FLAG_ACTIVITY_NEW_TASK)
-      startActivity(intent)
+      @activity.moveTaskToBack(true)
     end
 
     # Called every update_interval milliseconds while the window is being

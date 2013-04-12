@@ -8,9 +8,6 @@ module JavaImports
     java_import "android.opengl.GLSurfaceView"
   end
 
-  #Tobe able to switch to home
-  java_import "android.content.Intent"
-
   #Opengl dependencies
   java_import "javax.microedition.khronos.egl.EGL10"
   java_import "javax.microedition.khronos.egl.EGLConfig"
