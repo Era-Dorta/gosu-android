@@ -7,8 +7,8 @@ module Gosu
   #to the old color's channels.   
   
   #amMultiply -> The color's channels will be multiplied with each other.
-  AM_DEFAULT, AM_ADD, AM_MULTIPLY = *(0..2) 
-  AM_ADDITIVE = AM_ADD    
+  #:default, :add, :multiply = *(0..2) 
+  #:additive = :add    
   
   FF_BOLD         = 1
   FF_ITALIC       = 2
@@ -24,4 +24,17 @@ module Gosu
   BF_TILEABLE_RIGHT = 4
   BF_TILEABLE_BOTTOM = 8
   BF_TILEABLE = BF_TILEABLE_LEFT | BF_TILEABLE_TOP | BF_TILEABLE_RIGHT | BF_TILEABLE_BOTTOM
+  
+  def self.translate_mode mode
+    case mode
+    when :default
+      return 0
+    when :add
+      return 1
+    when :additive
+      return 1
+    when :multiply
+      return 2
+    end
+  end
 end    
