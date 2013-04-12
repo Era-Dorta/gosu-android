@@ -35,6 +35,9 @@ module Gosu
       return 1
     when :multiply
       return 2
+    else
+      #Assume :default to at least return something
+      return 0  
     end
   end
 end    
