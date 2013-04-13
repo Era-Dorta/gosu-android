@@ -83,7 +83,7 @@ module Gosu
     def draw(x, y, z, factor_x = 1, factor_y = 1, c = Color::WHITE, mode = :default)
       x2 = x + width*factor_x
       y2 = y + height*factor_y      
-      @data.draw(x, y, c, x2, y, c, x, y2, c, x2, y2, c, z, translate_mode(mode))
+      @data.draw(x, y, c, x2, y, c, x, y2, c, x2, y2, c, z, AM_MODES[mode])
     end
 
     def draw_rot(x, y, z, angle, center_x = 0.5, center_y = 0.5, factor_x = 1.0,
@@ -113,7 +113,7 @@ module Gosu
         y + dist_to_left_y  + dist_to_bottom_y, c,
         x + dist_to_right_x + dist_to_bottom_x,
         y + dist_to_right_y + dist_to_bottom_y,
-        c, z, mode)
+        c, z, AM_MODES[mode])
     end
 
     def self.load_tiles(window, bmp, tile_width, tile_height, tileable)
