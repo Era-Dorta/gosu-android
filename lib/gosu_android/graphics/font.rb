@@ -42,7 +42,7 @@ module Gosu
     #Draws text so the top left corner of the text is at (x; y).
     #param text Formatted text without line-breaks.
     def draw(text, x, y, z, factor_x = 1, factor_y = 1, c = Color::WHITE,
-      mode = AM_DEFAULT)
+      mode = :default)
 
       offset = 0
       text.each_char do |char|
