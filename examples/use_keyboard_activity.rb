@@ -13,7 +13,7 @@ class GameWindow < Gosu::Window
   end
   
   def draw
-    @font.draw("You press key: #{@key}", 10, 10, 3, 1.0, 1.0, 0xffffff00)
+    @font.draw("Press a key to see its code: #{@key}", 10, 10, 3, 1.0, 1.0, 0xffffff00)
   end
 end
 

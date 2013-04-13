@@ -326,6 +326,7 @@ module Gosu
       @surface_view.request_render
     end
 
+    #TODO On screen rotation the app breaks down
     def focus_changed has_focus, width, height
       @screen_width = width
       @screen_height = height
