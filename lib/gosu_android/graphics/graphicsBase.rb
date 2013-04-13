@@ -7,8 +7,6 @@ module Gosu
   #to the old color's channels.   
   
   #amMultiply -> The color's channels will be multiplied with each other.
-  #:default, :add, :multiply = *(0..2) 
-  #:additive = :add    
   AM_MODES = { :default => 0, :add => 1, :additive => 1, :multiply => 2 }
   
   FF_BOLD         = 1
