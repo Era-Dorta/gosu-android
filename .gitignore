@@ -1,3 +1,5 @@
 /.idea
 /pkg
 /repo
+/.project
+/.yardoc
