@@ -45,8 +45,8 @@ module Gosu
     end
 
     def finalize
-      tbb = ByteBuffer.allocateDirect(1*4)
-      tbb.order(ByteOrder.nativeOrder)
+      tbb = (JavaImports::ByteBuffer.allocateDirect(1*4))
+      tbb.order(JavaImports::ByteOrder.nativeOrder)
       texture_buffer = vbb.asIntBuffer
       texture_buffer.put(@name)
       texture_buffer.position(0)      
