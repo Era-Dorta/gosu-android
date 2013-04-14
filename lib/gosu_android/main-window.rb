@@ -112,6 +112,7 @@ module Gosu
         attr_accessor :input
         
         def on_destroy
+          super
           #Release audio resources
           Song.release_resources         
         end
