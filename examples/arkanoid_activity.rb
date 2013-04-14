@@ -75,13 +75,13 @@ class GameWindow < Gosu::Window
     @p1x = 0
     @stillObjects = Array.new
   
-    @ball = Ball.new(self, Ruboto::R::drawable::yellow_square, 100, 200, 0, 50, 100, 100)
+    @ball = Ball.new(self, Ruboto::R::drawable::yellow_square, 100, 200, 0, 10, 100, 100)
 
     @player_x = 300
     @player_y = 473    
     @size = 110
-    # 25 is to compesate square size of the ball
-    @size2 = @size/2 - 25    
+    # 5 is to compesate square size of the ball
+    @size2 = @size/2 - 5    
     @player = StillObject.new(self,Ruboto::R::drawable::bar_hor, [@player_x, @player_y], [@player_x + @size, @player_y],  0)
 
     #Left plane

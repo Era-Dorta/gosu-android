@@ -10,13 +10,13 @@ class GameWindow < Gosu::Window
     @beep = Gosu::Sample.new(self, Ruboto::R::raw::beep)
     @p1x = 0
 
-    @ball = Gosu::Square.new(self, Ruboto::R::drawable::yellow_square, 100, 200, 0, 50, 20, 100, 100)
+    @ball = Gosu::Square.new(self, Ruboto::R::drawable::yellow_square, 100, 200, 0, 10, 20, 100, 100)
 
     @player_x = 300
     @player_y = 473    
     @size = 110
-    # 25 is to compesate square size of the ball
-    @size2 = @size/2 - 25    
+    # 5 is to compesate square size of the ball
+    @size2 = @size/2 - 5    
     @player = Gosu::Plane.new(self,Ruboto::R::drawable::bar_hor, [@player_x, @player_y], [@player_x + @size, @player_y],  0)
 
     #Left plane
