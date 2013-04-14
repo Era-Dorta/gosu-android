@@ -26,8 +26,6 @@ module Gosu
     #system and loads the sample from a file.
     def initialize(window, filename)
       @window = window
-      #Set finalize
-      ObjectSpace.define_finalizer(self, self.class.method(:finalize).to_proc)
       if not defined? @@pool
         @@pool = JavaImports::SoundPool.new(MAX_SAMPLES, JavaImports::AudioManager::STREAM_MUSIC, 0)
       end
@@ -37,6 +35,8 @@ module Gosu
       else
         @id = @@pool.load(filename, 1)
       end
+      #Set finalize
+      ObjectSpace.define_finalizer(self, self.class.finalize(@id))      
     end
 
     #Plays the sample without panning.
@@ -62,8 +62,8 @@ module Gosu
       end
     end
 
-    def Sample.finalize(id)
-      @@pool.unload(@id)
+    def self.finalize(id)
+      proc { @@pool.unload(id) }
     end
 
   end
