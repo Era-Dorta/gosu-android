@@ -45,7 +45,12 @@ module Gosu
     end
 
     def finalize
-      @gl.glDeleteTextures(1, @name)
+      tbb = ByteBuffer.allocateDirect(1*4)
+      tbb.order(ByteOrder.nativeOrder)
+      texture_buffer = vbb.asIntBuffer
+      texture_buffer.put(@name)
+      texture_buffer.position(0)      
+      @gl.glDeleteTextures(1, texture_buffer)
     end
 
     def tex_name
