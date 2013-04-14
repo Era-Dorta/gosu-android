@@ -6,9 +6,6 @@ module Gosu
   class Texture
 
     def initialize(size, gl)
-      #Set finalize
-      ObjectSpace.define_finalizer(self,
-                          self.class.method(:finalize).to_proc)
       @size = size
       @allocator = BlockAllocator.new(@size, @size)
       @num = 0
