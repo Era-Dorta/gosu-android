@@ -47,7 +47,7 @@ module Gosu
       @gl.glTexParameterf(JavaImports::GL10::GL_TEXTURE_2D, JavaImports::GL10::GL_TEXTURE_MAG_FILTER, JavaImports::GL10::GL_LINEAR)
     end
 
-    def Texture.finalize(id)
+    def finalize
       @gl.glDeleteTextures(1, @name)
     end
 

@@ -69,6 +69,7 @@ module Gosu
       else
         @data = window.create_image(source, src_x, src_y, src_width, src_height, BF_SMOOTH)
       end
+      ObjectSpace.define_finalizer(self, Proc.new{@data.finalize})
     end
 
     public
