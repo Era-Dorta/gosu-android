@@ -102,11 +102,20 @@ module Gosu
     #TODO This is monkey patching, there has to be a better way to do it 
     #This method adds listeners to the activity that called gosu 
     #becouse the key events can only be cought in the activity 
+    
+    #TODO At least check if the methods were already defined,
+    #if so called them after/before this methods
     def add_key_event_listener
       # Get the class of the object.
       @activity.class.class_eval do
         
         attr_accessor :input
+        
+        def on_destroy
+          #Release audio resources
+          Song.release_resources         
+        end
+        
         def onKeyDown(keyCode, event)      
           if @input.feed_key_event_down(keyCode)
             return true

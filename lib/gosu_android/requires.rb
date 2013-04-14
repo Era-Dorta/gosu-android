@@ -44,5 +44,6 @@ module JavaImports
   #Audio
   java_import "android.media.SoundPool"
   java_import "android.media.AudioManager"  
-  java_import "android.media.MediaPlayer"  
+  java_import "android.media.MediaPlayer" 
+  java_import "android.app.Service" 
 end  

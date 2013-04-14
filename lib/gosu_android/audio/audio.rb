@@ -8,9 +8,15 @@ module Gosu
     end
   end
 
-  class AudioFocusListener
+  class AudioFocusListener < JavaImports::Service 
+    include JavaImports::AudioManager::OnAudioFocusChangeListener
       def onAudioFocusChange focusChange
         puts "In focus change #{focusChange}"
+        return false
+      end
+      
+      def onBind intent
+        return nil
       end
 
       def toString
@@ -152,6 +158,12 @@ module Gosu
         @@media_player.stop
       end
       @@current_song = 0
+    end
+    
+    def Song.release_resources
+      if defined? @@media_player
+        @@audio_manager.abandonAudioFocus @@audio_focus_listener
+      end
     end
 
   end
