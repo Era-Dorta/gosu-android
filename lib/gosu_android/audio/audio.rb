@@ -8,6 +8,9 @@ module Gosu
     end
   end
 
+  #TODO No listener gets ever called, also when a song ends
+  #logcat returns error:
+  # E/MP3Extractor(   95): Unable to resync. Signalling end of stream.
   class AudioFocusListener < JavaImports::Service 
     include JavaImports::AudioManager::OnAudioFocusChangeListener
       def onAudioFocusChange focusChange
@@ -25,7 +28,22 @@ module Gosu
   end
   
   class AudioCompletionListener
+    include JavaImports::MediaPlayer::OnCompletionListener
       def onCompletion mp
+        return true
+      end
+  end   
+  
+  class AudioErrorListener
+    include JavaImports::MediaPlayer::OnErrorListener
+      def onError(mp, what, extra)
+        return true
+      end
+  end   
+  
+  class AudioInfoListener
+    include JavaImports::MediaPlayer::OnInfoListener
+      def onInfo(mp, what, extra)
         return true
       end
   end  
@@ -94,6 +112,8 @@ module Gosu
         @@audio_manager = context.getSystemService(Context::AUDIO_SERVICE)
         focus = @@audio_manager.requestAudioFocus(@@audio_focus_listener, JavaImports::AudioManager::STREAM_MUSIC, JavaImports::AudioManager::AUDIOFOCUS_GAIN)
         @@media_player.setOnCompletionListener AudioCompletionListener.new
+        @@media_player.setOnErrorListener AudioErrorListener.new
+        @@media_player.setOnInfoListener AudioInfoListener.new
       else
         @@media_player.reset
         focus = @@audio_manager.requestAudioFocus(@@audio_focus_listener, JavaImports::AudioManager::STREAM_MUSIC, JavaImports::AudioManager::AUDIOFOCUS_GAIN)
