@@ -23,6 +23,12 @@ module Gosu
         self.class.to_s
       end
   end
+  
+  class AudioCompletionListener
+      def onCompletion mp
+        return true
+      end
+  end  
 
   #TODO ManageAudioFocus, when app loses, stop song
   #TODO Raise a warning is the file could not be loaded
@@ -87,6 +93,7 @@ module Gosu
         context = @window.activity.getApplicationContext
         @@audio_manager = context.getSystemService(Context::AUDIO_SERVICE)
         focus = @@audio_manager.requestAudioFocus(@@audio_focus_listener, JavaImports::AudioManager::STREAM_MUSIC, JavaImports::AudioManager::AUDIOFOCUS_GAIN)
+        @@media_player.setOnCompletionListener AudioCompletionListener.new
       else
         @@media_player.reset
         focus = @@audio_manager.requestAudioFocus(@@audio_focus_listener, JavaImports::AudioManager::STREAM_MUSIC, JavaImports::AudioManager::AUDIOFOCUS_GAIN)
