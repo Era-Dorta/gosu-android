@@ -8,7 +8,7 @@ class Player
   attr_reader :score
 
   def initialize(window)
-    @image = Gosu::Image.new(window, Ruboto::R::drawable::ship, false)
+    @image = Gosu::Image.new(window, Ruboto::R::drawable::star_fighter, false)
     @beep = Gosu::Sample.new(window, Ruboto::R::raw::beep)
     @x = @y = @vel_x = @vel_y = @angle = 0.0
     @score = 0
@@ -16,29 +16,6 @@ class Player
 
   def warp(x, y)
     @x, @y = x, y
-  end
-  
-  def turn_left
-    @angle -= 4.5
-  end
-  
-  def turn_right
-    @angle += 4.5
-  end
-  
-  def accelerate
-    @vel_x += Gosu::offset_x(@angle, 0.5)
-    @vel_y += Gosu::offset_y(@angle, 0.5)
-  end
-  
-  def move
-    @x += @vel_x
-    @y += @vel_y
-    @x %= 640
-    @y %= 480
-    
-    @vel_x *= 0.95
-    @vel_y *= 0.95
   end
 
   def draw
@@ -95,21 +72,15 @@ class GameWindow < Gosu::Window
   end
 
   def update
-    if button_down? Gosu::KbA then
-      @player.turn_left
-    end
-    if button_down? Gosu::KbD then
-      @player.turn_right
-    end
-    if button_down? Gosu::KbW then
-      @player.accelerate
-    end
-    @player.move
     @player.collect_stars(@stars)
-    
-    if rand(100) < 4 and @stars.size < 25 then
+    #Normally 25 stars
+    if rand(100) < 4 and @stars.size < 5 then
       @stars.push(Star.new(@star_anim))
     end
+  end
+
+  def touch_moved(touch)
+    @player.warp(touch.x, touch.y)
   end
 
   def draw
@@ -126,7 +97,7 @@ class GameWindow < Gosu::Window
   end
 end
 
-class TestGameActivity
+class TutorialTouchActivity
   def on_create(bundle)
     super(bundle)
     Gosu::AndroidInitializer.instance.start(self)
@@ -136,8 +107,7 @@ class TestGameActivity
   
   def on_ready
     window = GameWindow.new
-    window.show  
-    window.show_soft_keyboard  
+    window.show    
     rescue Exception => e
       puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!"    
   end
