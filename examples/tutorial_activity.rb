@@ -8,7 +8,7 @@ class Player
   attr_reader :score
 
   def initialize(window)
-    @image = Gosu::Image.new(window, Ruboto::R::drawable::ship, false)
+    @image = Gosu::Image.new(window, Ruboto::R::drawable::star_fighter, false)
     @beep = Gosu::Sample.new(window, Ruboto::R::raw::beep)
     @x = @y = @vel_x = @vel_y = @angle = 0.0
     @score = 0
