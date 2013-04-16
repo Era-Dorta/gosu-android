@@ -68,7 +68,6 @@ class GameWindow < Gosu::Window
   def initialize
     super 600, 480, false, 30
     self.caption = "Gosu Arkanoid"
-    self.physics_manager.gravity_y = 0
     @score = 0  
     @song = Gosu::Song.new(self, Ruboto::R::raw::chriss_onac_tempo_red)
     @beep = Gosu::Sample.new(self, Ruboto::R::raw::beep)
