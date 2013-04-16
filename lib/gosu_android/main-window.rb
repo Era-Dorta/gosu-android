@@ -65,6 +65,7 @@ module Gosu
     attr_accessor :media_player
     attr_reader :width, :height
     attr_reader :fullscreen
+    attr_reader :internal_update_interval
     attr_reader :update_interval
     attr_reader :physics_manager
     attr_reader :fonts_manager
@@ -81,7 +82,8 @@ module Gosu
       @display = @activity.getWindowManager.getDefaultDisplay
       @width = width
       @height= height
-      @update_interval = update_interval/1000.0
+      @internal_update_interval = update_interval/1000.0
+      @update_interval = update_interval
       #@surface_view = GosuSurfaceView.new(@activity)
       @surface_view = android_initializer.surface_view
       @input = Input.new(@display, self)
@@ -176,8 +178,8 @@ module Gosu
       do_tick
       #TODO gosu dark side
       @end_time = Time.now
-      if (@start_time <= @end_time and (@end_time - @start_time) < @update_interval)
-          sleep(@update_interval - (@end_time - @start_time))
+      if (@start_time <= @end_time and (@end_time - @start_time) < @internal_update_interval)
+          sleep(@internal_update_interval - (@end_time - @start_time))
       end
     end
 

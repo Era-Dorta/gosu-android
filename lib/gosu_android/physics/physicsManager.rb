@@ -6,7 +6,7 @@ module Gosu
     attr_accessor :gravity_x, :gravity_y
     def initialize(window)
       @window = window
-      @dt = @window.update_interval
+      @dt = @window.internal_update_interval
       @squares = []
       @planes = []
       @gravity_x = 0
