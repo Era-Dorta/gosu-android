@@ -5,7 +5,6 @@ require 'gosu_android/graphics/graphicsBase'
 require 'gosu_android/graphics/font'
 require 'gosu_android/input/input'
 require 'gosu_android/audio/audio'
-require 'gosu_android/physics/physicsManager'
 require 'gosu_android/timing'
 
 require 'singleton'
@@ -67,7 +66,6 @@ module Gosu
     attr_reader :fullscreen
     attr_reader :internal_update_interval
     attr_reader :update_interval
-    attr_reader :physics_manager
     attr_reader :fonts_manager
     attr_reader :activity
 
@@ -93,7 +91,6 @@ module Gosu
       @graphics.initialize_window(@width, @height, @fullscreen, self)
       #@surface_view.renderer =  @graphics
       @surface_view.set_render_mode(JavaImports::GLSurfaceView::RENDERMODE_WHEN_DIRTY)
-      @physics_manager = PhysicsManager.new self
       @fonts_manager = FontsManager.new self
       @media_player = nil
       add_key_event_listener
@@ -233,16 +230,6 @@ module Gosu
     # Called when and object collides with another object
     def object_collided(x, y, object); end
 
-    # This object should be subject to the physics manager
-    def apply_physics(object)
-      @physics_manager.register_new_object(object)
-    end
-
-    # Stop applying physics to the given object
-    def stop_physics(object)
-      @physics_manager.delete_object(object)
-    end
-
     # Draws a line from one point to another (last pixel exclusive).
     # Note: OpenGL lines are not reliable at all and may have a missing pixel at the start
     # or end point. Please only use this for debugging purposes. Otherwise, use a quad or
@@ -331,7 +318,6 @@ module Gosu
       @input.update
       self.update
       @input.clear
-      @physics_manager.update
       @graphics.begin(Color::BLACK)
       self.draw
       @graphics.end
