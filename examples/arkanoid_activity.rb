@@ -8,7 +8,7 @@ module Resources
     Resources::BALL = Ruboto::R::drawable::yellow_square
     Resources::BEEP = Ruboto::R::raw::beep
     Resources::SONG = Ruboto::R::raw::chriss_onac_tempo_red
-    Resources::BLOCK = Ruboto::R::drawable::bar
+    Resources::BLOCK = Ruboto::R::drawable::bar_hor
   else
     Resources::BALL = "media/yellow_square.png"
     Resources::BEEP = "media/beep.wav"
@@ -214,7 +214,7 @@ if not defined? Ruboto
   window = GameWindow.new
   window.show 
 else
-  class TutorialCommonActivity
+  class ArkanoidActivity
     def on_create(bundle)
       super(bundle)
       Gosu::AndroidInitializer.instance.start(self)
@@ -224,8 +224,7 @@ else
     
     def on_ready
       window = GameWindow.new
-      window.show  
-      window.show_soft_keyboard  
+      window.show   
       rescue Exception => e
         puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!"    
     end
