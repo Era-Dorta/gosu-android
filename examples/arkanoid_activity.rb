@@ -210,5 +210,24 @@ class GameWindow < Gosu::Window
  
 end
 
-window = GameWindow.new
-window.show    
+if not defined? Ruboto
+  window = GameWindow.new
+  window.show 
+else
+  class TutorialCommonActivity
+    def on_create(bundle)
+      super(bundle)
+      Gosu::AndroidInitializer.instance.start(self)
+      rescue Exception => e
+        puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!"    
+    end  
+    
+    def on_ready
+      window = GameWindow.new
+      window.show  
+      window.show_soft_keyboard  
+      rescue Exception => e
+        puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!"    
+    end
+  end  
+end
