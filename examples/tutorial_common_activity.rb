@@ -125,6 +125,10 @@ class GameWindow < Gosu::Window
       @stars.push(Star.new(@star_anim))
     end
   end
+  
+  def touch_moved(touch)
+    @player.warp(touch.x, touch.y)
+  end  
 
   def draw
     @background_image.draw(0, 0, ZOrder::Background)
@@ -155,7 +159,6 @@ else
     def on_ready
       window = GameWindow.new
       window.show  
-      window.show_soft_keyboard  
       rescue Exception => e
         puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!"    
     end
