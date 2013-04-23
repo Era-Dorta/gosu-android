@@ -8,15 +8,45 @@ module Gosu
     end
   end
 
-  class AudioFocusListener
+  #TODO No listener gets ever called, also when a song ends
+  #logcat returns error:
+  # E/MP3Extractor(   95): Unable to resync. Signalling end of stream.
+  class AudioFocusListener < JavaImports::Service 
+    include JavaImports::AudioManager::OnAudioFocusChangeListener
       def onAudioFocusChange focusChange
         puts "In focus change #{focusChange}"
+        return false
+      end
+      
+      def onBind intent
+        return nil
       end
 
       def toString
         self.class.to_s
       end
   end
+  
+  class AudioCompletionListener
+    include JavaImports::MediaPlayer::OnCompletionListener
+      def onCompletion mp
+        return true
+      end
+  end   
+  
+  class AudioErrorListener
+    include JavaImports::MediaPlayer::OnErrorListener
+      def onError(mp, what, extra)
+        return true
+      end
+  end   
+  
+  class AudioInfoListener
+    include JavaImports::MediaPlayer::OnInfoListener
+      def onInfo(mp, what, extra)
+        return true
+      end
+  end  
 
   #TODO ManageAudioFocus, when app loses, stop song
   #TODO Raise a warning is the file could not be loaded
@@ -26,8 +56,6 @@ module Gosu
     #system and loads the sample from a file.
     def initialize(window, filename)
       @window = window
-      #Set finalize
-      ObjectSpace.define_finalizer(self, self.class.method(:finalize).to_proc)
       if not defined? @@pool
         @@pool = JavaImports::SoundPool.new(MAX_SAMPLES, JavaImports::AudioManager::STREAM_MUSIC, 0)
       end
@@ -37,6 +65,8 @@ module Gosu
       else
         @id = @@pool.load(filename, 1)
       end
+      #Set finalize
+      ObjectSpace.define_finalizer(self, self.class.finalize(@id))      
     end
 
     #Plays the sample without panning.
@@ -62,14 +92,14 @@ module Gosu
       end
     end
 
-    def Sample.finalize(id)
-      @@pool.unload(@id)
+    def self.finalize(id)
+      proc { @@pool.unload(id) }
     end
 
   end
 
   #TODO Error on playing several songs, bear in mind mediaplayer states
-  #FIXME Set listener for when the data finished loading asynchronously
+  #TODO Set listener for when the data finished loading asynchronously
   # add some checks play is reached before that
   class Song
     attr_reader :current_song
@@ -81,6 +111,9 @@ module Gosu
         context = @window.activity.getApplicationContext
         @@audio_manager = context.getSystemService(Context::AUDIO_SERVICE)
         focus = @@audio_manager.requestAudioFocus(@@audio_focus_listener, JavaImports::AudioManager::STREAM_MUSIC, JavaImports::AudioManager::AUDIOFOCUS_GAIN)
+        @@media_player.setOnCompletionListener AudioCompletionListener.new
+        @@media_player.setOnErrorListener AudioErrorListener.new
+        @@media_player.setOnInfoListener AudioInfoListener.new
       else
         @@media_player.reset
         focus = @@audio_manager.requestAudioFocus(@@audio_focus_listener, JavaImports::AudioManager::STREAM_MUSIC, JavaImports::AudioManager::AUDIOFOCUS_GAIN)
@@ -152,6 +185,12 @@ module Gosu
         @@media_player.stop
       end
       @@current_song = 0
+    end
+    
+    def Song.release_resources
+      if defined? @@media_player
+        @@audio_manager.abandonAudioFocus @@audio_focus_listener
+      end
     end
 
   end

@@ -4,12 +4,11 @@ require 'gosu_android/graphics/common'
 module Gosu
   class TexChunk < ImageData
     def initialize(graphics, queues, texture, x, y, w, h, padding)
-      #Define object destructor
-      ObjectSpace.define_finalizer(self,
-                    self.class.method(:finalize).to_proc)
       @graphics = graphics
       @queues = queues
       @texture = texture
+      #Define object destructor
+      ObjectSpace.define_finalizer(self, Proc.new{@texture.finalize})
       @x = x
       @y = y
       @w = w
@@ -24,7 +23,7 @@ module Gosu
       @info.bottom = (@y.to_f + @h) / @texture.size
     end
 
-    def TexChunk.finalize(id)
+    def finalize
       @texture.free(@x - @padding, @y - @padding)
     end
 

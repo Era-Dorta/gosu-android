@@ -103,5 +103,17 @@ module Gosu
       return [false]           
     end
     
+    def free (left, top)
+      @pimpl.blocks.delete_if do |block|
+        if block.left == left and block.top == top
+          @pimpl.max_w = @pimpl.max_w - 1
+          @pimpl.max_h = @pimpl.max_h - 1
+          true
+        else
+          false  
+        end
+      end
+    end
+    
   end
 end

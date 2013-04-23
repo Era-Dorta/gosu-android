@@ -6,9 +6,6 @@ module Gosu
   class Texture
 
     def initialize(size, gl)
-      #Set finalize
-      ObjectSpace.define_finalizer(self,
-                          self.class.method(:finalize).to_proc)
       @size = size
       @allocator = BlockAllocator.new(@size, @size)
       @num = 0
@@ -47,8 +44,13 @@ module Gosu
       @gl.glTexParameterf(JavaImports::GL10::GL_TEXTURE_2D, JavaImports::GL10::GL_TEXTURE_MAG_FILTER, JavaImports::GL10::GL_LINEAR)
     end
 
-    def Texture.finalize(id)
-      @gl.glDeleteTextures(1, @name)
+    def finalize
+      tbb = (JavaImports::ByteBuffer.allocateDirect(4))
+      tbb.order(JavaImports::ByteOrder.nativeOrder)
+      texture_buffer = tbb.asIntBuffer
+      texture_buffer.put(@name)
+      texture_buffer.position(0)      
+      @gl.glDeleteTextures(1, texture_buffer)
     end
 
     def tex_name

@@ -8,6 +8,7 @@ module JavaImports
     java_import "android.opengl.GLSurfaceView"
   end
 
+  #Opengl dependencies
   java_import "javax.microedition.khronos.egl.EGL10"
   java_import "javax.microedition.khronos.egl.EGLConfig"
   java_import "javax.microedition.khronos.opengles.GL10"
@@ -31,6 +32,9 @@ module JavaImports
   java_import "android.view.WindowManager"
   java_import "android.view.KeyEvent"
   
+  #Handles the keyboard
+  java_import "android.view.inputmethod.InputMethodManager"
+  
   #Fonts
   java_import "android.graphics.Canvas"
   java_import "android.graphics.Paint"
@@ -40,5 +44,6 @@ module JavaImports
   #Audio
   java_import "android.media.SoundPool"
   java_import "android.media.AudioManager"  
-  java_import "android.media.MediaPlayer"  
+  java_import "android.media.MediaPlayer" 
+  java_import "android.app.Service" 
 end  

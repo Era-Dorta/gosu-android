@@ -1,3 +1,6 @@
 /.idea
 /pkg
 /repo
+/.project
+/.yardoc
+/examples/media

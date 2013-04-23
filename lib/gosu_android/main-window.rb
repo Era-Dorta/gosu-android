@@ -5,7 +5,6 @@ require 'gosu_android/graphics/graphicsBase'
 require 'gosu_android/graphics/font'
 require 'gosu_android/input/input'
 require 'gosu_android/audio/audio'
-require 'gosu_android/physics/physicsManager'
 require 'gosu_android/timing'
 
 require 'singleton'
@@ -47,21 +46,12 @@ module Gosu
       return true
     end
 
-    def onKeyDown(keyCode, event)
-      super
-      @input.feed_key_event(keyCode, event)
-    end
-
-    def onKeyUp(keyCode, event)
-      super
-      @input.feed_key_event(keyCode, event)
-    end
-
     def onWindowFocusChanged(has_focus)
       super
       if(@window)
         @window.focus_changed(has_focus, self.get_width, self.get_height)
       end
+      return true
     end
   end
 
@@ -74,8 +64,8 @@ module Gosu
     attr_accessor :media_player
     attr_reader :width, :height
     attr_reader :fullscreen
+    attr_reader :internal_update_interval
     attr_reader :update_interval
-    attr_reader :physics_manager
     attr_reader :fonts_manager
     attr_reader :activity
 
@@ -90,7 +80,8 @@ module Gosu
       @display = @activity.getWindowManager.getDefaultDisplay
       @width = width
       @height= height
-      @update_interval = update_interval/1000.0
+      @internal_update_interval = update_interval/1000.0
+      @update_interval = update_interval
       #@surface_view = GosuSurfaceView.new(@activity)
       @surface_view = android_initializer.surface_view
       @input = Input.new(@display, self)
@@ -100,11 +91,60 @@ module Gosu
       @graphics.initialize_window(@width, @height, @fullscreen, self)
       #@surface_view.renderer =  @graphics
       @surface_view.set_render_mode(JavaImports::GLSurfaceView::RENDERMODE_WHEN_DIRTY)
-      @physics_manager = PhysicsManager.new self
       @fonts_manager = FontsManager.new self
       @media_player = nil
+      add_key_event_listener
+      @activity.input = @input
+      @showing_keyboard = false
     end
 
+    #TODO This is monkey patching, there has to be a better way to do it 
+    #This method adds listeners to the activity that called gosu 
+    #becouse the key events can only be cought in the activity 
+    
+    #TODO At least check if the methods were already defined,
+    #if so called them after/before this methods
+    def add_key_event_listener
+      # Get the class of the object.
+      @activity.class.class_eval do
+        
+        attr_accessor :input
+        
+        def on_destroy
+          super
+          #Release audio resources
+          Song.release_resources         
+        end
+        
+        def onKeyDown(keyCode, event)      
+          if @input.feed_key_event_down(keyCode)
+            return true
+          else
+            return super keyCode, event
+          end
+        end
+    
+        def onKeyUp(keyCode, event)        
+          if @input.feed_key_event_up(keyCode)
+            return true
+          else
+            return super keyCode, event
+          end
+        end
+
+        #TODO It does never get called, it does not matter how long
+        #the press was
+        def onKeyLongPress(keyCode, event) 
+          if @input.feed_key_event_up(keyCode)
+            return true
+          else
+            return super keyCode, event
+          end
+        end
+        
+      end
+    end
+  
     # Enters a modal loop where the Window is visible on screen and receives calls to draw, update etc.
     def show
       @showing = true
@@ -135,14 +175,17 @@ module Gosu
       do_tick
       #TODO gosu dark side
       @end_time = Time.now
-      if (@start_time <= @end_time and (@end_time - @start_time) < @update_interval)
-          sleep(@update_interval - (@end_time - @start_time))
+      if (@start_time <= @end_time and (@end_time - @start_time) < @internal_update_interval)
+          sleep(@internal_update_interval - (@end_time - @start_time))
       end
     end
 
     # Tells the window to end the current show loop as soon as possible.
-    def close
+    def close     
+      #Self trigger window lost focus, since we are going to home
+      focus_changed false, @screen_width, @screen_height
       @showing = false
+      @activity.moveTaskToBack(true)
     end
 
     # Called every update_interval milliseconds while the window is being
@@ -173,7 +216,9 @@ module Gosu
     def button_up(id); end
 
     # Returns true if a button is currently pressed. Updated every tick.
-    def button_down?(id); end
+    def button_down?(id)
+      return @input.button_down? id
+    end
 
     # Called when the user started a touch on the screen
     def touch_began(touch); end
@@ -185,33 +230,23 @@ module Gosu
     # Called when and object collides with another object
     def object_collided(x, y, object); end
 
-    # This object should be subject to the physics manager
-    def apply_physics(object)
-      @physics_manager.register_new_object(object)
-    end
-
-    # Stop applying physics to the given object
-    def stop_physics(object)
-      @physics_manager.delete_object(object)
-    end
-
     # Draws a line from one point to another (last pixel exclusive).
     # Note: OpenGL lines are not reliable at all and may have a missing pixel at the start
     # or end point. Please only use this for debugging purposes. Otherwise, use a quad or
     # image to simulate lines, or contribute a better draw_line to Gosu.
-    def draw_line(x1, y1, c1, x2, y2, c2, z=0, mode=AM_DEFAULT)
-      @graphics.draw_line(x1, y1, c1, x2, y2, c2, z, mode)
+    def draw_line(x1, y1, c1, x2, y2, c2, z=0, mode=:default)
+      @graphics.draw_line(x1, y1, c1, x2, y2, c2, z, AM_MODES[mode])
     end
 
-    def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=AM_DEFAULT)
-      @graphics.draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z, mode)
+    def draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z=0, mode=:default)
+      @graphics.draw_triangle(x1, y1, c1, x2, y2, c2, x3, y3, c3, z, AM_MODES[mode])
     end
 
     # Draws a rectangle (two triangles) with given corners and corresponding
     # colors.
     # The points can be in clockwise order, or in a Z shape.
-    def draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=AM_DEFAULT)
-      @graphics.draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, mode)
+    def draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z=0, mode=:default)
+      @graphics.draw_quad(x1, y1, c1, x2, y2, c2, x3, y3, c3, x4, y4, c4, z, AM_MODES[mode])
     end
 
     # Flushes all drawing operations to OpenGL so that Z-ordering can start anew. This
@@ -282,29 +317,57 @@ module Gosu
     def do_tick
       @input.update
       self.update
-      @physics_manager.update
+      @input.clear
       @graphics.begin(Color::BLACK)
       self.draw
       @graphics.end
       @surface_view.request_render
     end
 
+    #TODO On screen rotation the app breaks down
     def focus_changed has_focus, width, height
       @screen_width = width
       @screen_height = height
-      if @showing and @media_player != nil
-        if has_focus
-          @media_player.start
-        else
-          @media_player.pause
+      
+      if has_focus
+               
+        if @showing and @media_player != nil
+            @media_player.start
         end
-     end
+
+        #TODO Keyboard does not appears again
+        if @showing_keyboard
+          show_soft_keyboard
+        end
+       
+      else
+        #Hide keyboard but mark it so it will be shown later
+        if @showing_keyboard
+          hide_soft_keyboard
+          @showing_keyboard = true
+        end
+        
+        if @showing and @media_player != nil
+            @media_player.pause
+        end
+        
+      end   
+      return true  
     end
 
-    def show_soft_keyboard
+    #TODO It would be nice that the keyboard was transparent
+    def show_soft_keyboard             
       context = @activity.getApplicationContext
       imm = context.getSystemService(Context::INPUT_METHOD_SERVICE)
       imm.toggleSoftInput(JavaImports::InputMethodManager::SHOW_FORCED,0)
+      @showing_keyboard = true
+    end
+    
+    def hide_soft_keyboard
+      context = @activity.getApplicationContext
+      imm = context.getSystemService(Context::INPUT_METHOD_SERVICE)
+      imm.toggleSoftInput(JavaImports::InputMethodManager::HIDE_IMPLICIT_ONLY,0)    
+      @showing_keyboard = false
     end
 
     def create_image(source, src_x, src_y, src_width, src_height, tileable)
