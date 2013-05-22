@@ -37,13 +37,15 @@ module Gosu
   # instance can exist per application.
   class Input
 
-    def initialize(display, window)
+    def initialize(display, window, max_x, max_y)
       @display = display
       @window = window
       @touch_event_list = []
       @key_event_list_up = []
       @key_event_list_down = []
       @id = 0
+      @max_x = max_x
+      @max_y = max_y
       @ingnore_buttons = [JavaImports::KeyEvent::KEYCODE_VOLUME_DOWN, 
         JavaImports::KeyEvent::KEYCODE_VOLUME_MUTE, 
         JavaImports::KeyEvent::KEYCODE_VOLUME_UP,
@@ -118,13 +120,16 @@ module Gosu
       @touch_event_list.each do |touch_event|
         touch_event.getPointerCount.times do |index|
           touch = Touch.new(touch_event. getPointerId(index), touch_event.getX(index), touch_event.getY(index))
-          case touch_event.getAction
-          when JavaImports::MotionEvent::ACTION_DOWN
-            @window.touch_began(touch)
-          when JavaImports::MotionEvent::ACTION_MOVE
-            @window.touch_moved(touch)
-          when JavaImports::MotionEvent::ACTION_UP
-            @window.touch_ended(touch)
+          #Check is touch is inside the screen use, otherwise ignore it
+          if(touch.x > 0 and touch.x < @max_x and touch.y > 0 and touch.y < @max_y)
+            case touch_event.getAction
+            when JavaImports::MotionEvent::ACTION_DOWN
+              @window.touch_began(touch)
+            when JavaImports::MotionEvent::ACTION_MOVE
+              @window.touch_moved(touch)
+            when JavaImports::MotionEvent::ACTION_UP
+              @window.touch_ended(touch)
+            end
           end
         end
       end      

@@ -84,7 +84,7 @@ module Gosu
       @update_interval = update_interval
       #@surface_view = GosuSurfaceView.new(@activity)
       @surface_view = android_initializer.surface_view
-      @input = Input.new(@display, self)
+      @input = Input.new(@display, self, width, height)
       @surface_view.atributes(self, @input)
       #@graphics = Graphics.new(@width, @height, @fullscreen, self)
       @graphics = android_initializer.graphics
