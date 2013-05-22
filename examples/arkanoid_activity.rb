@@ -8,12 +8,14 @@ module Resources
     Resources::BALL = Ruboto::R::drawable::yellow_square
     Resources::BEEP = Ruboto::R::raw::beep
     Resources::SONG = Ruboto::R::raw::chriss_onac_tempo_red
-    Resources::BLOCK = Ruboto::R::drawable::bar_hor
+    Resources::BLOCK = Ruboto::R::drawable::block
+    Resources::PLAYER = Ruboto::R::drawable::bar_hor
   else
     Resources::BALL = "media/yellow_square.png"
     Resources::BEEP = "media/beep.wav"
     Resources::SONG = "media/chriss_onac_tempo_red.mp3"
-    Resources::BLOCK = "media/bar_hor.png" 
+    Resources::BLOCK = "media/block.png" 
+    Resources::PLAYER = "media/bar_hor.png"
   end
 end
 
@@ -95,9 +97,9 @@ class GameWindow < Gosu::Window
     @ball = Ball.new(self, ball_shape, Resources::BALL, 100, 200, 0, 10, 100, 100)
     
     #Size of the image we are using for the blocks       
-    @size = 110   
+    @size = 80   
     new_block_body_shape CP::Vec2.new(1.0, 1.0), CP::Vec2.new(@size, 1.0) 
-    @player = StillObject.new(self, @shape_block, Resources::BLOCK, 300, 473,  0, :horizontal, false)
+    @player = StillObject.new(self, @shape_block, Resources::PLAYER, 300, 473,  0, :horizontal, false)
 
     #Left plane
     new_block_body_shape CP::Vec2.new(1.0, 1.0), CP::Vec2.new(1.0, 480.0) 
