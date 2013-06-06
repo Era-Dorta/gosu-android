@@ -13,6 +13,7 @@ module Resources
     Resources::SONG = Ruboto::R::raw::chriss_onac_tempo_red
     Resources::BLOCK = Ruboto::R::drawable::block
     Resources::PLAYER = Ruboto::R::drawable::bar_hor
+    Resources::BACKGROUND = Ruboto::R::drawable::arkanoid_background
   else
     #On PC: use this paths
     Resources::BALL = "media/yellow_square.png"
@@ -20,6 +21,7 @@ module Resources
     Resources::SONG = "media/chriss_onac_tempo_red.mp3"
     Resources::BLOCK = "media/block.png" 
     Resources::PLAYER = "media/bar_hor.png"
+    Resources::BACKGROUND = "media/arkanoid_background.png"
   end
 end
 
@@ -89,6 +91,7 @@ class GameWindow < Gosu::Window
     @score = 0  
     @song = Gosu::Song.new(self, Resources::SONG)
     @beep = Gosu::Sample.new(self, Resources::BEEP)
+    @background_image = Gosu::Image.new(self, Resources::BACKGROUND, true)
     @p1x = 0
     @stillObjects = Array.new
     # Time increment over which to apply a physics "step" ("delta t")
@@ -224,6 +227,8 @@ class GameWindow < Gosu::Window
   
   #Draw the blocks, tha player, the ball and the current score
   def draw
+    @background_image.draw(0, 0, 0)
+    
     @blocks.each_index do |i|
       @blocks[i].draw
     end
