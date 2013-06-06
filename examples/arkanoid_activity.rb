@@ -1,6 +1,7 @@
 require 'gosu'
 require 'chipmunk'
 
+#Simple arkanoid copy that uses gosu and chipmunk
 SUBSTEPS = 6
 
 #Module where we define paths to the resources

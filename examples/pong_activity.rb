@@ -1,5 +1,7 @@
 require 'gosu'
 
+#Simple pong copy that uses gosu
+
 class Ball
     attr_accessor :velocity
     attr_reader :position, :center
@@ -13,6 +15,7 @@ class Ball
     @dt = window.update_interval/1000.0
   end
   
+  #Move the ball using its velocity
   def update
     @position[0] += @velocity[0]*@dt
     @position[1] += @velocity[1]*@dt
@@ -21,6 +24,7 @@ class Ball
   end
   
   def generate_contact other_object
+    #Check boundaries with other_object
     if @center[0] - @size < other_object.top_limit[0] and other_object.bottom_limit[0] < @center[0] + @size and
       @center[1] - @size < other_object.bottom_limit[1] and other_object.top_limit[1] < @center[1] + @size
       #Calculate new velocity, after the hit
@@ -31,6 +35,7 @@ class Ball
       end
       return true
     end
+    #There was not collision
     return false
   end
   
@@ -45,13 +50,15 @@ class StillObject
   def initialize(window, file_name, p0, p1, z)
     @image = Gosu::Image.new(window, file_name)
     @z = z
-    @top_limit = Array.new p0
+    @top_limit = Array.new p0 #Copy object initial position
     @bottom_limit = Array.new p1
   
+    #If positions where not in order, then reorder them
     if(@bottom_limit[0] > @top_limit[0] or @bottom_limit[1] < @top_limit[1])
       @top_limit, @bottom_limit = @bottom_limit, @top_limit
     end
   
+    #Set its type according to its position
     if @bottom_limit[0] == @top_limit[0]
       @type = :vertical
     elsif @bottom_limit[1] == @top_limit[1]
@@ -60,6 +67,7 @@ class StillObject
   
   end
 
+  #Draw at given position
   def draw(x,y,z = @z)
     @image.draw(x,y,z)
   end
@@ -67,12 +75,16 @@ end
 
 class GameWindow < Gosu::Window
   def initialize
+    #Creates a window of 600 by 400, not fullscreen, at 30 fps
     super 600, 480, false, 50
+    #Window title
     self.caption = "Gosu Pong Game"
+    #Each player's score
     @player1_score = 0
     @player2_score = 0  
     @song = Gosu::Song.new(self, Ruboto::R::raw::chriss_onac_tempo_red)
     @beep = Gosu::Sample.new(self, Ruboto::R::raw::beep)
+    #Players initial position
     @player1_x = 0
     # 25 is to compesate square size of the ball
     @player1_y = 250 + 25
@@ -99,14 +111,18 @@ class GameWindow < Gosu::Window
 
   def update
     
+    #For each object that is not the ball check if it is 
+    #colliding with the ball
     @stillObjects.each do |obj|
       if @ball.generate_contact obj
         @beep.play 
       end
     end
     
+    #Move the ball
     @ball.update
     
+    #Check boundaries
     if @ball.center[0] < 0
       #Player 1 lost
       @player1_score += 1
@@ -128,9 +144,12 @@ class GameWindow < Gosu::Window
   
   def touch_moved(touch)
     touch.y = touch.y - @size2
+    #Since screen is 600 width, then left half is for player 1
+    #and the other half is for player 2
     if touch.x < 300
       #Player1
       @player1_y = touch.y
+      #Update player position according to the touch
       @player1.bottom_limit[1] = @player1_y + @size
       @player1.top_limit[1] = @player1_y  
     else
@@ -141,6 +160,7 @@ class GameWindow < Gosu::Window
     end
   end
   
+  #Draw the ball, the players and the score
   def draw
     @ball.draw
     @player1.draw(@player1_x,@player1_y,0)
@@ -150,6 +170,7 @@ class GameWindow < Gosu::Window
  
 end
 
+#Initialize gosu for android 
 class PongActivity
   def on_create(bundle)
     super(bundle)
