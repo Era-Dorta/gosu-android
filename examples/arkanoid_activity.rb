@@ -3,14 +3,17 @@ require 'chipmunk'
 
 SUBSTEPS = 6
 
+#Module where we define paths to the resources
 module Resources
   if defined? Ruboto
+    #On Android: use this paths
     Resources::BALL = Ruboto::R::drawable::yellow_square
     Resources::BEEP = Ruboto::R::raw::beep
     Resources::SONG = Ruboto::R::raw::chriss_onac_tempo_red
     Resources::BLOCK = Ruboto::R::drawable::block
     Resources::PLAYER = Ruboto::R::drawable::bar_hor
   else
+    #On PC: use this paths
     Resources::BALL = "media/yellow_square.png"
     Resources::BEEP = "media/beep.wav"
     Resources::SONG = "media/chriss_onac_tempo_red.mp3"
@@ -18,6 +21,7 @@ module Resources
     Resources::PLAYER = "media/bar_hor.png"
   end
 end
+
 
 class Ball
     attr_reader :shape
@@ -28,12 +32,15 @@ class Ball
     @z = z
     @image = Gosu::Image.new(window, file_name, false)  
   end
-      
+  
+  #Every time there is a collision the ball must bounce    
   def bounce other_object
-    #Calculate new velocity, after the hit
+    #Calculate new velocity, after the hit    
     if other_object.type == :vertical
+      #If the object was vertical change x velocity
       @shape.body.v.x = -@shape.body.v.x  
     else
+      #If the object was horizontal change y velocity
       @shape.body.v.y = -@shape.body.v.y  
     end  
   end
@@ -42,22 +49,26 @@ class Ball
     #Check that the ball did not go under the screen
     if @shape.body.p.y > 480
       @shape.body.p.y = 200
+      #Change y velocity so that the ball will not move in
+      #the same direction as before
       @shape.body.v.y = -@shape.body.v.x       
     end  
   end
   
   def draw
+    #Draw ball at current position
     @image.draw(@shape.body.p.x, @shape.body.p.y, @z)
   end
 end
 
+#Class for blocks and player
 class StillObject
   attr_reader :type, :shape, :deletable
   def initialize(window, shape, file_name, x, y, z, type, deletable)
     @image = Gosu::Image.new(window, file_name)    
     @z = z
-    @deletable = deletable
-    @type = type
+    @deletable = deletable #Indicates wheter we can delete this object or not  
+    @type = type #Vertical or horizontal
     @shape = shape
     @shape.body.p = CP::Vec2.new(x , y ) # position
     @shape.body.v = CP::Vec2.new(0, 0) # velocity    
@@ -70,7 +81,9 @@ end
 
 class GameWindow < Gosu::Window
   def initialize
+    #Creates a window of 600 by 400, not fullscreen, at 30 fps
     super 600, 480, false, 30
+    #Window title
     self.caption = "Gosu Arkanoid"
     @score = 0  
     @song = Gosu::Song.new(self, Resources::SONG)
@@ -79,9 +92,10 @@ class GameWindow < Gosu::Window
     @stillObjects = Array.new
     # Time increment over which to apply a physics "step" ("delta t")
     @dt = self.update_interval/(1000.0*SUBSTEPS)
+    #We need to define a space where the physics will take place
     @space = CP::Space.new   
     
-    #Ball body, rguments for body new are mass and inertia
+    #Ball body, arguments for body new are mass and inertia
     ball_body = CP::Body.new(1.0, 150.0)
     
     #Shape, we define a square shape
@@ -113,6 +127,7 @@ class GameWindow < Gosu::Window
     
     @blocks = []
     @blocks_position = []
+    #Position for the first block
     block_x = 150
     block_y = 120
     img = Resources::BLOCK
@@ -129,6 +144,7 @@ class GameWindow < Gosu::Window
     @song.play true
     
     @remove_shapes = []
+    #Add method to be called when the ball hits anything
     @space.add_collision_func(:ball, :block) do |ball_shape, block_shape|
       #Search block_shape in stills obects, if is not found it means that the
       #ball already hit it and should be gone, but chipmunk was faster and it
@@ -160,7 +176,8 @@ class GameWindow < Gosu::Window
   end
   
   def update
-      
+    
+    #Every frame iterate substeps times  
     SUBSTEPS.times do
       #Delete the block body and shape from the space
       @remove_shapes.each do |shape|
@@ -175,12 +192,14 @@ class GameWindow < Gosu::Window
       @space.step(@dt)          
     end  
 
+    #On PC: if player press 'A' key, move left
     if button_down? Gosu::KbA then
       if @player.shape.body.p.x > 0
         @player.shape.body.p.x -= 10
       end  
     end  
 
+    #On PC: if player press 'D' key, move right
     if button_down? Gosu::KbD then
       if @player.shape.body.p.x + @size < 600
         @player.shape.body.p.x += 10
@@ -189,17 +208,20 @@ class GameWindow < Gosu::Window
     
   end
  
+  #On Android use touches
   def touch_moved(touch)
     #On a touch interface translate directly the player's position
     @player.shape.body.p.x = touch.x
   end
   
+  #On PC: If player pressed escape then close the game
   def button_down(id) 
     if id == Gosu::KbEscape then
       close
     end
   end  
   
+  #Draw the blocks, tha player, the ball and the current score
   def draw
     @blocks.each_index do |i|
       @blocks[i].draw
@@ -213,17 +235,21 @@ class GameWindow < Gosu::Window
 end
 
 if not defined? Ruboto
+  #On PC: do standard initialization
   window = GameWindow.new
   window.show 
 else
+  #On Android: do more complex initialization
   class ArkanoidActivity
     def on_create(bundle)
       super(bundle)
+      #Start initializer
       Gosu::AndroidInitializer.instance.start(self)
       rescue Exception => e
         puts "#{ e } (#{ e.class } #{e.message} #{e.backtrace.inspect} )!"    
     end  
     
+    #Initializer will call this method when it is ready
     def on_ready
       window = GameWindow.new
       window.show   
