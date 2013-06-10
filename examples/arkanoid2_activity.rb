@@ -157,29 +157,35 @@ class GameWindow < Gosu::Window
     @space.add_collision_func(:ball, :block) do |ball_shape, block_shape|
       #Search block_shape in stills obects, if is not found it means that the
       #ball already hit it and should be gone, but chipmunk was faster and it
-      #generated another collision before it could be erased. 
-      index = @stillObjects.index{|obj| obj.shape==block_shape}
-      if(index != nil )  
-        @beep.play
-        @ball.bounce @stillObjects[index]        
-        if(@stillObjects[index].deletable )  
-          if( @stillObjects[index].delete_count <= 1)
-            #Block can be deleted
-            @score += 10  
-            #Bodies and shapes cannot be deleted here so we mark them for later
-            @remove_shapes << block_shape
-            @blocks.delete @stillObjects[index] 
-            @stillObjects.delete_at index    
-          else
-            #Block cannot be deleted yet.
-            #Decrease delete count
-            @stillObjects[index].delete_count -= 1
-            #Use half broken image to show it only needs one more hit to
-            #be broken
-            @stillObjects[index].image = Gosu::Image.new(self, Resources::BLOCK_BROKEN)
-          end                         
-        end    
-      end    
+      #generated another collision before it could be erased.   
+      
+      #Since we iterate several times in every frame only allow one
+      #collision per frame, otherwise strange this will happen    
+      if @allow_collision
+        index = @stillObjects.index{|obj| obj.shape==block_shape}
+        if(index != nil )  
+          @beep.play
+          @ball.bounce @stillObjects[index]        
+          if(@stillObjects[index].deletable )  
+            if( @stillObjects[index].delete_count <= 1)
+              #Block can be deleted
+              @score += 10  
+              #Bodies and shapes cannot be deleted here so we mark them for later
+              @remove_shapes << block_shape
+              @blocks.delete @stillObjects[index] 
+              @stillObjects.delete_at index    
+            else
+              #Block cannot be deleted yet.
+              #Decrease delete count
+              @stillObjects[index].delete_count -= 1
+              #Use half broken image to show it only needs one more hit to
+              #be broken
+              @stillObjects[index].image = Gosu::Image.new(self, Resources::BLOCK_BROKEN)
+            end                         
+          end    
+        end
+        @allow_collision = false    
+      end          
     end        
   end
   
@@ -197,7 +203,8 @@ class GameWindow < Gosu::Window
   def update
     
     #Every frame iterate substeps times  
-    SUBSTEPS.times do
+    SUBSTEPS.times do |i|
+      @allow_collision = true
       #Delete the block body and shape from the space
       @remove_shapes.each do |shape|
         @space.remove_body(shape.body)
