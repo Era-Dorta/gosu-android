@@ -52,7 +52,6 @@ module Gosu
   KbReturn = JavaImports::KeyEvent::KEYCODE_ENTER
   KbRight = JavaImports::KeyEvent::KEYCODE_DPAD_RIGHT
   KbRightAlt = JavaImports::KeyEvent::KEYCODE_ALT_RIGHT
-  #KbRightControl = JavaImports::KeyEvent::KEYCODE_CTRL_RIGHT
   KbRightShift = JavaImports::KeyEvent::KEYCODE_SHIFT_RIGHT
   KbSpace = JavaImports::KeyEvent::KEYCODE_SPACE
   KbTab = JavaImports::KeyEvent::KEYCODE_TAB
