@@ -160,7 +160,7 @@ class GameWindow < Gosu::Window
       #generated another collision before it could be erased.   
       
       #Since we iterate several times in every frame only allow one
-      #collision per frame, otherwise strange this will happen    
+      #collision per frame, otherwise strange things will happen    
       if @allow_collision
         index = @stillObjects.index{|obj| obj.shape==block_shape}
         if(index != nil )  
