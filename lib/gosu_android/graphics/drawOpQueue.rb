@@ -7,6 +7,7 @@ module Gosu
       @ops = []
       @gl = gl
       @op_pool = DrawOpPool.new(@gl, 50)
+      @manager = RenderStateManager.new(@gl)
     end
 
     def gl= gl
@@ -21,9 +22,9 @@ module Gosu
     def perform_draw_ops_and_code
       #Sort by z
       @ops.sort!
-      manager = RenderStateManager.new(@gl)
+      
       @ops.each do |op|
-          manager.render_state = op.render_state
+          @manager.render_state = op.render_state
           op.perform(nil) if op.vertices_or_block_index >= 0
       end
       @op_pool.clearPool

@@ -251,8 +251,8 @@ class GameWindow < Gosu::Window
   def draw
     @background_image.draw(0, 0, 0)
     
-    @blocks.each_index do |i|
-      @blocks[i].draw
+    @blocks.each do |b|
+      b.draw
     end
     
     @ball.draw
