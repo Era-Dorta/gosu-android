@@ -1,6 +1,6 @@
 Gosu-Android
 ============
-A [Gosu](http://www.libgosu.org/) implementation for Adroid devices.
+A [Gosu](http://www.libgosu.org/) implementation for Android devices.
 
 Installation
 -----------
