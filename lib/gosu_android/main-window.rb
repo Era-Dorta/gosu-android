@@ -35,7 +35,7 @@ module Gosu
 
   class GosuSurfaceView < JavaImports::GLSurfaceView
 
-    def atributes(window, input)
+    def attributes(window, input)
       @window = window
       @input = input
     end
@@ -85,7 +85,7 @@ module Gosu
       #@surface_view = GosuSurfaceView.new(@activity)
       @surface_view = android_initializer.surface_view
       @input = Input.new(@display, self, width, height)
-      @surface_view.atributes(self, @input)
+      @surface_view.attributes(self, @input)
       #@graphics = Graphics.new(@width, @height, @fullscreen, self)
       @graphics = android_initializer.graphics
       @graphics.initialize_window(@width, @height, @fullscreen, self)

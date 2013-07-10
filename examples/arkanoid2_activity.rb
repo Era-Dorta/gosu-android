@@ -29,7 +29,7 @@ end
 
 
 class Ball
-    attr_reader :shape
+  attr_reader :shape
   def initialize window, shape, file_name, x, y, z, size, velocity_x, velocity_y  
     @shape = shape
     @shape.body.p = CP::Vec2.new(x, y) # position

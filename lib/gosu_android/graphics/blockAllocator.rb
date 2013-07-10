@@ -27,15 +27,15 @@ module Gosu
 
         #Block isn't valid.
         if (right > self[:width] || bottom > self[:height])
-            return false
+          return false
         end
         
         #Test if the block collides with any existing rects.
         self[:blocks].each do |i|
-            if (i.left < right and block.left < i.left + i.width and
-                i.top < bottom and block.top < i.top + i.height)
-                return false
-            end
+          if (i.left < right and block.left < i.left + i.width and
+            i.top < bottom and block.top < i.top + i.height)
+            return false
+          end
         end
         true  
       end
@@ -60,11 +60,11 @@ module Gosu
     def alloc(a_width, a_height)
       #The rect wouldn't even fit onto the texture!
       if a_width > width || a_height > height
-          return [false]
+        return [false]
       end     
       #We know there's no space left.
       if a_width > @pimpl.max_w && a_height > @pimpl.max_h
-          return [false]
+        return [false]
       end
       #Start to look for a place next to the last returned rect. Chances are
       #good we'll find a place there.
@@ -84,10 +84,10 @@ module Gosu
   
             #Try to make up for the large for()-stepping.
             while (b.top > 0 and @pimpl.is_block_free(Block.new(b.left, b.top - 1, a_width, a_height))) do
-                b.top -= 1
+              b.top -= 1
             end    
             while (b.left > 0 and @pimpl.is_block_free(Block.new(b.left - 1, b.top, a_width, a_height))) do
-                b.left -= 1
+              b.left -= 1
             end
             @pimpl.mark_block_used(b, a_width, a_height)
             return [true, b]          

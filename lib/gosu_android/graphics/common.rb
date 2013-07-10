@@ -10,12 +10,8 @@ module Gosu
   end       
   
   def self.reorder_coordinates_if_necessary(x1, y1, x2, y2, x3, y3, c3, x4, y4, c4)
-    if (Gosu::is_p_to_the_left_of_ab(x1, y1, x2, y2, x3, y3) ==
+    (Gosu::is_p_to_the_left_of_ab(x1, y1, x2, y2, x3, y3) ==
       Gosu::is_p_to_the_left_of_ab(x2, y2, x3, y3, x4, y4))
-      true
-    else
-      false
-    end    
   end
     
 end

@@ -15,7 +15,7 @@ directory CLASSES_DIR
 
 desc 'Generate the gosu.java.jar'
 task :jar => [CLASSES_DIR] + FileList[JAVA_SOURCES] do
-  sh "javac -source 1.6 -target 1.6 -bootclasspath #{ENV['ANDROID_HOME']}/platforms/android-10/android.jar -d #{CLASSES_DIR} #{JAVA_SOURCES}"
+  sh "javac -source 1.6 -target 1.6 -bootclasspath \"#{ENV['ANDROID_HOME']}/platforms/android-10/android.jar\" -d #{CLASSES_DIR} #{JAVA_SOURCES}"
   sh "jar cf lib/gosu.java.jar -C #{CLASSES_DIR} gosu"
 end
 

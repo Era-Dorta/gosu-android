@@ -46,7 +46,7 @@ module Gosu
       @id = 0
       @max_x = max_x
       @max_y = max_y
-      @ingnore_buttons = [JavaImports::KeyEvent::KEYCODE_VOLUME_DOWN, 
+      @ignore_buttons = [JavaImports::KeyEvent::KEYCODE_VOLUME_DOWN, 
         JavaImports::KeyEvent::KEYCODE_VOLUME_MUTE, 
         JavaImports::KeyEvent::KEYCODE_VOLUME_UP,
         JavaImports::KeyEvent::KEYCODE_BACK,
@@ -62,7 +62,7 @@ module Gosu
     end
 
     def feed_key_event_down(keyCode)
-      if @ingnore_buttons.include? keyCode
+      if @ignore_buttons.include? keyCode
         return false
       end  
       @key_event_list_down.push keyCode
@@ -70,7 +70,7 @@ module Gosu
     end
 
     def feed_key_event_up(keyCode)
-      if @ingnore_buttons.include? keyCode
+      if @ignore_buttons.include? keyCode
         return false
       end  
       @key_event_list_up.push keyCode
