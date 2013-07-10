@@ -122,7 +122,7 @@ class GameWindow < Gosu::Window
     @player.collect_stars(@stars)
     
     if rand(100) < 4 and @stars.size < 25 then
-      @stars.push(Star.new(@star_anim))
+      @stars << Star.new(@star_anim)
     end
   end
   
