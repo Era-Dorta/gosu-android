@@ -3,8 +3,8 @@ require 'gosu'
 #Simple pong copy that uses gosu
 
 class Ball
-    attr_accessor :velocity
-    attr_reader :position, :center
+  attr_accessor :velocity
+  attr_reader :position, :center
   def initialize window, file_name, x, y, z, size, velocity_x, velocity_y
     @position = [x,y]
     @size = size / 2
@@ -130,15 +130,13 @@ class GameWindow < Gosu::Window
       @ball.position[0] = 300
       @ball.velocity[0] = -@ball.velocity[0]
       @beep.play
-    else
-      if @ball.center[0] > 600
-        #Player2 lost
-        @player2_score += 1
-        #Reset the ball
-        @ball.position[0] = 300
-        @ball.velocity[0] = -@ball.velocity[0]
-        @beep.play
-      end
+    elsif @ball.center[0] > 600
+      #Player2 lost
+      @player2_score += 1
+      #Reset the ball
+      @ball.position[0] = 300
+      @ball.velocity[0] = -@ball.velocity[0]
+      @beep.play
     end  
   end
   

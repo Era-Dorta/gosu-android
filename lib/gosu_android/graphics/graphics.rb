@@ -155,7 +155,7 @@ module Gosu
         end
 
         if data == nil
-            raise "Internal texture block allocation error"
+          raise "Internal texture block allocation error"
         end
         return data
       end
@@ -175,7 +175,7 @@ module Gosu
       #Try to put the bitmap into one of the already allocated textures.
       @textures.each do |tex|
         data = tex.try_alloc(self, @queues, tex, bmp, 1)
-          return data if data != nil
+        return data if data != nil
       end
 
       #All textures are full: Create a new one.

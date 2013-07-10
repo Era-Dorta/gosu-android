@@ -8,15 +8,15 @@ module Gosu
   class FontsManager
 
     def initialize(window)
-       file = Ruboto::R::drawable::character_atlas8
-       font_vector = Gosu::Image::load_tiles(window, file, 13, 25, false)
-       symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-/*\'\"!?[]{}_.,:; "
-       @font_symbols = {}
-       i = 0
-       symbols.each_char do |symbol|
-         @font_symbols[symbol] = font_vector[i]
-         i += 1
-       end
+      file = Ruboto::R::drawable::character_atlas8
+      font_vector = Gosu::Image::load_tiles(window, file, 13, 25, false)
+      symbols = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+-/*\'\"!?[]{}_.,:; "
+      @font_symbols = {}
+      i = 0
+      symbols.each_char do |symbol|
+        @font_symbols[symbol] = font_vector[i]
+        i += 1
+      end
     end
 
     def getSymbol(symbol)

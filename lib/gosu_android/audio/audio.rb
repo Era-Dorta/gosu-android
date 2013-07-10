@@ -13,39 +13,39 @@ module Gosu
   # E/MP3Extractor(   95): Unable to resync. Signalling end of stream.
   class AudioFocusListener < JavaImports::Service 
     include JavaImports::AudioManager::OnAudioFocusChangeListener
-      def onAudioFocusChange focusChange
-        puts "In focus change #{focusChange}"
-        return false
-      end
+    def onAudioFocusChange focusChange
+      puts "In focus change #{focusChange}"
+      return false
+    end
       
-      def onBind intent
-        return nil
-      end
+    def onBind intent
+      return nil
+    end
 
-      def toString
-        self.class.to_s
-      end
+    def toString
+      self.class.to_s
+    end
   end
   
   class AudioCompletionListener
     include JavaImports::MediaPlayer::OnCompletionListener
-      def onCompletion mp
-        return true
-      end
+    def onCompletion mp
+      return true
+    end
   end   
   
   class AudioErrorListener
     include JavaImports::MediaPlayer::OnErrorListener
-      def onError(mp, what, extra)
-        return true
-      end
+    def onError(mp, what, extra)
+      return true
+    end
   end   
   
   class AudioInfoListener
     include JavaImports::MediaPlayer::OnInfoListener
-      def onInfo(mp, what, extra)
-        return true
-      end
+    def onInfo(mp, what, extra)
+      return true
+    end
   end  
 
   #TODO ManageAudioFocus, when app loses, stop song
