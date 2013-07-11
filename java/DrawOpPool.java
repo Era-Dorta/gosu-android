@@ -53,11 +53,13 @@ public class DrawOpPool{
     	}    	
     	size -= 1;
     	opPool.get(size).getRenderState().reset();
+    	opPool.get(size).setVerticesOrBlockIndex(0);
     }    
     
     public void clearPool(){    
     	for(int i = 0; i < size; i++){
     		opPool.get(i).getRenderState().reset();
+    		opPool.get(i).setVerticesOrBlockIndex(0);
     	}
     	size = 0;
     }     
