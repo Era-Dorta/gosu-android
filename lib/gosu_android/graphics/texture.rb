@@ -40,7 +40,7 @@ module Gosu
       @gl.glTexParameteri(JavaImports::GL10::GL_TEXTURE_2D,
         JavaImports::GL10::GL_TEXTURE_WRAP_T, JavaImports::GL10::GL_CLAMP_TO_EDGE)
 =end
-      @gl.glTexParameterf(JavaImports::GL10::GL_TEXTURE_2D, JavaImports::GL10::GL_TEXTURE_MIN_FILTER, JavaImports::GL10::GL_NEAREST)
+      @gl.glTexParameterf(JavaImports::GL10::GL_TEXTURE_2D, JavaImports::GL10::GL_TEXTURE_MIN_FILTER, JavaImports::GL10::GL_LINEAR)
       @gl.glTexParameterf(JavaImports::GL10::GL_TEXTURE_2D, JavaImports::GL10::GL_TEXTURE_MAG_FILTER, JavaImports::GL10::GL_LINEAR)
     end
 
@@ -69,10 +69,9 @@ module Gosu
       block = alloc_info[1]
       result = TexChunk.new(graphics, queues, ptr, block.left + padding, block.top + padding,
                                 block.width - 2 * padding, block.height - 2 * padding, padding)
+      @gl.glBindTexture(JavaImports::GL10::GL_TEXTURE_2D, @name[0])                          
       @gl.glTexSubImage2D(JavaImports::GL10::GL_TEXTURE_2D, 0, block.left, block.top, block.width, block.height,
         Color::GL_FORMAT, JavaImports::GL10::GL_UNSIGNED_BYTE, bmp.data_java)
-      #@gl.glBindTexture(JavaImports::GL10::GL_TEXTURE_2D, @name[0])
-      #JavaImports::GLUtils.texImage2D(JavaImports::GL10::GL_TEXTURE_2D, 0, bmp.to_open_gl, 0)
 
       @num += 1
       result
