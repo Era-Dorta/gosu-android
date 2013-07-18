@@ -117,7 +117,7 @@ class GameWindow < Gosu::Window
     #Size of the image we are using for the blocks       
     @size = 80   
     new_block_body_shape CP::Vec2.new(1.0, 1.0), CP::Vec2.new(@size, 1.0) 
-    @player = StillObject.new(self, @shape_block, Resources::PLAYER, 300, 473,  0, :horizontal, false)
+    @player = StillObject.new(self, @shape_block, Resources::PLAYER, 300, 423,  0, :horizontal, false)
 
     #Left plane
     new_block_body_shape CP::Vec2.new(1.0, 1.0), CP::Vec2.new(1.0, 480.0) 
