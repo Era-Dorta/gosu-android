@@ -27,7 +27,6 @@ module Gosu
         @manager.render_state = op.render_state
         op.perform(nil) if op.vertices_or_block_index >= 0
       end
-      @op_pool.clearPool
     end
 
 
