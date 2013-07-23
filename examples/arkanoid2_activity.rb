@@ -4,6 +4,11 @@ require 'chipmunk'
 #Simple arkanoid copy that uses gosu and chipmunk
 SUBSTEPS = 6
 
+module ZOrder
+  Hidden, Background, Block, Player, UI = *0..4
+end
+
+
 #Module where we define paths to the resources
 module Resources
   if defined? Ruboto
@@ -117,22 +122,22 @@ class GameWindow < Gosu::Window
     @space.add_body(ball_body)
     @space.add_shape(ball_shape)    
     
-    @ball = Ball.new(self, ball_shape, Resources::BALL, 100, 200, 0, 10, 100, 100)
+    @ball = Ball.new(self, ball_shape, Resources::BALL, 100, 200, ZOrder::Block, 10, 100, 100)
     
     #Size of the image we are using for the blocks       
     @size = 80   
     new_block_body_shape CP::Vec2.new(1.0, 1.0), CP::Vec2.new(@size, 1.0) 
-    @player = StillObject.new(self, @shape_block, Resources::PLAYER, 300, 423,  0, :horizontal, false)
+    @player = StillObject.new(self, @shape_block, Resources::PLAYER, 300, 423, ZOrder::Block, :horizontal, false)
 
     #Left plane
     new_block_body_shape CP::Vec2.new(1.0, 1.0), CP::Vec2.new(1.0, 480.0) 
-    @p1 = StillObject.new(self, @shape_block,Resources::BLOCK, 0, 0, 0, :vertical, false)
+    @p1 = StillObject.new(self, @shape_block,Resources::BLOCK, 0, 0, ZOrder::Hidden, :vertical, false)
     #Top plane
     new_block_body_shape CP::Vec2.new(1.0, 1.0), CP::Vec2.new(600.0, 1.0) 
-    @p2 = StillObject.new(self, @shape_block,Resources::BLOCK, 0, 0, 0, :horizontal, false)
+    @p2 = StillObject.new(self, @shape_block,Resources::BLOCK, 0, 0, ZOrder::Hidden, :horizontal, false)
     #Right plane
     new_block_body_shape CP::Vec2.new(1.0, 1.0), CP::Vec2.new(1.0, 480.0) 
-    @p3 = StillObject.new(self, @shape_block,Resources::BLOCK, 600, 0 , 0, :vertical, false)
+    @p3 = StillObject.new(self, @shape_block,Resources::BLOCK, 600, 0 , ZOrder::Hidden, :vertical, false)
     
     @blocks = []
     @blocks_position = []
@@ -143,7 +148,7 @@ class GameWindow < Gosu::Window
     2.times do |i|
       3.times do |j|
         new_block_body_shape CP::Vec2.new(1.0, 1.0), CP::Vec2.new(@size, 1.0) 
-        @blocks.push StillObject.new(self, @shape_block, img, block_x + (@size + 30)*i, block_y + 30*j ,  0, :horizontal, true, 2)
+        @blocks.push StillObject.new(self, @shape_block, img, block_x + (@size + 30)*i, block_y + 30*j , ZOrder::Block, :horizontal, true, 2)
         @stillObjects.push @blocks.last
       end
     end
@@ -249,7 +254,7 @@ class GameWindow < Gosu::Window
   
   #Draw the blocks, tha player, the ball and the current score
   def draw
-    @background_image.draw(0, 0, 0)
+    @background_image.draw(0, 0, ZOrder::Background)
     
     @blocks.each do |b|
       b.draw
@@ -257,7 +262,7 @@ class GameWindow < Gosu::Window
     
     @ball.draw
     @player.draw
-    @font.draw("Score: #{@score}", 10, 10, 3, 1.0, 1.0, 0xffffff00)
+    @font.draw("Score: #{@score}", 10, 10, ZOrder::UI, 1.0, 1.0, 0xffffff00)
   end
  
 end
