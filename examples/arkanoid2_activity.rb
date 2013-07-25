@@ -45,7 +45,7 @@ class Ball
   
   #Every time there is a collision the ball must bounce    
   def bounce other_object
-    #Calculate new velocity, after the hit    
+    #Calculate new velocity, after the hit  
     if other_object.type == :vertical
       #If the object was vertical change x velocity
       @shape.body.v.x = -@shape.body.v.x  
@@ -110,7 +110,7 @@ class GameWindow < Gosu::Window
     @space = CP::Space.new   
     
     #Ball body, arguments for body new are mass and inertia
-    ball_body = CP::Body.new(1.0, 150.0)
+    ball_body = CP::Body.new(1.0, Float::MIN)
     
     #Shape, we define a square shape
     ball_shape_array = [CP::Vec2.new(-5.0, -5.0), CP::Vec2.new(-5.0, 5.0), CP::Vec2.new(5.0, 5.0), CP::Vec2.new(5.0, -5.0)]
@@ -122,7 +122,7 @@ class GameWindow < Gosu::Window
     @space.add_body(ball_body)
     @space.add_shape(ball_shape)    
     
-    @ball = Ball.new(self, ball_shape, Resources::BALL, 100, 200, ZOrder::Block, 10, 100, 100)
+    @ball = Ball.new(self, ball_shape, Resources::BALL, 100, 200, ZOrder::Block, 10, 300, 300)
     
     #Size of the image we are using for the blocks       
     @size = 80   
@@ -176,9 +176,7 @@ class GameWindow < Gosu::Window
               #Block can be deleted
               @score += 10  
               #Bodies and shapes cannot be deleted here so we mark them for later
-              @remove_shapes << block_shape
-              @blocks.delete @stillObjects[index] 
-              @stillObjects.delete_at index    
+              @remove_shapes << block_shape  
             else
               #Block cannot be deleted yet.
               #Decrease delete count
@@ -197,11 +195,11 @@ class GameWindow < Gosu::Window
   #Creates a new body and shape for a block
   def new_block_body_shape pos0, pos1
     #Arguments for body new are mass and inertia
-    @body_block = CP::Body.new(10.0, 150.0)
-    @shape_block = CP::Shape::Segment.new(@body_block, pos0, pos1, 0)
+    body_block = CP::Body.new(Float::MAX, Float::MAX)
+    @shape_block = CP::Shape::Segment.new(body_block, pos0, pos1, 0)
     
     @shape_block.collision_type = :block   
-    @space.add_body(@body_block)
+    @space.add_body(body_block)
     @space.add_shape(@shape_block)      
   end
   
@@ -211,7 +209,9 @@ class GameWindow < Gosu::Window
     SUBSTEPS.times do |i|
       @allow_collision = true
       #Delete the block body and shape from the space
-      @remove_shapes.each do |shape|
+      @remove_shapes.each do |shape|         
+        @blocks.delete_if { |block| block.shape == shape }
+        @stillObjects.delete_if { |obj| obj.shape == shape }
         @space.remove_body(shape.body)
         @space.remove_shape(shape)
       end     
