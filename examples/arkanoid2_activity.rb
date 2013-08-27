@@ -14,6 +14,7 @@ module Resources
   if defined? Ruboto
     #On Android: use this paths
     Resources::BALL = Ruboto::R::drawable::yellow_square
+    Resources::BALL_BOUNCE = Ruboto::R::drawable::ball_bounce_effect
     Resources::BEEP = Ruboto::R::raw::beep
     Resources::SONG = Ruboto::R::raw::chriss_onac_tempo_red
     Resources::BLOCK = Ruboto::R::drawable::block
@@ -23,6 +24,7 @@ module Resources
   else
     #On PC: use this paths
     Resources::BALL = "media/yellow_square.png"
+    Resources::BALL_BOUNCE = "media/ball_bounce_effect.png"
     Resources::BEEP = "media/beep.wav"
     Resources::SONG = "media/chriss_onac_tempo_red.mp3"
     Resources::BLOCK = "media/block.png" 
@@ -35,12 +37,16 @@ end
 
 class Ball
   attr_reader :shape
-  def initialize window, shape, file_name, x, y, z, size, velocity_x, velocity_y  
+  def initialize window, shape, file_name, x, y, z, size, velocity_x, velocity_y, bounce_file
     @shape = shape
     @shape.body.p = CP::Vec2.new(x, y) # position
     @shape.body.v = CP::Vec2.new(velocity_x, velocity_y) # velocity   
     @z = z
     @image = Gosu::Image.new(window, file_name, false)  
+    @width = @image.width / 2.0
+    @height = @image.height / 2.0
+    @bounce_effect = Gosu::Image.new(window, bounce_file, false)
+    @z_bounce = ZOrder::Hidden      
   end
   
   #Every time there is a collision the ball must bounce    
@@ -53,6 +59,8 @@ class Ball
       #If the object was horizontal change y velocity
       @shape.body.v.y = -@shape.body.v.y  
     end  
+    #Show bounce effect
+    @z_bounce = @z
   end
   
   def validate_position
@@ -61,13 +69,16 @@ class Ball
       @shape.body.p.y = 200
       #Change y velocity so that the ball will not move in
       #the same direction as before
-      @shape.body.v.y = -@shape.body.v.x       
+      @shape.body.v.y = -@shape.body.v.x      
     end  
   end
   
   def draw
     #Draw ball at current position
     @image.draw(@shape.body.p.x, @shape.body.p.y, @z)
+    @bounce_effect.draw(@shape.body.p.x - @width, @shape.body.p.y - @height, @z_bounce)
+    #Hide bounce effect
+    @z_bounce = ZOrder::Hidden     
   end
 end
 
@@ -122,7 +133,7 @@ class GameWindow < Gosu::Window
     @space.add_body(ball_body)
     @space.add_shape(ball_shape)    
     
-    @ball = Ball.new(self, ball_shape, Resources::BALL, 100, 200, ZOrder::Block, 10, 300, 300)
+    @ball = Ball.new(self, ball_shape, Resources::BALL, 100, 200, ZOrder::Block, 10, 300, 300, Resources::BALL_BOUNCE)
     
     #Size of the image we are using for the blocks       
     @size = 80   
