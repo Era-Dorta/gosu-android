@@ -47,7 +47,7 @@ module Gosu
       offset = 0
       text.each_char do |char|
         (@fonts_manager.getSymbol char ).draw(x + offset, y, z, factor_x, factor_y, c, mode)
-        offset += 10
+        offset += 10*factor_x
       end
 
     end

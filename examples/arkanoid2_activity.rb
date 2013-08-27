@@ -103,6 +103,8 @@ class StillObject
   end  
 end
 
+class BlockScore < Struct.new(:x,:y,:countdown); end
+
 class GameWindow < Gosu::Window
   def initialize
     #Creates a window of 600 by 400, not fullscreen, at 30 fps
@@ -113,8 +115,8 @@ class GameWindow < Gosu::Window
     @song = Gosu::Song.new(self, Resources::SONG)
     @beep = Gosu::Sample.new(self, Resources::BEEP)
     @background_image = Gosu::Image.new(self, Resources::BACKGROUND, true)
-    @p1x = 0
     @stillObjects = Array.new
+    @block_scores = Array.new
     # Time increment over which to apply a physics "step" ("delta t")
     @dt = self.update_interval/(1000.0*SUBSTEPS)
     #We need to define a space where the physics will take place
@@ -133,7 +135,7 @@ class GameWindow < Gosu::Window
     @space.add_body(ball_body)
     @space.add_shape(ball_shape)    
     
-    @ball = Ball.new(self, ball_shape, Resources::BALL, 100, 200, ZOrder::Block, 10, 300, 300, Resources::BALL_BOUNCE)
+    @ball = Ball.new(self, ball_shape, Resources::BALL, 100, 200, ZOrder::Block, 10, -300, 300, Resources::BALL_BOUNCE)
     
     #Size of the image we are using for the blocks       
     @size = 80   
@@ -188,6 +190,7 @@ class GameWindow < Gosu::Window
               @score += 10  
               #Bodies and shapes cannot be deleted here so we mark them for later
               @remove_shapes << block_shape  
+              @block_scores << BlockScore.new(block_shape.body.p.x, block_shape.body.p.y, 1)
             else
               #Block cannot be deleted yet.
               #Decrease delete count
@@ -232,7 +235,9 @@ class GameWindow < Gosu::Window
       @ball.validate_position      
       #Move the objects in the world one dt
       @space.step(@dt)          
-    end  
+    end 
+    
+    @block_scores.delete_if { |block| block.countdown == 10 }     
 
     #On PC: if player press 'A' key, move left
     if button_down? Gosu::KbA then
@@ -269,6 +274,12 @@ class GameWindow < Gosu::Window
     
     @blocks.each do |b|
       b.draw
+    end
+    
+    #Show earned score after a block is broken
+    @block_scores.each do |block|
+      @font.draw("10", block.x, block.y, ZOrder::UI, block.countdown, block.countdown, 0xffffff00)
+      block.countdown += 1
     end
     
     @ball.draw
