@@ -137,9 +137,10 @@ class GameWindow < Gosu::Window
     
     @ball = Ball.new(self, ball_shape, Resources::BALL, 100, 200, ZOrder::Block, 10, -300, 300, Resources::BALL_BOUNCE)
     
-    #Size of the image we are using for the blocks       
-    @size = 80   
-    new_block_body_shape CP::Vec2.new(1.0, 1.0), CP::Vec2.new(@size, 1.0) 
+    #Size in pixels of the image we are using for the player       
+    @player_size = 110   
+    @half_player_size = @player_size / 2
+    new_block_body_shape CP::Vec2.new(1.0, 1.0), CP::Vec2.new(@player_size, 1.0) 
     @player = StillObject.new(self, @shape_block, Resources::PLAYER, 300, 423, ZOrder::Block, :horizontal, false)
 
     #Left plane
@@ -157,11 +158,13 @@ class GameWindow < Gosu::Window
     #Position for the first block
     block_x = 150
     block_y = 120
+    #Size in pixels of the image we are using for the blocks  
+    size = 80
     img = Resources::BLOCK
     2.times do |i|
       3.times do |j|
-        new_block_body_shape CP::Vec2.new(1.0, 1.0), CP::Vec2.new(@size, 1.0) 
-        @blocks.push StillObject.new(self, @shape_block, img, block_x + (@size + 30)*i, block_y + 30*j , ZOrder::Block, :horizontal, true, 2)
+        new_block_body_shape CP::Vec2.new(1.0, 1.0), CP::Vec2.new(size, 1.0) 
+        @blocks.push StillObject.new(self, @shape_block, img, block_x + (size + 30)*i, block_y + 30*j , ZOrder::Block, :horizontal, true, 2)
         @stillObjects.push @blocks.last
       end
     end
@@ -183,7 +186,7 @@ class GameWindow < Gosu::Window
         index = @stillObjects.index{|obj| obj.shape==block_shape}
         if(index != nil )  
           @beep.play
-          @ball.bounce @stillObjects[index]        
+          @ball.bounce @stillObjects[index]   
           if(@stillObjects[index].deletable )  
             if( @stillObjects[index].delete_count <= 1)
               #Block can be deleted
@@ -248,7 +251,7 @@ class GameWindow < Gosu::Window
 
     #On PC: if player press 'D' key, move right
     if button_down? Gosu::KbD then
-      if @player.shape.body.p.x + @size < 600
+      if @player.shape.body.p.x + @player_size < 600
         @player.shape.body.p.x += 10
       end
     end 
@@ -257,8 +260,23 @@ class GameWindow < Gosu::Window
  
   #On Android use touches
   def touch_moved(touch)
-    #On a touch interface translate directly the player's position
-    @player.shape.body.p.x = touch.x
+    #Move the touch because we want the player to be in the center
+    #of the touch
+    touch.x -= @half_player_size
+    #On a touch interface move at fixed speed towards players touch
+    #Move right
+    if @player.shape.body.p.x + 10 < touch.x
+      #Do not allow the player to go off screen
+      if @player.shape.body.p.x + @player_size < 600
+        @player.shape.body.p.x += 10
+      end 
+    #Move left    
+    elsif @player.shape.body.p.x - 10 > touch.x
+      #Do not allow the player to go off screen
+      if @player.shape.body.p.x > 0
+        @player.shape.body.p.x -= 10
+      end
+    end
   end
   
   #On PC: If player pressed escape then close the game
