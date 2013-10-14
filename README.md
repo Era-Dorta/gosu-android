@@ -43,3 +43,9 @@ Troubleshooting
 -------------------
 * When using several audio files double check that all have the same codification or you could get: `E/MediaPlayer(16127): Unable to to create media player`
  	* http://forums.pragprog.com/forums/152/topics/9144
+ 	
+Current state
+-------------------              
+This software was started as part of the final project for my computer engineering degree. The project is already finished. So good news is I will continue the development, 
+but at a more slow pace since I cannot give it as much time as before. As a side note, I also want to explore the Android NDK and Java JNI to achieve better performance 
+and more integration with the original Gosu project. So this could lead to a complete rewrite of the code.
