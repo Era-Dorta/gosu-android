@@ -63,14 +63,16 @@ class Ball
     @z_bounce = @z
   end
   
-  def validate_position
+  def invalid_position
     #Check that the ball did not go under the screen
     if @shape.body.p.y > 480
       @shape.body.p.y = 200
       #Change y velocity so that the ball will not move in
       #the same direction as before
-      @shape.body.v.y = -@shape.body.v.x      
-    end  
+      @shape.body.v.y = -@shape.body.v.x
+      return true
+    end
+    return false
   end
   
   def draw
@@ -111,7 +113,9 @@ class GameWindow < Gosu::Window
     super 600, 480, false, 30
     #Window title
     self.caption = "Gosu Arkanoid"
-    @score = 0  
+    @score = 0
+    @lives = 3
+    @show_game_end = false
     @song = Gosu::Song.new(self, Resources::SONG)
     @beep = Gosu::Sample.new(self, Resources::BEEP)
     @background_image = Gosu::Image.new(self, Resources::BACKGROUND, true)
@@ -222,23 +226,38 @@ class GameWindow < Gosu::Window
   
   def update
     
-    #Every frame iterate substeps times  
-    SUBSTEPS.times do |i|
-      @allow_collision = true
-      #Delete the block body and shape from the space
-      @remove_shapes.each do |shape|         
-        @blocks.delete_if { |block| block.shape == shape }
-        @stillObjects.delete_if { |obj| obj.shape == shape }
-        @space.remove_body(shape.body)
-        @space.remove_shape(shape)
-      end     
-      
-      @remove_shapes.clear  
-      #Check the ball current position    
-      @ball.validate_position      
-      #Move the objects in the world one dt
-      @space.step(@dt)          
-    end 
+    if not @show_game_end
+      #Every frame iterate substeps times  
+      SUBSTEPS.times do |i|
+        @allow_collision = true
+        #Delete the block body and shape from the space
+        @remove_shapes.each do |shape|         
+          @blocks.delete_if { |block| block.shape == shape }
+          @stillObjects.delete_if { |obj| obj.shape == shape }
+          @space.remove_body(shape.body)
+          @space.remove_shape(shape)
+        end     
+        
+        @remove_shapes.clear  
+        #Check the ball current position    
+        if @ball.invalid_position
+          @lives -= 1
+          #Game over
+          if @lives == -1
+            @show_game_end = true
+            @end_text = "GAME OVER"
+          end
+        end
+        
+        #Game beaten
+        if @blocks.empty?
+            @show_game_end = true
+            @end_text = "YOU WIN!!!"         
+        end
+        #Move the objects in the world one dt
+        @space.step(@dt)          
+      end
+    end
     
     @block_scores.delete_if { |block| block.countdown == 10 }     
 
@@ -246,13 +265,19 @@ class GameWindow < Gosu::Window
     if button_down? Gosu::KbA then
       if @player.shape.body.p.x > 0
         @player.shape.body.p.x -= 10
-      end  
+      end
+      if @show_game_end
+        reset_world
+      end
     end  
 
     #On PC: if player press 'D' key, move right
     if button_down? Gosu::KbD then
       if @player.shape.body.p.x + @player_size < 600
         @player.shape.body.p.x += 10
+      end
+      if @show_game_end
+        reset_world
       end
     end 
     
@@ -277,6 +302,10 @@ class GameWindow < Gosu::Window
         @player.shape.body.p.x -= 10
       end
     end
+    
+    if @show_game_end
+      reset_world
+    end
   end
   
   #On PC: If player pressed escape then close the game
@@ -300,11 +329,47 @@ class GameWindow < Gosu::Window
       block.countdown += 1
     end
     
+    if @show_game_end
+      @font.draw(@end_text, 300, 240, ZOrder::UI, 1.0, 1.0, 0xffffff00)
+      @font.draw("touch to continue", 280, 260, ZOrder::UI, 1.0, 1.0, 0xffffff00)
+    end
+    
     @ball.draw
     @player.draw
-    @font.draw("Score: #{@score}", 10, 10, ZOrder::UI, 1.0, 1.0, 0xffffff00)
+    @font.draw("Score: #{@score}  Lives: #{@lives}", 10, 10, ZOrder::UI, 1.0, 1.0, 0xffffff00)
   end
- 
+
+  #Reset world to its initial state
+  def reset_world
+    @score = 0
+    @lives = 3
+
+    #Delete all the blocks
+    @blocks.each do |block|         
+        @stillObjects.delete_if { |obj| obj.shape == block.shape }
+        @space.remove_body(block.shape.body)
+        @space.remove_shape(block.shape)
+    end
+
+    @remove_shapes.clear
+    @block_scores.clear
+    @blocks.clear
+    @blocks_position.clear
+    #Position for the first block
+    block_x = 150
+    block_y = 120
+    #Size in pixels of the image we are using for the blocks  
+    size = 80
+    img = Resources::BLOCK
+    2.times do |i|
+      3.times do |j|
+        new_block_body_shape CP::Vec2.new(1.0, 1.0), CP::Vec2.new(size, 1.0) 
+        @blocks.push StillObject.new(self, @shape_block, img, block_x + (size + 30)*i, block_y + 30*j , ZOrder::Block, :horizontal, true, 2)
+        @stillObjects.push @blocks.last
+      end
+    end
+    @show_game_end = false
+  end
 end
 
 if not defined? Ruboto
