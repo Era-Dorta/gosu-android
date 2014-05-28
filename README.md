@@ -18,10 +18,10 @@ source "http://rubygems.org"
 gem 'gosu_android'
 ```
 
-* Create a folder inside `res` called `drawable-nodpi` and copy this [file] (https://github.com/neochuky/gosu-android/tree/master/res/drawable-nodpi/character_atlas8.png)
+* Create a folder inside `res` called `drawable-nodpi` and copy this [file] (https://github.com/Garoe/gosu-android/tree/master/res/drawable-nodpi/character_atlas8.png)
 in it. On linux you can do it easily with: 
 `mkdir res/drawable-nodpi` 
-`wget https://raw.github.com/neochuky/gosu-android/master/res/drawable-nodpi/character_atlas8.png` 
+`wget https://raw.github.com/Garoe/gosu-android/master/res/drawable-nodpi/character_atlas8.png` 
 `mv character_atlas8.png res/drawable-nodpi`
 
 ### Alternative
@@ -37,7 +37,7 @@ General Information
 -------------------
 * This is still an early effort, so there are a number of features that had not yet been added. 
 * There are some known bugs that I hope to fix soon.
-* In its current status there are some small changes to Gosu Window initialization, check examples with many comments in the [wiki](https://github.com/neochuky/gosu-android/wiki).
+* In its current status there are some small changes to Gosu Window initialization, check examples with many comments in the [wiki](https://github.com/Garoe/gosu-android/wiki).
 
 Troubleshooting
 -------------------
@@ -45,7 +45,6 @@ Troubleshooting
  	* http://forums.pragprog.com/forums/152/topics/9144
  	
 Current state
--------------------              
-This software was started as part of the final project for my computer engineering degree. The project is already finished. So good news is I will continue the development, 
-but at a more slow pace since I cannot give it as much time as before. As a side note, I also want to explore the Android NDK and Java JNI to achieve better performance 
-and more integration with the original Gosu project. So this could lead to a complete rewrite of the code.
+-------------------
+
+The engine is not actively maintained by me anymore.
