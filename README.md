@@ -47,4 +47,4 @@ Troubleshooting
 Current state
 -------------------
 
-The engine is not actively maintained by me anymore.
+Develoment on the engine has stopped until further notice.
